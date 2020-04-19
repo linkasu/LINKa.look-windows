@@ -1,0 +1,113 @@
+﻿<Window x:Class="LinkaWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LinkaWPF"
+        xmlns:models="clr-namespace:LinkaWPF.Models"
+        mc:Ignorable="d"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="PaintButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Border CornerRadius="1" BorderThickness="1" BorderBrush="Gray" Margin="1">
+                                <Grid Background="White">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="20"/>
+                                    </Grid.RowDefinitions>
+                                    <!--<local:GifImage GifSource="{Binding Source}" AutoStart="True"/>-->
+
+                                    <!--<local:AnimatedImage Source="{Binding Source}"/>--> <!-- Рабочий вариант-->
+
+                                    <Image gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="{Binding Source}" />
+
+                                    <!--<MediaElement LoadedBehavior="Manual" Loaded="MediaElement_MediaEnded" MediaEnded="MediaElement_MediaEnded" Source="{Binding Source}">
+                                        <MediaElement.OpacityMask>
+                                            <ImageBrush ImageSource="{Binding Source}"/>
+                                        </MediaElement.OpacityMask>
+                                    </MediaElement>-->
+                                    <!--<Image Source="{Binding Source}" />-->
+                                    <!--<local:AnimatedImage GifSource="{Binding XPath=Source}"/>-->
+
+                                    <!--<Image Name="Spinner" Source="{Binding Source}" RenderTransformOrigin="0.5, 0.5">
+                                        <Image.Triggers>
+                                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                                <EventTrigger.Actions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard Storyboard.TargetName="Spinner" Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)">
+                                                            <DoubleAnimation From="0" To="360" BeginTime="0:0:0" Duration="0:0:2" RepeatBehavior="Forever" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger.Actions>
+                                            </EventTrigger>
+                                        </Image.Triggers>
+                                        <Image.RenderTransform>
+                                            <RotateTransform Angle="0" />
+                                        </Image.RenderTransform>
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsBusy}" Value="False">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>-->
+
+
+                                    <ContentPresenter HorizontalAlignment="Center" Content="{Binding Title}" Grid.Row="1" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="mainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Text -->
+        <TextBox x:Name="text" Grid.Row="0" Grid.ColumnSpan="3" FontSize="20">Test</TextBox>
+        
+        <!-- Buttons -->
+        <Button x:Name="prevButton" Grid.Row="1" Grid.Column="0" Click="prevButton_Click">Prev</Button>
+        <Button x:Name="nextButton" Grid.Row="1" Grid.Column="2" Click="nextButton_Click">Next</Button>
+        
+        <!-- Cards -->
+        <Grid x:Name="gridCard" Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
+            <!--<Button Content="Button" Width="150" Height="50" HorizontalAlignment="Center" Click="Button_Click_1"/>-->
+            <!--<Image Grid.Column="1" Source="apple.png"/>-->
+            <!--<Button>
+                <Button.Content>
+                    <StackPanel>
+                        <Image Source="apple.png" Stretch="None"/>
+                        <TextBlock Text="Apple" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>-->
+            <!--<Button Content="apple.png" Style="{StaticResource PaintButton}" />-->
+            <!--<Button Style="{StaticResource PaintButton}" Grid.Row="2">
+                <BitmapImage UriSource="apple.png"/>
+            </Button>-->
+        </Grid>
+    </Grid>
+</Window>
