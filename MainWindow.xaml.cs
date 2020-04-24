@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Tobii.Interaction;
+using Tobii.Interaction.Wpf;
+
 namespace LinkaWPF
 {
     /// <summary>
@@ -26,6 +29,9 @@ namespace LinkaWPF
         private int _gridSize;
         private int _rows;
         private int _columns;
+
+        private Host _host;
+        private WpfInteractorAgent _wpfInteractorAgent;
         public MainWindow()
         {
             InitializeComponent();
