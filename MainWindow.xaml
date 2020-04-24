@@ -20,46 +20,8 @@
                                         <RowDefinition/>
                                         <RowDefinition Height="20"/>
                                     </Grid.RowDefinitions>
-                                    <!--<local:GifImage GifSource="{Binding Source}" AutoStart="True"/>-->
-
-                                    <!--<local:AnimatedImage Source="{Binding Source}"/>--> <!-- Рабочий вариант-->
 
                                     <Image gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="{Binding Source}" />
-
-                                    <!--<MediaElement LoadedBehavior="Manual" Loaded="MediaElement_MediaEnded" MediaEnded="MediaElement_MediaEnded" Source="{Binding Source}">
-                                        <MediaElement.OpacityMask>
-                                            <ImageBrush ImageSource="{Binding Source}"/>
-                                        </MediaElement.OpacityMask>
-                                    </MediaElement>-->
-                                    <!--<Image Source="{Binding Source}" />-->
-                                    <!--<local:AnimatedImage GifSource="{Binding XPath=Source}"/>-->
-
-                                    <!--<Image Name="Spinner" Source="{Binding Source}" RenderTransformOrigin="0.5, 0.5">
-                                        <Image.Triggers>
-                                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                                <EventTrigger.Actions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard Storyboard.TargetName="Spinner" Storyboard.TargetProperty="RenderTransform.(RotateTransform.Angle)">
-                                                            <DoubleAnimation From="0" To="360" BeginTime="0:0:0" Duration="0:0:2" RepeatBehavior="Forever" />
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger.Actions>
-                                            </EventTrigger>
-                                        </Image.Triggers>
-                                        <Image.RenderTransform>
-                                            <RotateTransform Angle="0" />
-                                        </Image.RenderTransform>
-                                        <Image.Style>
-                                            <Style TargetType="Image">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsBusy}" Value="False">
-                                                        <Setter Property="Visibility" Value="Hidden"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Image.Style>
-                                    </Image>-->
-
 
                                     <ContentPresenter HorizontalAlignment="Center" Content="{Binding Title}" Grid.Row="1" />
                                 </Grid>
