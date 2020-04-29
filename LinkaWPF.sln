@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29926.136
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkaWPF", "LinkaWPF.csproj", "{752215DA-0BE3-4C83-936A-E3D1003DD6A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkaWPF", "LinkaWPF\LinkaWPF.csproj", "{E7AB7113-641D-47D4-BC7D-B29135C2DE45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{752215DA-0BE3-4C83-936A-E3D1003DD6A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{752215DA-0BE3-4C83-936A-E3D1003DD6A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{752215DA-0BE3-4C83-936A-E3D1003DD6A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{752215DA-0BE3-4C83-936A-E3D1003DD6A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7AB7113-641D-47D4-BC7D-B29135C2DE45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7AB7113-641D-47D4-BC7D-B29135C2DE45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7AB7113-641D-47D4-BC7D-B29135C2DE45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7AB7113-641D-47D4-BC7D-B29135C2DE45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C94BC1B6-B49E-4771-9B4A-9C936A5FC3F9}
+		SolutionGuid = {8862178C-E164-4C91-88CE-DC0E956F3B66}
 	EndGlobalSection
 EndGlobal
