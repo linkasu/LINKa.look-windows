@@ -17,16 +17,17 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Margin="1" tobii:Behaviors.HasGazeChanged="cardButton_HasGazeChanged" Tag="{Binding Title}"
-                                
-            tobii:Behaviors.IsGazeAware="True"
-            tobii:Behaviors.IsActivatable="True"
-            
-            tobii:Behaviors.GazeAwareDelayTime="200"
-            tobii:Behaviors.GazeAwareMode="Normal"
-            tobii:Behaviors.IsTentativeFocusEnabled="True"
-         
-                                BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" RenderOptions.EdgeMode="Aliased">
+                        <Border Margin="1" 
+                                tobii:Behaviors.HasGazeChanged="cardButton_HasGazeChanged" 
+                                tobii:Behaviors.IsGazeAware="True"
+                                tobii:Behaviors.IsActivatable="True"
+                                tobii:Behaviors.GazeAwareDelayTime="200"
+                                tobii:Behaviors.GazeAwareMode="Normal"
+                                tobii:Behaviors.IsTentativeFocusEnabled="True"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                RenderOptions.EdgeMode="Aliased">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
