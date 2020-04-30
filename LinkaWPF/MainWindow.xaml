@@ -17,7 +17,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Margin="1" tobii:Behaviors.HasGazeChanged="cardButton_HasGazeChanged"
+                        <Border Margin="1" tobii:Behaviors.HasGazeChanged="cardButton_HasGazeChanged" Tag="{Binding Title}"
                                 
             tobii:Behaviors.IsGazeAware="True"
             tobii:Behaviors.IsActivatable="True"

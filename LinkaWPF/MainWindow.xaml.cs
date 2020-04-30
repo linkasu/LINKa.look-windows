@@ -147,11 +147,20 @@ namespace LinkaWPF
         {
             //text.Text = "HasGazeChanged";
 
+            // 1. Кнопка в sender
+            // 2. Title в свойстве Tag Border'а
+            text.Text = string.Empty;
+
+            if (e.Source != null)
+            {
+                text.Text = "Border:" + ((Border)e.Source).Tag.ToString();
+            }
+
             if (sender != null)
             {
                 //выдает ошибку что не может привести бордер к баттон
                 var button = ((Button)sender);
-               text.Text = ((Models.Card)button.DataContext).Title;
+               text.Text += " Button: " + ((Models.Card)button.DataContext).Title;
             } else
             {
                 text.Text = "HasGazeChanged";
