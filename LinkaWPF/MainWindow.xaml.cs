@@ -145,13 +145,13 @@ namespace LinkaWPF
 
         private void cardButton_HasGazeChanged(object sender, Tobii.Interaction.Wpf.HasGazeChangedRoutedEventArgs e)
         {
-            text.Text = "HasGazeChanged";
+            //text.Text = "HasGazeChanged";
 
-            if (e.Source != null)
+            if (sender != null)
             {
                 //выдает ошибку что не может привести бордер к баттон
-             //   var button = ((Button)e.Source);
-               // text.Text = ((Models.Card)button.DataContext).Title;
+                var button = ((Button)sender);
+               text.Text = ((Models.Card)button.DataContext).Title;
             } else
             {
                 text.Text = "HasGazeChanged";
