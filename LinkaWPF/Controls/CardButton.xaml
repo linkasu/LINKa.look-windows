@@ -1,0 +1,31 @@
+﻿<UserControl x:Name="userControl" x:Class="LinkaWPF.CardButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:tobii="clr-namespace:Tobii.Interaction.Wpf;assembly=Tobii.Interaction.Net"
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             xmlns:local="clr-namespace:LinkaWPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="150"
+             MouseLeftButtonDown="OnMouseLeftButtonDown" MouseLeftButtonUp="OnMouseLeftButtonUp">
+    <Grid Background="White"
+          Margin="1"
+          tobii:Behaviors.HasGazeChanged="OnHasGazeChanged"
+          tobii:Behaviors.IsGazeAware="True"
+          tobii:Behaviors.IsActivatable="True"
+          tobii:Behaviors.GazeAwareDelayTime="200"
+          tobii:Behaviors.GazeAwareMode="Normal"
+          tobii:Behaviors.IsTentativeFocusEnabled="True">
+        <Border BorderThickness="1" BorderBrush="Black" RenderOptions.EdgeMode="Aliased">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="{Binding Card.Source, ElementName=userControl}"/>
+                <TextBlock x:Name="text" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Card.Title, ElementName=userControl}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
