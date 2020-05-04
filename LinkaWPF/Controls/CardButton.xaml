@@ -8,15 +8,14 @@
              xmlns:local="clr-namespace:LinkaWPF"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="150"
-             MouseLeftButtonDown="OnMouseLeftButtonDown" MouseLeftButtonUp="OnMouseLeftButtonUp">
-    <Grid Background="White"
-          Margin="1"
-          tobii:Behaviors.HasGazeChanged="OnHasGazeChanged"
-          tobii:Behaviors.IsGazeAware="True"
-          tobii:Behaviors.IsActivatable="True"
-          tobii:Behaviors.GazeAwareDelayTime="200"
-          tobii:Behaviors.GazeAwareMode="Normal"
-          tobii:Behaviors.IsTentativeFocusEnabled="True">
+             MouseLeftButtonDown="OnMouseLeftButtonDown" MouseLeftButtonUp="OnMouseLeftButtonUp"
+             tobii:Behaviors.HasGazeChanged="OnHasGazeChanged"
+             tobii:Behaviors.IsGazeAware="True"
+             tobii:Behaviors.IsActivatable="True"
+             tobii:Behaviors.GazeAwareDelayTime="200"
+             tobii:Behaviors.GazeAwareMode="Normal"
+             tobii:Behaviors.IsTentativeFocusEnabled="True">
+    <Grid Background="White" Margin="1">
         <Border BorderThickness="1" BorderBrush="Black" RenderOptions.EdgeMode="Aliased">
             <Grid>
                 <Grid.RowDefinitions>

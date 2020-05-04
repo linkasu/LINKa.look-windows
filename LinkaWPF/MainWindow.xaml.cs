@@ -82,7 +82,8 @@ namespace LinkaWPF
             for (var i = 0; i < this._gridSize; i++)
             {
                 var button = new CardButton();
-                button.Click += new RoutedEventHandler(this.cardButton_Click);
+                button.Click += new RoutedEventHandler(cardButton_Click);
+                button.HazGazeChanged += new RoutedEventHandler(cardButton_HazGazeChanged);
 
                 var row = Convert.ToInt32(Math.Round(Convert.ToDouble(i / this._rows), 0));
                 int column = i - (this._rows * row);
@@ -139,6 +140,12 @@ namespace LinkaWPF
         {
             var button = sender as CardButton;
             text.Text = button.Card.Title;
+        }
+
+        private void cardButton_HazGazeChanged(object sender, RoutedEventArgs e)
+        {
+            var button = sender as CardButton;
+            if (button.Card != null) text.Text = button.Card.Title;
         }
 
         private void prevButton_Click(object sender, RoutedEventArgs e)

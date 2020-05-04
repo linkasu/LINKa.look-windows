@@ -42,11 +42,18 @@ namespace LinkaWPF
         }
 
         public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CardButton));
+        public static readonly RoutedEvent HazGazeChangedEvent = EventManager.RegisterRoutedEvent("HazGazeChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CardButton));
 
         public event RoutedEventHandler Click
         {
             add { AddHandler(ClickEvent, value); }
             remove { RemoveHandler(ClickEvent, value); }
+        }
+
+        public event RoutedEventHandler HazGazeChanged
+        {
+            add { AddHandler(HazGazeChangedEvent, value); }
+            remove { RemoveHandler(HazGazeChangedEvent, value); }
         }
 
         private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -66,7 +73,8 @@ namespace LinkaWPF
 
         private void OnHasGazeChanged(object sender, Tobii.Interaction.Wpf.HasGazeChangedRoutedEventArgs e)
         {
-            
+            RoutedEventArgs newEventArgs = new RoutedEventArgs(CardButton.HazGazeChangedEvent);
+            RaiseEvent(newEventArgs);
         }
     }
 }
