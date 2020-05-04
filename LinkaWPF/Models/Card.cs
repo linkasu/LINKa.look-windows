@@ -10,12 +10,15 @@ namespace LinkaWPF.Models
 {
     public class Card
     {
-        public Card(string title, string path)
+        public Card(int id, string title, string path)
         {
+            this.Id = id;
             this.Title = title;
-            this.Source = new BitmapImage(new Uri(Environment.CurrentDirectory + "/images/" + path, UriKind.Absolute));
+            
+            if (path != string.Empty) this.Source = new BitmapImage(new Uri(Environment.CurrentDirectory + "/images/" + path, UriKind.Absolute));
             //this.Source = new Uri(Environment.CurrentDirectory + "/images/" + path, UriKind.Absolute);
         }
+        public int Id { get; set; }
         public ImageSource Source { get; set; }
         public string Title { get; set; }
     }
