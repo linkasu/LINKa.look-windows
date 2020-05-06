@@ -29,6 +29,7 @@ namespace LinkaWPF
         private int _gridSize;
         private int _rows;
         private int _columns;
+        private CircularProgressBar _progress;
 
         public MainWindow()
         {
@@ -84,6 +85,8 @@ namespace LinkaWPF
                 var button = new CardButton();
                 button.Click += new RoutedEventHandler(cardButton_Click);
                 button.HazGazeChanged += new RoutedEventHandler(cardButton_HazGazeChanged);
+                button.MouseEnter += new MouseEventHandler(cardButton_MouseEnter);
+                button.MouseLeave += new MouseEventHandler(cardButton_MouseLeave);
 
                 var row = Convert.ToInt32(Math.Round(Convert.ToDouble(i / this._rows), 0));
                 int column = i - (this._rows * row);
@@ -94,6 +97,13 @@ namespace LinkaWPF
 
                 this._buttons.Add(button);
             }
+
+            _progress = new CircularProgressBar();
+            _progress.Radius = 25;
+            _progress.StrokeThickness = 6;
+            _progress.HorizontalAlignment = HorizontalAlignment.Center;
+            _progress.VerticalAlignment = VerticalAlignment.Center;
+            _progress.Visibility = Visibility.Hidden;
         }
 
         private void Render()
@@ -145,7 +155,41 @@ namespace LinkaWPF
         private void cardButton_HazGazeChanged(object sender, RoutedEventArgs e)
         {
             var button = sender as CardButton;
-            if (button.Card != null) text.Text = button.Card.Title;
+            startClick(button);
+        }
+
+        private void startClick(CardButton button)
+        {
+            if (_progress.Parent != null)
+            {
+                (_progress.Parent as Grid).Children.Remove(_progress);
+            }
+
+            button.grid.Children.Add(_progress);
+            _progress.Visibility = Visibility.Visible;
+
+            var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(2));
+            animation.Completed += new EventHandler((o, args) => {
+                _progress.Visibility = Visibility.Hidden;
+            });
+            _progress.BeginAnimation(CircularProgressBar.PercentageProperty, animation);
+        }
+
+        private void stopClick()
+        {
+            _progress.Visibility = Visibility.Hidden;
+        }
+
+        private void cardButton_MouseEnter(object sender, RoutedEventArgs e)
+        {
+            var button = sender as CardButton;
+
+            startClick(button);
+        }
+
+        private void cardButton_MouseLeave(object sender, RoutedEventArgs e)
+        {
+            stopClick();
         }
 
         private void prevButton_Click(object sender, RoutedEventArgs e)

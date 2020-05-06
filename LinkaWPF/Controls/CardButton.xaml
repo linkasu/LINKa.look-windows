@@ -15,9 +15,9 @@
              tobii:Behaviors.GazeAwareDelayTime="200"
              tobii:Behaviors.GazeAwareMode="Normal"
              tobii:Behaviors.IsTentativeFocusEnabled="True">
-    <Grid Background="White" Margin="1">
+    <Grid Background="LightGray" Margin="1" x:Name="grid">
         <Border BorderThickness="1" BorderBrush="Black" RenderOptions.EdgeMode="Aliased">
-            <Grid>
+            <Grid Background="Red">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="20"/>
