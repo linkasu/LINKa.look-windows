@@ -30,6 +30,7 @@ namespace LinkaWPF
         private int _rows;
         private int _columns;
         private CircularProgressBar _progress;
+        private Storyboard _sb;
 
         public MainWindow()
         {
@@ -99,11 +100,20 @@ namespace LinkaWPF
             }
 
             _progress = new CircularProgressBar();
-            _progress.Radius = 25;
             _progress.StrokeThickness = 6;
             _progress.HorizontalAlignment = HorizontalAlignment.Center;
             _progress.VerticalAlignment = VerticalAlignment.Center;
             _progress.Visibility = Visibility.Hidden;
+
+            var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(3));
+            animation.Completed += new EventHandler((o, args) => {                
+                _progress.Visibility = Visibility.Hidden;
+            });
+            Storyboard.SetTarget(animation, _progress);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(CircularProgressBar.PercentageProperty));
+
+            _sb = new Storyboard();
+            _sb.Children.Add(animation);
         }
 
         private void Render()
@@ -165,14 +175,14 @@ namespace LinkaWPF
                 (_progress.Parent as Grid).Children.Remove(_progress);
             }
 
+            // Добавляем прогресс на карточку
             button.grid.Children.Add(_progress);
+
+            _progress.Radius = Convert.ToInt32((button.ActualHeight - 20) / 2);
             _progress.Visibility = Visibility.Visible;
 
-            var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(2));
-            animation.Completed += new EventHandler((o, args) => {
-                _progress.Visibility = Visibility.Hidden;
-            });
-            _progress.BeginAnimation(CircularProgressBar.PercentageProperty, animation);
+            _sb.Stop();
+            _sb.Begin();
         }
 
         private void stopClick()
