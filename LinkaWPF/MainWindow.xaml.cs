@@ -217,5 +217,21 @@ namespace LinkaWPF
 
             GC.Collect();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            // Очистка текстового поля
+            text.Text = "";
+            text.Focus();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            // Удалить последнее слово из текстового поля
+            var end = text.Text.LastIndexOf(' ');
+            text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
+            text.Select(text.Text.Length, 0);
+            text.Focus();
+        }
     }
 }
