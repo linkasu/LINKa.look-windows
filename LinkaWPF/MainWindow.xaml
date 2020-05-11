@@ -18,7 +18,18 @@
         </Grid.ColumnDefinitions>
 
         <!-- Text -->
-        <TextBox x:Name="text" Grid.Row="0" Grid.ColumnSpan="3" FontSize="20">Test</TextBox>
+        <Grid Grid.Row="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="text" Grid.Column="0" FontSize="20" Margin="2">Test</TextBox>
+            <Button Grid.Column="1" Margin="2">Удалить слово</Button>
+            <Button Grid.Column="2" Margin="2">Очистить</Button>
+            <Button Grid.Column="3" Margin="2">Воспроизвести</Button>
+        </Grid>
 
         <!-- Buttons -->
         <Button x:Name="prevButton" Grid.Row="1" Grid.Column="0" Click="prevButton_Click">Prev</Button>
