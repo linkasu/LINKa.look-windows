@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.DirectX.AudioVideoPlayback;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -232,6 +233,13 @@ namespace LinkaWPF
             text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
             text.Select(text.Text.Length, 0);
             text.Focus();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            // Воспроизвдение
+            Audio audio1 = new Audio(@"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\one.ogg");
+            audio1.Play();
         }
     }
 }
