@@ -35,10 +35,8 @@
         <Button x:Name="prevButton" Grid.Row="1" Grid.Column="0" Click="prevButton_Click">Prev</Button>
         <Button x:Name="nextButton" Grid.Row="1" Grid.Column="2" Click="nextButton_Click">Next</Button>
 
-        <!-- Cards -->
-        <Grid x:Name="gridCard" Grid.Row="2" Grid.Column="1">
-            <Grid.RowDefinitions/>
-            <Grid.ColumnDefinitions/>
-        </Grid>
+        <!-- CardBoard -->
+        <local:CardBoard x:Name="cardBoard" Grid.Row="1" Grid.Column="1"></local:CardBoard>
+        
     </Grid>
 </Window>

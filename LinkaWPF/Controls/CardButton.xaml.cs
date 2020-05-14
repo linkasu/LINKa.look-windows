@@ -76,5 +76,15 @@ namespace LinkaWPF
             RoutedEventArgs newEventArgs = new RoutedEventArgs(CardButton.HazGazeChangedEvent);
             RaiseEvent(newEventArgs);
         }
+
+        public void AddElement(UIElement element)
+        {
+            grid.Children.Add(element);
+        }
+
+        public void RemoveElement(UIElement element)
+        {
+            grid.Children.Remove(element);
+        }
     }
 }

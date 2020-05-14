@@ -24,44 +24,13 @@ namespace LinkaWPF
     public partial class MainWindow : Window
     {
         private List<Models.Card> _cards;
-        private List<CardButton> _buttons;
-        private int _currentPage;
-        private int _countPages;
-        private int _gridSize;
-        private int _rows;
-        private int _columns;
-        private CircularProgressBar _progress;
-        private Storyboard _sb;
         private List<Models.Card> _words;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Init();
-            Render();
-        }
-
-        private void Init()
-        {
-            this._currentPage = 0;
-            this._rows = 6;
-            this._columns = 6;
-            this._gridSize = this._rows * this._columns;
-
-            for (var i = 0; i < this._rows; i++)
-            {
-                var rowDefinition = new RowDefinition();
-                gridCard.RowDefinitions.Add(rowDefinition);
-            }
-
-            for (var i = 0; i < this._columns; i++)
-            {
-                var columnDefinition = new ColumnDefinition();
-                gridCard.ColumnDefinitions.Add(columnDefinition);
-            }
-
-            this._cards = new List<Models.Card>() {
+            _cards = new List<Models.Card>() {
                 // Page one
                 new Models.Card(0, "One", "1.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\one.ogg"),
                 new Models.Card(1, "Two", "2.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\two.ogg"),
@@ -77,155 +46,34 @@ namespace LinkaWPF
                 new Models.Card(11, "Sleep", "eat.gif")
             };
 
-            // Рассчитываем максимальное количество страниц
-            this._countPages = Convert.ToInt32(Math.Round(Convert.ToDouble(this._cards.Count) / this._gridSize, 0));
-
-            this._buttons = new List<CardButton>();
-
-            // Создаем кнопки и раскладываем их по клеткам таблицы
-            for (var i = 0; i < this._gridSize; i++)
-            {
-                var button = new CardButton();
-                button.Click += new RoutedEventHandler(cardButton_Click);
-                button.HazGazeChanged += new RoutedEventHandler(cardButton_HazGazeChanged);
-                button.MouseEnter += new MouseEventHandler(cardButton_MouseEnter);
-                button.MouseLeave += new MouseEventHandler(cardButton_MouseLeave);
-
-                var row = Convert.ToInt32(Math.Round(Convert.ToDouble(i / this._rows), 0));
-                int column = i - (this._rows * row);
-
-                this.gridCard.Children.Add(button);
-                Grid.SetRow(button, row);
-                Grid.SetColumn(button, column);
-
-                this._buttons.Add(button);
-            }
-
-            _progress = new CircularProgressBar();
-            _progress.StrokeThickness = 6;
-            _progress.HorizontalAlignment = HorizontalAlignment.Center;
-            _progress.VerticalAlignment = VerticalAlignment.Center;
-            _progress.Visibility = Visibility.Hidden;
-
-            var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(3));
-            animation.Completed += new EventHandler((o, args) => {                
-                _progress.Visibility = Visibility.Hidden;
-            });
-            Storyboard.SetTarget(animation, _progress);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(CircularProgressBar.PercentageProperty));
-
-            _sb = new Storyboard();
-            _sb.Children.Add(animation);
+            cardBoard.Cards = _cards;
+            cardBoard.ClickOnCardButton += cardButton_Click;
 
             _words = new List<Models.Card>();
         }
 
-        private void Render()
+        private void cardButton_Click(object sender, EventArgs e)
         {
-            for (var i = this._currentPage * this._gridSize; i < this._currentPage * this._gridSize + this._gridSize; i++)
-            {
-                Models.Card card = null;
-                if (i >= 0 && i < this._cards.Count)
-                {
-                    card = this._cards[i];
-                }
-                var count = i - this._currentPage * this._gridSize;
-                this._buttons[count].Card = card;
-            }
-        }
+            var cardButton = sender as CardButton;
 
-        private void NextPage()
-        {
-            if (this._currentPage == this._countPages - 1)
-            {
-                this._currentPage = 0;
-            }
-            else
-            {
-                this._currentPage++;
-            }
-            Render();
-        }
+            if (cardButton.Card == null) return;
 
-        private void PrevPage()
-        {
-            if (this._currentPage - 1 < 0)
-            {
-                this._currentPage = this._countPages - 1;
-            }
-            else
-            {
-                this._currentPage--;
-            }
-            Render();
-        }
-
-        private void cardButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as CardButton;
-
-            if (button.Card == null) return;
-
-            text.Text += " " + button.Card.Title;
+            text.Text += " " + cardButton.Card.Title;
 
             // Добавить карточку в цепочку
-            _words.Add(button.Card);
-        }
-
-        private void cardButton_HazGazeChanged(object sender, RoutedEventArgs e)
-        {
-            var button = sender as CardButton;
-            startClick(button);
-        }
-
-        private void startClick(CardButton button)
-        {
-            if (_progress.Parent != null)
-            {
-                (_progress.Parent as Grid).Children.Remove(_progress);
-            }
-
-            // Добавляем прогресс на карточку
-            button.grid.Children.Add(_progress);
-
-            _progress.Radius = Convert.ToInt32((button.ActualHeight - 20) / 2);
-            _progress.Visibility = Visibility.Visible;
-
-            _sb.Stop();
-            _sb.Begin();
-        }
-
-        private void stopClick()
-        {
-            _progress.Visibility = Visibility.Hidden;
-        }
-
-        private void cardButton_MouseEnter(object sender, RoutedEventArgs e)
-        {
-            var button = sender as CardButton;
-
-            startClick(button);
-        }
-
-        private void cardButton_MouseLeave(object sender, RoutedEventArgs e)
-        {
-            stopClick();
+            _words.Add(cardButton.Card);
         }
 
         private void prevButton_Click(object sender, RoutedEventArgs e)
         {
             // Prev
-            this.PrevPage();
-
-            GC.Collect();
+            cardBoard.PrevPage();
         }
 
         private void nextButton_Click(object sender, RoutedEventArgs e)
         {
             // Next
-            this.NextPage();
-
-            GC.Collect();
+            cardBoard.NextPage();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
