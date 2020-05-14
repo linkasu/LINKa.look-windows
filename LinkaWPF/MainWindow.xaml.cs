@@ -103,14 +103,19 @@ namespace LinkaWPF
             // Воспроизведение
             void play(IList<Models.Card> playlist, int startIndex)
             {
-                if (playlist == null || (playlist != null && playlist[startIndex].Audio == null)) return;
+                if (playlist == null || startIndex >= playlist.Count) return;
+                if (playlist[startIndex].Audio == null)
+                {
+                    play(playlist, startIndex + 1);
+                    return;
+                }
+
                 var audio = new Audio(playlist[startIndex].Audio);
                 audio.Ending += new EventHandler((obj, evnt) => {
-                    if (++startIndex >= playlist.Count) return;
-
                     play(_words, startIndex);
                 });
                 audio.Play();
+                startIndex++;
             }
 
             play(_words, 0);
