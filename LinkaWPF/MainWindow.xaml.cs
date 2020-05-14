@@ -120,11 +120,11 @@ namespace LinkaWPF
                     return;
                 }
 
-                var audio = new Audio(playlist[startIndex].Audio);
-                audio.Ending += new EventHandler((obj, evnt) => {
+                var player = new DirectxPlayer(playlist[startIndex].Audio);
+                player.Ending += new EventHandler((obj, evnt) => {
                     play(_words, startIndex);
                 });
-                audio.Play();
+                player.Play();
                 startIndex++;
             }
 

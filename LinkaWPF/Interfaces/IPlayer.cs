@@ -8,7 +8,7 @@ namespace LinkaWPF.Interfaces
 {
     public interface IPlayer
     {
-        void Play(string path);
+        void Play();
         event EventHandler Ending;
     }
 }

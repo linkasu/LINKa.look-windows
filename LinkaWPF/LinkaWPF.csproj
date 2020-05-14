@@ -102,7 +102,9 @@
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DirectxPlayer.cs" />
     <Compile Include="Interfaces\IContainer.cs" />
+    <Compile Include="Interfaces\IPlayer.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
