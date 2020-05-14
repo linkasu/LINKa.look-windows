@@ -76,7 +76,7 @@ namespace LinkaWPF
             cardBoard.NextPage();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void clearTextBoxButton_Click(object sender, RoutedEventArgs e)
         {
             // Очистка текстового поля
             text.Text = "";
@@ -86,7 +86,7 @@ namespace LinkaWPF
             _words.Clear();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void removeLastWordButton_Click(object sender, RoutedEventArgs e)
         {
             // Удалить последнее слово из текстового поля
             var end = text.Text.LastIndexOf(' ');
@@ -98,7 +98,7 @@ namespace LinkaWPF
             _words.RemoveAt(_words.Count - 1);
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
         {
             // Воспроизведение
             void play(IList<Models.Card> playlist, int startIndex)
