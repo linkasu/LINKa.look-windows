@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinkaWPF.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace LinkaWPF
     /// <summary>
     /// Логика взаимодействия для CardButton.xaml
     /// </summary>
-    public partial class CardButton : UserControl
+    public partial class CardButton : UserControl, IContainer
     {
         private bool _isMouseDown;
         public CardButton()
@@ -77,14 +78,17 @@ namespace LinkaWPF
             RaiseEvent(newEventArgs);
         }
 
-        public void AddElement(UIElement element)
+        void IContainer.AddElement(UIElement element)
         {
             grid.Children.Add(element);
         }
 
-        public void RemoveElement(UIElement element)
+        void IContainer.RemoveElement(UIElement element)
         {
             grid.Children.Remove(element);
         }
+
+        double IContainer.Width { get => this.ActualWidth; }
+        double IContainer.Height { get => this.ActualHeight; }
     }
 }

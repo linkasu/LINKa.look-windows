@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinkaWPF.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace LinkaWPF
     {
         private CircularProgressBar _progress;
         private Storyboard _sb;
-        private object _parent;
+        private IContainer _container;
 
         public AnimatedDelayedClick(double delay)
         {
@@ -26,7 +27,7 @@ namespace LinkaWPF
             var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(delay));
             animation.Completed += new EventHandler((sender, e) => {
                 _progress.Visibility = Visibility.Hidden;
-                Ended(_parent, new EventArgs());
+                Ended(_container, new EventArgs());
             });
             Storyboard.SetTarget(animation, _progress);
             Storyboard.SetTargetProperty(animation, new PropertyPath(CircularProgressBar.PercentageProperty));
@@ -35,19 +36,19 @@ namespace LinkaWPF
             _sb.Children.Add(animation);
         }
 
-        public void Start(CardButton cardButton)
+        public void Start(IContainer container)
         {
-            if (_parent != null)
+            if (_container != null)
             {
-                (_parent as CardButton).RemoveElement(_progress);
+                _container.RemoveElement(_progress);
             }
 
             // Добавляем прогресс на карточку
-            cardButton.AddElement(_progress);
+            container.AddElement(_progress);
 
-            _parent = cardButton;
+            _container = container;
 
-            _progress.Radius = Convert.ToInt32((cardButton.ActualHeight - 20) / 2);
+            _progress.Radius = Convert.ToInt32((_container.Height - 20) / 2);
             _progress.Visibility = Visibility.Visible;
 
             _sb.Stop();
