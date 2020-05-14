@@ -57,6 +57,7 @@ namespace LinkaWPF
 
         public void Stop()
         {
+            _sb.Stop();
             _progress.Visibility = Visibility.Hidden;
         }
 
