@@ -58,7 +58,13 @@ namespace LinkaWPF
 
             if (cardButton.Card == null) return;
 
-            text.Text += " " + cardButton.Card.Title;
+            text.Text += (text.Text != string.Empty ? " " : string.Empty) + cardButton.Card.Title;
+
+            // Переставить курсор в конец строки
+            text.Select(text.Text.Length, 0);
+
+            // Передать фокус текстовому полю
+            text.Focus();
 
             // Добавить карточку в цепочку
             _words.Add(cardButton.Card);
@@ -91,7 +97,11 @@ namespace LinkaWPF
             // Удалить последнее слово из текстового поля
             var end = text.Text.LastIndexOf(' ');
             text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
+
+            // Переставить курсор в конец строки
             text.Select(text.Text.Length, 0);
+
+            // Передать фокус текстовому полю
             text.Focus();
 
             // Удалить последнее слово из цепочки слов

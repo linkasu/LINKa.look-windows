@@ -25,7 +25,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="text" Grid.Column="0" FontSize="20" Margin="2"></TextBox>
+            <TextBox x:Name="text" Grid.Column="0" FontSize="20" Margin="2" IsReadOnly="True"></TextBox>
             <Button Grid.Column="1" Margin="2" Click="removeLastWordButton_Click">Удалить слово</Button>
             <Button Grid.Column="2" Margin="2" Click="clearTextBoxButton_Click">Очистить</Button>
             <Button Grid.Column="3" Margin="2" Click="pronounceWordsButton_Click">Воспроизвести</Button>
