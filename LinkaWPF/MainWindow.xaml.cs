@@ -1,6 +1,7 @@
 ﻿using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,31 +26,44 @@ namespace LinkaWPF
     {
         private List<Models.Card> _cards;
         private List<Models.Card> _words;
+        private YandexSpeech _yandexSpeech;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            // TODO: Заменить на загрузку из конфига
+             _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348");
+
             _cards = new List<Models.Card>() {
                 // Page one
-                new Models.Card(0, "One", "1.png", @"audios\one.ogg"),
-                new Models.Card(1, "Two", "2.png", @"audios\two.ogg"),
-                new Models.Card(2, "Three", "3.png", @"audios\three.ogg"),
-                new Models.Card(3, "Four", "4.png", @"audios\four.ogg"),
-                new Models.Card(4, "Five", "5.png", @"audios\five.ogg"),
-                new Models.Card(5, "Six", "6.png", @"audios\six.ogg"),
-                new Models.Card(6, "Seven", "7.png", @"audios\seven.ogg"),
-                new Models.Card(7, "Eight", "8.png"),
-                new Models.Card(8, "Nine", "9.png"),
-                new Models.Card(9, "Nine", "9.png"),
-                new Models.Card(10, "Sleep", "sleep.gif"),
-                new Models.Card(11, "Sleep", "eat.gif")
+                new Models.Card(0, "Один", "1.png", @"audios\one.ogg"),
+                new Models.Card(1, "Два", "2.png", @"audios\two.ogg"),
+                new Models.Card(2, "Три", "3.png", @"audios\three.ogg"),
+                new Models.Card(3, "Четыре", "4.png", @"audios\four.ogg"),
+                new Models.Card(4, "Пять", "5.png", @"audios\five.ogg"),
+                new Models.Card(5, "Шесть", "6.png", @"audios\six.ogg"),
+                new Models.Card(6, "Семь", "7.png", @"audios\seven.ogg"),
+                new Models.Card(7, "Восемь", "8.png"),
+                new Models.Card(8, "Девять", "9.png"),
+                new Models.Card(9, "Девять", "9.png"),
+                new Models.Card(10, "Спать", "sleep.gif"),
+                new Models.Card(11, "Есть", "eat.gif")
             };
 
             cardBoard.Cards = _cards;
             cardBoard.ClickOnCardButton += cardButton_Click;
 
             _words = new List<Models.Card>();
+        }
+
+        private void ClearCach()
+        {
+            var allfiles = Directory.GetFiles("temp");
+            foreach (var filename in allfiles)
+            {
+                File.Delete(filename);
+            }
         }
 
         private void cardButton_Click(object sender, EventArgs e)
@@ -110,25 +124,15 @@ namespace LinkaWPF
 
         private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Воспроизведение
-            void play(IList<Models.Card> playlist, int startIndex)
-            {
-                if (playlist == null || startIndex >= playlist.Count) return;
-                if (playlist[startIndex].Audio == null)
-                {
-                    play(playlist, startIndex + 1);
-                    return;
-                }
+            var player = new Player(_yandexSpeech);
 
-                var player = new DirectxPlayer(playlist[startIndex].Audio);
-                player.Ending += new EventHandler((obj, evnt) => {
-                    play(_words, startIndex);
-                });
-                player.Play();
-                startIndex++;
-            }
+            player.Play(_words);
+        }
 
-            play(_words, 0);
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            // Удаляем закешированные аудиофайлы
+            ClearCach();
         }
     }
 }
