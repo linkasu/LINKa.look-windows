@@ -33,7 +33,7 @@ namespace LinkaWPF
             InitializeComponent();
 
             // Создать директорию для временных файлов
-            var tempPath = Directory.GetCurrentDirectory() + "\\temp\\";
+            var tempPath = Environment.CurrentDirectory + "\\temp\\";
             Directory.CreateDirectory(tempPath);
 
             // TODO: Заменить на загрузку из конфига
@@ -41,18 +41,18 @@ namespace LinkaWPF
 
             _cards = new List<Models.Card>() {
                 // Page one
-                new Models.Card(0, "Один", "1.png", @"audios\one.ogg"),
-                new Models.Card(1, "Два", "2.png", @"audios\two.ogg"),
-                new Models.Card(2, "Три", "3.png", @"audios\three.ogg"),
-                new Models.Card(3, "Четыре", "4.png", @"audios\four.ogg"),
-                new Models.Card(4, "Пять", "5.png", @"audios\five.ogg"),
-                new Models.Card(5, "Шесть", "6.png", @"audios\six.ogg"),
-                new Models.Card(6, "Семь", "7.png", @"audios\seven.ogg"),
-                new Models.Card(7, "Восемь", "8.png"),
-                new Models.Card(8, "Девять", "9.png"),
-                new Models.Card(9, "Девять", "9.png"),
-                new Models.Card(10, "Спать", "sleep.gif"),
-                new Models.Card(11, "Есть", "eat.gif")
+                new Models.Card(0, "Один", string.Format("{0}\\images\\1.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\one.ogg", Environment.CurrentDirectory)),
+                new Models.Card(1, "Два", string.Format("{0}\\images\\2.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\two.ogg", Environment.CurrentDirectory)),
+                new Models.Card(2, "Три", string.Format("{0}\\images\\3.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\three.ogg", Environment.CurrentDirectory)),
+                new Models.Card(3, "Четыре", string.Format("{0}\\images\\4.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\four.ogg", Environment.CurrentDirectory)),
+                new Models.Card(4, "Пять", string.Format("{0}\\images\\5.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\five.ogg", Environment.CurrentDirectory)),
+                new Models.Card(5, "Шесть", string.Format("{0}\\images\\6.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\six.ogg", Environment.CurrentDirectory)),
+                new Models.Card(6, "Семь", string.Format("{0}\\images\\7.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\seven.ogg", Environment.CurrentDirectory)),
+                new Models.Card(7, "Восемь", string.Format("{0}\\images\\8.png", Environment.CurrentDirectory)),
+                new Models.Card(8, "Девять", string.Format("{0}\\images\\9.png", Environment.CurrentDirectory)),
+                new Models.Card(9, "Девять", string.Format("{0}\\images\\9.png", Environment.CurrentDirectory)),
+                new Models.Card(10, "Спать", string.Format("{0}\\images\\sleep.gif", Environment.CurrentDirectory)),
+                new Models.Card(11, "Есть", string.Format("{0}\\images\\eat.gif", Environment.CurrentDirectory))
             };
 
             cardBoard.Cards = _cards;
