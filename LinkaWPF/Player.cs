@@ -1,6 +1,7 @@
 ﻿using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,7 +60,16 @@ namespace LinkaWPF
         {
             if (index >= pathList.Count) return;
 
-            var audio = new Audio(pathList[index]);
+            var path = pathList[index];
+
+            if (File.Exists(path) == false)
+            {
+                index++;
+                PlayAudio(pathList, index);
+                return;
+            }
+
+            var audio = new Audio(path);
             audio.Ending += new EventHandler((obj, evnt) => {
                 PlayAudio(pathList, index);
             });
