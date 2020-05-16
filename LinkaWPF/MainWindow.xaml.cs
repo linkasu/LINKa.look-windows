@@ -32,13 +32,13 @@ namespace LinkaWPF
 
             _cards = new List<Models.Card>() {
                 // Page one
-                new Models.Card(0, "One", "1.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\one.ogg"),
-                new Models.Card(1, "Two", "2.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\two.ogg"),
-                new Models.Card(2, "Three", "3.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\three.ogg"),
-                new Models.Card(3, "Four", "4.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\four.ogg"),
-                new Models.Card(4, "Five", "5.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\five.ogg"),
-                new Models.Card(5, "Six", "6.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\six.ogg"),
-                new Models.Card(6, "Seven", "7.png", @"C:\Users\alex\LinkaWPF\LinkaWPF\bin\Debug\audios\seven.ogg"),
+                new Models.Card(0, "One", "1.png", @"audios\one.ogg"),
+                new Models.Card(1, "Two", "2.png", @"audios\two.ogg"),
+                new Models.Card(2, "Three", "3.png", @"audios\three.ogg"),
+                new Models.Card(3, "Four", "4.png", @"audios\four.ogg"),
+                new Models.Card(4, "Five", "5.png", @"audios\five.ogg"),
+                new Models.Card(5, "Six", "6.png", @"audios\six.ogg"),
+                new Models.Card(6, "Seven", "7.png", @"audios\seven.ogg"),
                 new Models.Card(7, "Eight", "8.png"),
                 new Models.Card(8, "Nine", "9.png"),
                 new Models.Card(9, "Nine", "9.png"),
