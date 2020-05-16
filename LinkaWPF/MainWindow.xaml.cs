@@ -32,8 +32,12 @@ namespace LinkaWPF
         {
             InitializeComponent();
 
+            // Создать директорию для временных файлов
+            var tempPath = Directory.GetCurrentDirectory() + "\\temp\\";
+            Directory.CreateDirectory(tempPath);
+
             // TODO: Заменить на загрузку из конфига
-             _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348");
+            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", tempPath);
 
             _cards = new List<Models.Card>() {
                 // Page one

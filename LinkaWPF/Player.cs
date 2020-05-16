@@ -25,6 +25,8 @@ namespace LinkaWPF
             IList<string> cachedAudio = await Cache(cards);
 
             PlayAudio(cachedAudio, 0);
+
+            var test = 0;
         }
 
         private async Task<IList<string>> Cache(IList<Models.Card> cards)
@@ -72,6 +74,7 @@ namespace LinkaWPF
             var audio = new Audio(path);
             audio.Ending += new EventHandler((obj, evnt) => {
                 PlayAudio(pathList, index);
+                Task.Run(() => { (obj as Audio).Dispose(); });
             });
             audio.Play();
             index++;

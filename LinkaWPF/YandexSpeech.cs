@@ -11,9 +11,12 @@ namespace LinkaWPF
     public class YandexSpeech
     {
         private readonly string _key;
-        public YandexSpeech(string key)
+        private readonly string _tempPath;
+
+        public YandexSpeech(string key, string tempPath)
         {
             _key = key;
+            _tempPath = tempPath;
         }
 
         public async Task<string> GetAudio(string text)
@@ -30,7 +33,8 @@ namespace LinkaWPF
             if (response.IsSuccessStatusCode == true)
             {
                 var responseBytes = await response.Content.ReadAsByteArrayAsync();
-                var audioFile = string.Format(@"temp\{0}.ogg", System.Guid.NewGuid());
+
+                var audioFile = string.Format(@"{0}\{1}.ogg", _tempPath, System.Guid.NewGuid());
                 File.WriteAllBytes(audioFile, responseBytes);
 
                 return audioFile;
