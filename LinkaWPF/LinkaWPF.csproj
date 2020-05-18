@@ -77,6 +77,9 @@
     <Compile Include="Controls\AnimatedCardBoard.xaml.cs">
       <DependentUpon>AnimatedCardBoard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditorWindow.xaml.cs">
+      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Player.cs" />
     <Compile Include="YandexSpeech.cs" />
     <Page Include="Controls\AnimatedCardBoard.xaml">
@@ -92,6 +95,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CircularProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
