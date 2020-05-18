@@ -54,7 +54,7 @@
         <Button x:Name="nextButton" Grid.Row="1" Grid.Column="2" Click="nextButton_Click">Next</Button>
 
         <!-- CardBoard -->
-        <local:CardBoard x:Name="cardBoard" Grid.Row="1" Grid.Column="1"></local:CardBoard>
+        <local:AnimatedCardBoard x:Name="cardBoard" Grid.Row="1" Grid.Column="1"></local:AnimatedCardBoard>
         
     </Grid>
 </Window>

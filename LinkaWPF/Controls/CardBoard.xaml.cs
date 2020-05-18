@@ -26,14 +26,10 @@ namespace LinkaWPF
         private int _gridSize;
         private int _rows;
         private int _columns;
-        private AnimatedDelayedClick _delayedClick;
 
         public CardBoard()
         {
             InitializeComponent();
-
-            _delayedClick = new AnimatedDelayedClick(3);
-            _delayedClick.Ended += _delayedClick_Ended;
 
             InitGrid();
         }
@@ -67,7 +63,7 @@ namespace LinkaWPF
 
 #endregion
 
-#region Methods
+        #region Methods
         // Methods
         private void InitGrid()
         {
@@ -99,10 +95,10 @@ namespace LinkaWPF
             for (var i = 0; i < _gridSize; i++)
             {
                 var button = new CardButton();
-                button.Click += new RoutedEventHandler(cardButton_Click);
-                button.HazGazeChanged += new RoutedEventHandler(cardButton_HazGazeChanged);
-                button.MouseEnter += Button_MouseEnter;
-                button.MouseLeave += Button_MouseLeave;
+                button.Click += new RoutedEventHandler(CardButton_Click);
+                button.HazGazeChanged += new RoutedEventHandler(CardButton_HazGazeChanged);
+                button.MouseEnter += CardButton_MouseEnter;
+                button.MouseLeave += CardButton_MouseLeave;
 
                 var row = Convert.ToInt32(Math.Round(Convert.ToDouble(i / _rows), 0));
                 int column = i - (_rows * row);
@@ -169,46 +165,26 @@ namespace LinkaWPF
             GC.Collect();
         }
 
-        private void cardButton_Click(object sender, RoutedEventArgs e)
+        private void CardButton_Click(object sender, RoutedEventArgs e)
         {
-            clickOnCardButton(sender);
+            PressOnCardButton(sender);
         }
 
-        private void clickOnCardButton(object sender)
+        protected void PressOnCardButton(object sender)
         {
-            EventArgs e = new EventArgs();
-            ClickOnCardButton?.Invoke(sender, e);
+            ClickOnCardButton?.Invoke(sender, new EventArgs());
         }
 
-        private void cardButton_HazGazeChanged(object sender, RoutedEventArgs e)
+        protected virtual void CardButton_HazGazeChanged(object sender, RoutedEventArgs e)
         {
-            var button = sender as CardButton;
-            if (button.Card == null) return;
-
-            _delayedClick.Start(button);
         }
 
-        private void StopClick()
+        protected virtual void CardButton_MouseEnter(object sender, MouseEventArgs e)
         {
-            _delayedClick.Stop();
         }
 
-        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        protected virtual void CardButton_MouseLeave(object sender, MouseEventArgs e)
         {
-            var button = sender as CardButton;
-            if (button.Card == null) return;
-
-            _delayedClick.Start(button);
-        }
-
-        private void Button_MouseLeave(object sender, MouseEventArgs e)
-        {
-            _delayedClick.Stop();
-        }
-
-        private void _delayedClick_Ended(object sender, EventArgs e)
-        {
-            ClickOnCardButton?.Invoke(sender, e);
         }
         #endregion
     }
