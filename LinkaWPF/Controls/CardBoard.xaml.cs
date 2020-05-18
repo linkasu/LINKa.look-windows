@@ -94,7 +94,7 @@ namespace LinkaWPF
             // Создаем кнопки и раскладываем их по клеткам таблицы
             for (var i = 0; i < _gridSize; i++)
             {
-                var button = new CardButton();
+                var button = CreateCardButton();
                 button.Click += new RoutedEventHandler(CardButton_Click);
                 button.HazGazeChanged += new RoutedEventHandler(CardButton_HazGazeChanged);
                 button.MouseEnter += CardButton_MouseEnter;
@@ -163,6 +163,11 @@ namespace LinkaWPF
             Render();
 
             GC.Collect();
+        }
+
+        protected virtual CardButton CreateCardButton()
+        {
+            return new CardButton();
         }
 
         private void CardButton_Click(object sender, RoutedEventArgs e)
