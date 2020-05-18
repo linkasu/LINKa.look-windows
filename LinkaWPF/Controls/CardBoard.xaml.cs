@@ -24,14 +24,12 @@ namespace LinkaWPF
         private int _currentPage;
         private int _countPages;
         private int _gridSize;
-        private int _rows;
-        private int _columns;
 
         public CardBoard()
         {
             InitializeComponent();
 
-            InitGrid();
+            Init(); ;
         }
 
         #region Properties
@@ -39,15 +37,29 @@ namespace LinkaWPF
         public static readonly DependencyProperty CardsProperty =
             DependencyProperty.Register("Cards", typeof(IList<Models.Card>), typeof(CardBoard), new PropertyMetadata(null, new PropertyChangedCallback(OnCardsChanged)));
 
+        public static readonly DependencyProperty ColumnsProperty =
+            DependencyProperty.Register("Columns", typeof(int), typeof(CardBoard), new PropertyMetadata(3, new PropertyChangedCallback(GridSizeChanged)));
+
+        public static readonly DependencyProperty RowsProperty =
+            DependencyProperty.Register("Rows", typeof(int), typeof(CardBoard), new PropertyMetadata(3, new PropertyChangedCallback(GridSizeChanged)));
+
         private static void OnCardsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             CardBoard cardBoard = sender as CardBoard;
-            cardBoard.Cards = (IList<Models.Card>)args.NewValue;
+            var cards = (IList<Models.Card>)args.NewValue;
 
-            cardBoard.InitCardButtons();
+            cardBoard.Cards = cards;
+
+            if (cards == null) return;
+
             cardBoard.InitPages();
-
             cardBoard.Render();
+        }
+
+        private static void GridSizeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            CardBoard cardBoard = sender as CardBoard;
+            cardBoard.Init();
         }
 
         public IList<Models.Card> Cards
@@ -55,9 +67,29 @@ namespace LinkaWPF
             get { return (IList<Models.Card>)GetValue(CardsProperty); }
             set { SetValue(CardsProperty, value); }
         }
-#endregion
 
-#region Events
+        public int Columns
+        {
+            get { return (int)GetValue(ColumnsProperty); }
+            set
+            {
+                if (value <= 0) value = 1;
+                SetValue(ColumnsProperty, value);
+            }
+        }
+
+        public int Rows
+        {
+            get { return (int)GetValue(RowsProperty); }
+            set
+            {
+                if (value <= 0) value = 1;
+                SetValue(RowsProperty, value);
+            }
+        }
+        #endregion
+
+        #region Events
         // Events
         public event EventHandler ClickOnCardButton;
 
@@ -68,17 +100,19 @@ namespace LinkaWPF
         private void InitGrid()
         {
             _currentPage = 0;
-            _rows = 6;
-            _columns = 6;
-            _gridSize = _rows * _columns;
+            _gridSize = Rows * Columns;
 
-            for (var i = 0; i < _rows; i++)
+            if (grid.Children.Count != 0) grid.Children.Clear();
+            if (grid.RowDefinitions.Count != 0) grid.RowDefinitions.Clear();
+            if (grid.ColumnDefinitions.Count != 0) grid.ColumnDefinitions.Clear();
+
+            for (var i = 0; i < Rows; i++)
             {
                 var rowDefinition = new RowDefinition();
                 grid.RowDefinitions.Add(rowDefinition);
             }
 
-            for (var i = 0; i < _columns; i++)
+            for (var i = 0; i < Columns; i++)
             {
                 var columnDefinition = new ColumnDefinition();
                 grid.ColumnDefinitions.Add(columnDefinition);
@@ -87,27 +121,31 @@ namespace LinkaWPF
 
         private void InitCardButtons()
         {
-            grid.Children.Clear();
-
-            _buttons = new List<CardButton>();
+            if (_buttons == null)
+            {
+                _buttons = new List<CardButton>();
+            } else
+            {
+                _buttons.Clear();
+            }
 
             // Создаем кнопки и раскладываем их по клеткам таблицы
-            for (var i = 0; i < _gridSize; i++)
+            for (var i = 0; i < Rows; i++)
             {
-                var button = CreateCardButton();
-                button.Click += new RoutedEventHandler(CardButton_Click);
-                button.HazGazeChanged += new RoutedEventHandler(CardButton_HazGazeChanged);
-                button.MouseEnter += CardButton_MouseEnter;
-                button.MouseLeave += CardButton_MouseLeave;
+                for (var j = 0; j < Columns; j++)
+                {
+                    var button = CreateCardButton();
+                    button.Click += new RoutedEventHandler(CardButton_Click);
+                    button.HazGazeChanged += new RoutedEventHandler(CardButton_HazGazeChanged);
+                    button.MouseEnter += CardButton_MouseEnter;
+                    button.MouseLeave += CardButton_MouseLeave;
 
-                var row = Convert.ToInt32(Math.Round(Convert.ToDouble(i / _rows), 0));
-                int column = i - (_rows * row);
+                    grid.Children.Add(button);
+                    Grid.SetRow(button, i);
+                    Grid.SetColumn(button, j);
 
-                grid.Children.Add(button);
-                Grid.SetRow(button, row);
-                Grid.SetColumn(button, column);
-
-                _buttons.Add(button);
+                    _buttons.Add(button);
+                }
             }
         }
 
@@ -163,6 +201,17 @@ namespace LinkaWPF
             Render();
 
             GC.Collect();
+        }
+
+        private void Init()
+        {
+            InitGrid();
+            InitCardButtons();
+
+            if (Cards == null) return;
+
+            InitPages();
+            Render();
         }
 
         protected virtual CardButton CreateCardButton()
