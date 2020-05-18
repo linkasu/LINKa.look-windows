@@ -15,7 +15,7 @@ namespace LinkaWPF.Models
             this.Id = id;
             this.Title = title;
 
-            if (path != string.Empty) this.Source = new BitmapImage(new Uri(path));
+            if (path != null && path != string.Empty) this.Source = new BitmapImage(new Uri(path));
             //this.Source = new Uri(Environment.CurrentDirectory + "/images/" + path, UriKind.Absolute);
 
             Audio = audio;
