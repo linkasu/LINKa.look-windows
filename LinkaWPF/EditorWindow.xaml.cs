@@ -46,16 +46,29 @@ namespace LinkaWPF
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
 
-            var card = new Models.Card(_cards.Count, cardEditorWindow.Title, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath);
-            card.WithoutSpace = cardEditorWindow.WithoutSpace;
+            var card = new Models.Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.WithoutSpace);
             _cards.Add(card);
-            cardBoard.Cards = null;
-            cardBoard.Cards = _cards;
+
+            cardBoard.Update(_cards);
         }
 
         private void EditCard(object sender, RoutedEventArgs e)
         {
+            if (_selectedCardButton == null || _selectedCardButton.Card == null) return;
 
+            var index = _cards.IndexOf(_selectedCardButton.Card);
+
+            var cardEditorWindow = new CardEditorWindow(_selectedCardButton.Card.Title, _selectedCardButton.Card.WithoutSpace, _selectedCardButton.Card.ImagePath, _selectedCardButton.Card.AudioPath);
+            cardEditorWindow.Owner = this;
+            cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            if (cardEditorWindow.ShowDialog() != true) return;
+
+            _cards[index].Title = cardEditorWindow.Caption;
+            _cards[index].WithoutSpace = cardEditorWindow.WithoutSpace;
+            _cards[index].ImagePath = cardEditorWindow.ImagePath;
+            _cards[index].AudioPath = cardEditorWindow.AudioPath;
+
+            cardBoard.UpdateCard(index, _cards[index]);
         }
 
         private void RemoveCard(object sender, RoutedEventArgs e)
@@ -64,8 +77,8 @@ namespace LinkaWPF
 
             _cards.Remove(_selectedCardButton.Card);
             RemoveSelectionCard();
-            cardBoard.Cards = null;
-            cardBoard.Cards = _cards;
+
+            cardBoard.Update(_cards);
         }
 
         private void ChangeGridSize(object sender, RoutedEventArgs e)

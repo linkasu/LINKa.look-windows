@@ -40,9 +40,10 @@ namespace LinkaWPF
 
         public CardEditorWindow() : this("", false, null, null)
         {
+            acceptButton.Content = "Добавить";
         }
 
-        public CardEditorWindow(string title, bool withoutSpace, string imagePath, string audioPath)
+        public CardEditorWindow(string caption, bool withoutSpace, string imagePath, string audioPath)
         {
             InitializeComponent();
 
@@ -53,10 +54,12 @@ namespace LinkaWPF
             // TODO: Заменить на загрузку из конфига
             _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", tempPath);
 
-            titleTextBox.Text = title;
+            captionTextBox.Text = caption;
             withoutSpaceCheckBox.IsChecked = withoutSpace;
             Image = SetImageFromPath(imagePath);
             AudioPath = audioPath;
+
+            acceptButton.Content = "Изменить";
         }
 
         private void UploadImage(object sender, RoutedEventArgs e)
@@ -73,7 +76,7 @@ namespace LinkaWPF
 
         private async void UploadAudioFromYandex(object sender, RoutedEventArgs e)
         {
-            if (titleTextBox.Text == null || titleTextBox.Text == string.Empty)
+            if (captionTextBox.Text == null || captionTextBox.Text == string.Empty)
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
@@ -81,7 +84,7 @@ namespace LinkaWPF
 
             uploadFromYandexButton.IsEnabled = false;
             uploadFromFileButton.IsEnabled = false;
-            AudioPath = await _yandexSpeech.GetAudio(titleTextBox.Text);
+            AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
 
             uploadFromYandexButton.IsEnabled = true;
             uploadFromFileButton.IsEnabled = true;
@@ -111,7 +114,7 @@ namespace LinkaWPF
 
         private void Accept(object sender, RoutedEventArgs e)
         {
-            if (titleTextBox.Text == null || titleTextBox.Text == string.Empty)
+            if (captionTextBox.Text == null || captionTextBox.Text == string.Empty)
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
@@ -132,9 +135,9 @@ namespace LinkaWPF
             return new BitmapImage(new Uri(path));
         }
 
-        public string Title
+        public string Caption
         {
-            get { return titleTextBox.Text; }
+            get { return captionTextBox.Text; }
         }
 
         public string ImagePath
