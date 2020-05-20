@@ -163,7 +163,7 @@ namespace LinkaWPF
             }
 
             // Рассчитываем максимальное количество страниц
-            _countPages = Convert.ToInt32(Math.Round(Convert.ToDouble(Cards.Count) / _gridSize, 0));
+            _countPages = Convert.ToInt32(Math.Ceiling((double)Cards.Count / _gridSize));
 
             if (_currentPage > _countPages) _currentPage = _countPages;
         }
@@ -223,38 +223,34 @@ namespace LinkaWPF
             }
         }
 
-        public void NextPage()
+        public bool NextPage()
         {
-            if (_countPages == 0) return;
+            if (_countPages <= 1) return false;
 
-            if (_currentPage == _countPages - 1)
-            {
-                _currentPage = 0;
-            }
-            else
-            {
-                _currentPage++;
-            }
+            _currentPage++;
+
+            if (_currentPage >= _countPages) _currentPage = 0;
+
             Render();
 
             GC.Collect();
+
+            return true;
         }
 
-        public void PrevPage()
+        public bool PrevPage()
         {
-            if (_countPages == 0) return;
+            if (_countPages <= 1) return false;
 
-            if (_currentPage - 1 < 0)
-            {
-                _currentPage = _countPages - 1;
-            }
-            else
-            {
-                _currentPage--;
-            }
+            _currentPage--;
+
+            if (_currentPage < 0) _currentPage = _countPages - 1;
+
             Render();
 
             GC.Collect();
+
+            return true;
         }
 
         private void Init()
