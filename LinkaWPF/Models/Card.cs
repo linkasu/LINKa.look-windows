@@ -10,21 +10,40 @@ namespace LinkaWPF.Models
 {
     public class Card
     {
-        public Card(int id, string title, string path, string audio = null)
+        private string _imagePath;
+
+        public Card(int id, string title, string imagePath, string audioPath = null) : this(id, title, imagePath, audioPath, false)
         {
-            this.Id = id;
-            this.Title = title;
-
-            if (path != null && path != string.Empty) this.Source = new BitmapImage(new Uri(path));
-            //this.Source = new Uri(Environment.CurrentDirectory + "/images/" + path, UriKind.Absolute);
-
-            Audio = audio;
-            WithoutSpace = false;
+            
         }
+
+        public Card(int id, string title, string imagePath, string audioPath, bool withoutSpace)
+        {
+            Id = id;
+            Title = title;
+            ImagePath = imagePath;
+            AudioPath = audioPath;
+            WithoutSpace = withoutSpace;
+        }
+
         public int Id { get; set; }
-        public ImageSource Source { get; set; }
+
+        public string ImagePath
+        {
+            get { return _imagePath; }
+            set
+            {
+                if (value != null && value != string.Empty) Image = new BitmapImage(new Uri(value));
+                _imagePath = value;
+            }
+        }
+
+        public ImageSource Image { get; private set; }
+
         public string Title { get; set; }
-        public string Audio { get; set; }
+
+        public string AudioPath { get; set; }
+
         public bool WithoutSpace { get; set; }
     }
 }

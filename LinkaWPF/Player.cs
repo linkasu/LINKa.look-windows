@@ -25,8 +25,6 @@ namespace LinkaWPF
             IList<string> cachedAudio = await Cache(cards);
 
             PlayAudio(cachedAudio, 0);
-
-            var test = 0;
         }
 
         private async Task<IList<string>> Cache(IList<Models.Card> cards)
@@ -38,7 +36,7 @@ namespace LinkaWPF
             {
                 if (card == null) continue;
 
-                if (card.Audio == null)
+                if (card.AudioPath == null)
                 {
                     // У карточки нет озвучки, синтезируем голос из текста карточки и кэшируем аудио
                     var path = await _yandexSpeech.GetAudio(card.Title);
@@ -50,7 +48,7 @@ namespace LinkaWPF
                 } else
                 {
                     // У карточки есть озвучка, вставляем путь к аудио в список воспроизведения
-                    tempList.Add(card.Audio);
+                    tempList.Add(card.AudioPath);
                 }
             }
 
