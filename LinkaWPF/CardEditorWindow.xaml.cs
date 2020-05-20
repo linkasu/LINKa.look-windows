@@ -129,7 +129,7 @@ namespace LinkaWPF
         {
             if (path == null || File.Exists(path) == false) return null;
 
-            return new BitmapImage(new Uri(ImagePath));
+            return new BitmapImage(new Uri(path));
         }
 
         public string Title
