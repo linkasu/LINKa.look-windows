@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.DirectX.AudioVideoPlayback;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +39,16 @@ namespace LinkaWPF
             var cardButton = sender as CardButton;
 
             SelectCard(cardButton);
+        }
+
+        private void Play(object sender, RoutedEventArgs e)
+        {
+            if (_selectedCardButton == null || _selectedCardButton.Card == null || _selectedCardButton.Card.AudioPath == null || File.Exists(_selectedCardButton.Card.AudioPath) == false) return;
+
+            var audio = new Audio(_selectedCardButton.Card.AudioPath);
+            playButton.IsEnabled = false;
+            audio.Ending += (s, args) => { playButton.IsEnabled = true; };
+            audio.Play();
         }
 
         private void AddCard(object sender, RoutedEventArgs e)
@@ -90,6 +102,13 @@ namespace LinkaWPF
             if (columns != cardBoard.Columns) cardBoard.Columns = columns;
         }
 
+        private void SelectedCardChanged(Models.Card card)
+        {
+            playButton.IsEnabled = card == null || card.AudioPath == null || card.AudioPath == string.Empty ? false : true;
+            editButton.IsEnabled = card == null ? false : true;
+            deleteButton.IsEnabled = card == null ? false : true;
+        }
+
         private void SelectCard(CardButton cardButton)
         {
             if (cardButton == null || cardButton.Card == null) return;
@@ -98,6 +117,8 @@ namespace LinkaWPF
 
             _selectedCardButton = cardButton;
             _selectedCardButton.Background = Brushes.Yellow;
+
+            SelectedCardChanged(_selectedCardButton.Card);
         }
 
         private void RemoveSelectionCard()
@@ -106,6 +127,18 @@ namespace LinkaWPF
 
             _selectedCardButton.Background = Brushes.White;
             _selectedCardButton = null;
+
+            SelectedCardChanged(null);
+        }
+
+        private void PrevPage(object sender, RoutedEventArgs e)
+        {
+            if (cardBoard.PrevPage() == true) RemoveSelectionCard();
+        }
+
+        private void NextPage(object sender, RoutedEventArgs e)
+        {
+            if (cardBoard.NextPage() == true) RemoveSelectionCard();
         }
     }
 }
