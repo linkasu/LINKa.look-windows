@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="Создание карточки" Height="300" Width="450" ResizeMode="NoResize">
+        Title="Создание карточки" Height="320" Width="450" ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="2"/>
@@ -31,8 +31,8 @@
         <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Title</TextBlock>
 
         <StackPanel Grid.Column="1" Margin="2">
-            <TextBox Grid.Column="1" Grid.Row="0" x:Name="title" FontSize="16"/>
-            <CheckBox x:Name="withoutSpaceCheckbox">Не добавлять пробел после слова</CheckBox>
+            <TextBox Grid.Column="1" Grid.Row="0" x:Name="titleTextBox" FontSize="16"/>
+            <CheckBox x:Name="withoutSpaceCheckBox">Не добавлять пробел после слова</CheckBox>
         </StackPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Изображение</TextBlock>

@@ -38,7 +38,11 @@ namespace LinkaWPF
                 typeof(CardEditorWindow));
         }
 
-        public CardEditorWindow()
+        public CardEditorWindow() : this("", false, null, null)
+        {
+        }
+
+        public CardEditorWindow(string title, bool withoutSpace, string imagePath, string audioPath)
         {
             InitializeComponent();
 
@@ -48,6 +52,11 @@ namespace LinkaWPF
 
             // TODO: Заменить на загрузку из конфига
             _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", tempPath);
+
+            titleTextBox.Text = title;
+            withoutSpaceCheckBox.IsChecked = withoutSpace;
+            Image = SetImageFromPath(imagePath);
+            AudioPath = audioPath;
         }
 
         private void UploadImage(object sender, RoutedEventArgs e)
@@ -59,12 +68,12 @@ namespace LinkaWPF
 
             ImagePath = openFileDialog.FileName;
 
-            Image = new BitmapImage(new Uri(ImagePath));
+            Image = SetImageFromPath(ImagePath);
         }
 
         private async void UploadAudioFromYandex(object sender, RoutedEventArgs e)
         {
-            if (title.Text == null || title.Text == string.Empty)
+            if (titleTextBox.Text == null || titleTextBox.Text == string.Empty)
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
@@ -72,7 +81,7 @@ namespace LinkaWPF
 
             uploadFromYandexButton.IsEnabled = false;
             uploadFromFileButton.IsEnabled = false;
-            AudioPath = await _yandexSpeech.GetAudio(title.Text);
+            AudioPath = await _yandexSpeech.GetAudio(titleTextBox.Text);
 
             uploadFromYandexButton.IsEnabled = true;
             uploadFromFileButton.IsEnabled = true;
@@ -102,7 +111,7 @@ namespace LinkaWPF
 
         private void Accept(object sender, RoutedEventArgs e)
         {
-            if (title.Text == null || title.Text == string.Empty)
+            if (titleTextBox.Text == null || titleTextBox.Text == string.Empty)
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
@@ -116,9 +125,16 @@ namespace LinkaWPF
             DialogResult = false;
         }
 
+        private ImageSource SetImageFromPath(string path)
+        {
+            if (path == null || File.Exists(path) == false) return null;
+
+            return new BitmapImage(new Uri(ImagePath));
+        }
+
         public string Title
         {
-            get { return title.Text; }
+            get { return titleTextBox.Text; }
         }
 
         public string ImagePath
@@ -135,7 +151,7 @@ namespace LinkaWPF
 
         public bool WithoutSpace
         {
-            get { return withoutSpaceCheckbox.IsChecked == null || withoutSpaceCheckbox.IsChecked == false ? false : true; }
+            get { return withoutSpaceCheckBox.IsChecked == null || withoutSpaceCheckBox.IsChecked == false ? false : true; }
         }
     }
 }
