@@ -29,7 +29,7 @@ namespace LinkaWPF
         {
             InitializeComponent();
 
-            Init(); ;
+            Init();
         }
 
         #region Properties
@@ -47,13 +47,7 @@ namespace LinkaWPF
         {
             CardBoard cardBoard = sender as CardBoard;
             var cards = (IList<Models.Card>)args.NewValue;
-
-            cardBoard.Cards = cards;
-
-            if (cards == null) return;
-
-            cardBoard.InitPages();
-            cardBoard.Render();
+            cardBoard.Update(cards);
         }
 
         private static void GridSizeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
@@ -86,6 +80,16 @@ namespace LinkaWPF
                 if (value <= 0) value = 1;
                 SetValue(RowsProperty, value);
             }
+        }
+
+        public int CountPages
+        {
+            get { return _countPages; }
+        }
+
+        public int CurrentPage
+        {
+            get { return _currentPage; }
         }
         #endregion
 
@@ -151,12 +155,30 @@ namespace LinkaWPF
 
         private void InitPages()
         {
+            if (Cards == null || Cards.Count <= 0)
+            {
+                _countPages = 0;
+                _currentPage = 0;
+                return;
+            }
+
             // Рассчитываем максимальное количество страниц
             _countPages = Convert.ToInt32(Math.Round(Convert.ToDouble(Cards.Count) / _gridSize, 0));
+
+            if (_currentPage > _countPages) _currentPage = _countPages;
         }
 
         private void Render()
         {
+            if (Cards == null)
+            {
+                for(var i = 0; i < _buttons.Count; i++)
+                {
+                    _buttons[i].Card = null;
+                }
+                return;
+            }
+
             for (var i = _currentPage * _gridSize; i < _currentPage * _gridSize + _gridSize; i++)
             {
                 Models.Card card = null;
@@ -166,6 +188,38 @@ namespace LinkaWPF
                 }
                 var count = i - _currentPage * _gridSize;
                 _buttons[count].Card = card;
+            }
+        }
+
+        public void Update(IList<Models.Card> cards)
+        {
+            if (Cards != cards)
+            {
+                Cards = cards;
+            }
+
+            InitPages();
+            Render();
+        }
+
+        public void UpdateCard(int index, Models.Card card)
+        {
+            if (Cards == null || index < 0 || index >= Cards.Count) return;
+
+            Cards[index] = card;
+
+            // Выясним на какой странице находится карточка
+            var page = Convert.ToInt32(Math.Round((double)index / _gridSize));
+
+            // Находится ли карточка на текущей странице
+            if (page == _currentPage)
+            {
+                // Вычисляем индекс кнопки на которой находится карточка
+                var indexOfButtons = index - _currentPage * _gridSize;
+
+                // Обновляем карточку на кнопке
+                _buttons[indexOfButtons].Card = null;
+                _buttons[indexOfButtons].Card = card;
             }
         }
 
@@ -207,9 +261,6 @@ namespace LinkaWPF
         {
             InitGrid();
             InitCardButtons();
-
-            if (Cards == null) return;
-
             InitPages();
             Render();
         }
