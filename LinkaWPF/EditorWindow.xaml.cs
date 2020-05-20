@@ -26,10 +26,7 @@ namespace LinkaWPF
         {
             InitializeComponent();
 
-            _cards = new List<Models.Card>()
-            {
-                new Models.Card(0, "Test", null)
-            };
+            _cards = new List<Models.Card>();
 
             cardBoard.Cards = _cards;
             cardBoard.ClickOnCardButton += ClickOnCardButton;
@@ -44,7 +41,14 @@ namespace LinkaWPF
 
         private void AddCard(object sender, RoutedEventArgs e)
         {
-            _cards.Add(new Models.Card(_cards.Count, "Test", null));
+            var cardEditorWindow = new CardEditorWindow();
+            cardEditorWindow.Owner = this;
+            cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            if (cardEditorWindow.ShowDialog() != true) return;
+
+            var card = new Models.Card(_cards.Count, cardEditorWindow.Title, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath);
+            card.WithoutSpace = cardEditorWindow.WithoutSpace;
+            _cards.Add(card);
             cardBoard.Cards = null;
             cardBoard.Cards = _cards;
         }

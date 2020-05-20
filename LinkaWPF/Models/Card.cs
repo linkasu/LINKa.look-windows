@@ -19,10 +19,12 @@ namespace LinkaWPF.Models
             //this.Source = new Uri(Environment.CurrentDirectory + "/images/" + path, UriKind.Absolute);
 
             Audio = audio;
+            WithoutSpace = false;
         }
         public int Id { get; set; }
         public ImageSource Source { get; set; }
         public string Title { get; set; }
         public string Audio { get; set; }
+        public bool WithoutSpace { get; set; }
     }
 }
