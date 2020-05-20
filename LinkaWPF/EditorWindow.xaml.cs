@@ -120,6 +120,8 @@ namespace LinkaWPF
             playButton.IsEnabled = card == null || card.AudioPath == null || card.AudioPath == string.Empty ? false : true;
             editButton.IsEnabled = card == null ? false : true;
             deleteButton.IsEnabled = card == null ? false : true;
+            moveToLeftButton.IsEnabled = card == null ? false : true;
+            moveToRightButton.IsEnabled = card == null ? false : true;
         }
 
         private void SelectCard(CardButton cardButton)
@@ -152,6 +154,38 @@ namespace LinkaWPF
         private void NextPage(object sender, RoutedEventArgs e)
         {
             cardBoard.NextPage();
+        }
+
+        private void MoveToLeft(object sender, RoutedEventArgs e)
+        {
+            // Переместить карточку влево
+            if (_selectedCardButton == null || _selectedCardButton.Card == null || _cards.Count == 0) return;
+
+            var index = _cards.IndexOf(_selectedCardButton.Card);
+
+            if (index <= 0 || index >= _cards.Count) return;
+
+            var prevCard = _cards[index - 1];
+            _cards[index - 1] = _cards[index];
+            _cards[index] = prevCard;
+
+            cardBoard.Update(_cards);
+        }
+
+        private void MoveToRight(object sender, RoutedEventArgs e)
+        {
+            // Переместить карточку вправо
+            if (_selectedCardButton == null || _selectedCardButton.Card == null || _cards.Count == 0) return;
+
+            var index = _cards.IndexOf(_selectedCardButton.Card);
+
+            if (index < 0 || index >= _cards.Count - 1) return;
+
+            var nextCard = _cards[index + 1];
+            _cards[index + 1] = _cards[index];
+            _cards[index] = nextCard;
+
+            cardBoard.Update(_cards);
         }
 
         private void UpdatePageInfo()

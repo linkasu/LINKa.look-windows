@@ -55,12 +55,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" x:Name="playButton" Click="Play" IsEnabled="false">Воспроизвести</Button>
                 <Button Grid.Column="1" Click="AddCard">Добавить</Button>
                 <Button Grid.Column="2" x:Name="editButton" Click="EditCard" IsEnabled="false">Редактировать</Button>
                 <Button Grid.Column="3" x:Name="deleteButton" Click="RemoveCard" IsEnabled="false">Удалить</Button>
+                <Button Grid.Column="4" x:Name="moveToLeftButton" Click="MoveToLeft" IsEnabled="False">Сместить влево</Button>
+                <Button Grid.Column="5" x:Name="moveToRightButton" Click="MoveToRight" IsEnabled="False">Сместить вправо</Button>
             </Grid>
         </GroupBox>
     </Grid>
