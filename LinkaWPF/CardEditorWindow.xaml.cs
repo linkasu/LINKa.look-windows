@@ -84,10 +84,12 @@ namespace LinkaWPF
 
             uploadFromYandexButton.IsEnabled = false;
             uploadFromFileButton.IsEnabled = false;
+            playButton.IsEnabled = false;
             AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
 
             uploadFromYandexButton.IsEnabled = true;
             uploadFromFileButton.IsEnabled = true;
+            playButton.IsEnabled = true;
         }
 
         private void UploadAudio(object sender, RoutedEventArgs e)
@@ -105,10 +107,21 @@ namespace LinkaWPF
             if (AudioPath == null || File.Exists(AudioPath) == false)
             {
                 MessageBox.Show("Перед воспроизведением загрузите аудио файл!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
             }
             var audio = new Audio(AudioPath);
-            audio.Ending += new EventHandler((s, args) => { playButton.IsEnabled = true; });
+            audio.Ending += new EventHandler((s, args) => {
+                // Разблокируем кнопки после окончания воспроизведения
+                uploadFromYandexButton.IsEnabled = true;
+                uploadFromFileButton.IsEnabled = true;
+                playButton.IsEnabled = true;
+            });
+
+            // Блокируем кнопки перед воспроизведением
+            uploadFromYandexButton.IsEnabled = false;
+            uploadFromFileButton.IsEnabled = false;
             playButton.IsEnabled = false;
+
             audio.Play();
         }
 
