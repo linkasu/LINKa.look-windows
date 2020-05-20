@@ -32,6 +32,19 @@ namespace LinkaWPF
 
             cardBoard.Cards = _cards;
             cardBoard.ClickOnCardButton += ClickOnCardButton;
+            cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
+            cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
+        }
+
+        private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
+        {
+            UpdatePageInfo();
+            RemoveSelectionCard();
+        }
+
+        private void CardBoard_CountPagesChanged(object sender, EventArgs e)
+        {
+            UpdatePageInfo();
         }
 
         private void ClickOnCardButton(object sender, EventArgs e)
@@ -133,12 +146,17 @@ namespace LinkaWPF
 
         private void PrevPage(object sender, RoutedEventArgs e)
         {
-            if (cardBoard.PrevPage() == true) RemoveSelectionCard();
+            cardBoard.PrevPage();
         }
 
         private void NextPage(object sender, RoutedEventArgs e)
         {
-            if (cardBoard.NextPage() == true) RemoveSelectionCard();
+            cardBoard.NextPage();
+        }
+
+        private void UpdatePageInfo()
+        {
+            pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
         }
     }
 }
