@@ -22,14 +22,16 @@ namespace LinkaWPF
     /// </summary>
     public partial class EditorWindow : Window
     {
-        private IList<Models.Card> _cards;
+        private IList<Card> _cards;
         private CardButton _selectedCardButton;
 
         public EditorWindow()
         {
             InitializeComponent();
 
-            _cards = new List<Models.Card>();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            _cards = new List<Card>();
 
             cardBoard.Cards = _cards;
             cardBoard.ClickOnCardButton += ClickOnCardButton;
@@ -72,7 +74,7 @@ namespace LinkaWPF
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
 
-            var card = new Models.Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.WithoutSpace);
+            var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.WithoutSpace);
             _cards.Add(card);
 
             cardBoard.Update(_cards);
@@ -116,7 +118,7 @@ namespace LinkaWPF
             if (columns != cardBoard.Columns) cardBoard.Columns = columns;
         }
 
-        private void SelectedCardChanged(Models.Card card)
+        private void SelectedCardChanged(Card card)
         {
             playButton.IsEnabled = card == null || card.AudioPath == null || card.AudioPath == string.Empty ? false : true;
             editButton.IsEnabled = card == null ? false : true;
