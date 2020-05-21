@@ -82,11 +82,18 @@ namespace LinkaWPF
                 return;
             }
 
-            uploadFromYandexButton.IsEnabled = false;
-            uploadFromFileButton.IsEnabled = false;
-            playButton.IsEnabled = false;
-            acceptButton.IsEnabled = false;
-            AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
+            try
+            {
+                uploadFromYandexButton.IsEnabled = false;
+                uploadFromFileButton.IsEnabled = false;
+                playButton.IsEnabled = false;
+                acceptButton.IsEnabled = false;
+                AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("При загрузке аудио произошла ошибка (возможно отсутствует интернет соединение)! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             uploadFromYandexButton.IsEnabled = true;
             uploadFromFileButton.IsEnabled = true;

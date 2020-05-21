@@ -38,13 +38,17 @@ namespace LinkaWPF
 
                 if (card.AudioPath == null)
                 {
-                    // У карточки нет озвучки, синтезируем голос из текста карточки и кэшируем аудио
-                    var path = await _yandexSpeech.GetAudio(card.Title);
+                    try
+                    {
+                        // У карточки нет озвучки, синтезируем голос из текста карточки и кэшируем аудио
+                        var path = await _yandexSpeech.GetAudio(card.Title);
 
-                    // TODO: Что-то произошло, аудиофайла нет, нужно записать в лог
-                    if (path == null) continue;
+                        // TODO: Что-то произошло, аудиофайла нет, нужно записать в лог
+                        if (path == null) continue;
 
-                    tempList.Add(path);
+                        tempList.Add(path);
+                    }
+                    catch { }
                 } else
                 {
                     // У карточки есть озвучка, вставляем путь к аудио в список воспроизведения
