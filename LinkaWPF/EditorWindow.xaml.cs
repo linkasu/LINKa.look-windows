@@ -200,21 +200,48 @@ namespace LinkaWPF
 
             try
             {
-                var cardSetLoader = new CardSetFile(6, 6, _cards);
-                cardSetLoader.SaveToFile(saveFileDialog.FileName);
+                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, _cards);
+                var cardSetLoader = new CardSetLoader();
+                cardSetLoader.SaveToFile(saveFileDialog.FileName, cardSetFile);
+
+                MessageBox.Show(this, "Набор успешно сохранен!", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, string.Format("При сохранении набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
-
-            MessageBox.Show(this, "Набор успешно сохранен!", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void LoadCardSet(object sender, RoutedEventArgs e)
         {
+            var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Linka files(*.linka)|*.linka";
 
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            try
+            {
+                var destPath = Environment.CurrentDirectory + "\\temp\\" + Guid.NewGuid();
+
+                var cardSetLoader = new CardSetLoader();
+                var cardSetFile = cardSetLoader.LoadFromFile(openFileDialog.FileName, destPath);
+
+                cardBoard.Columns = cardSetFile.Columns;
+                cardBoard.Rows = cardSetFile.Rows;
+
+                _cards = cardSetFile.Cards;
+                foreach (var card in _cards)
+                {
+                    if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + "\\" + card.ImagePath;
+                    if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + "\\" + card.AudioPath;
+                }
+                cardBoard.Update(_cards);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }           
         }
 
         private void UpdatePageInfo()

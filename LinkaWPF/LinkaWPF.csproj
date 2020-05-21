@@ -80,7 +80,9 @@
     <Compile Include="CardEditorWindow.xaml.cs">
       <DependentUpon>CardEditorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CardJsonConverter.cs" />
     <Compile Include="CardSetFile.cs" />
+    <Compile Include="CardSetLoader.cs" />
     <Compile Include="Controls\AnimatedCardBoard.xaml.cs">
       <DependentUpon>AnimatedCardBoard.xaml</DependentUpon>
     </Compile>
