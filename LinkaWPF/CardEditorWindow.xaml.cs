@@ -85,11 +85,13 @@ namespace LinkaWPF
             uploadFromYandexButton.IsEnabled = false;
             uploadFromFileButton.IsEnabled = false;
             playButton.IsEnabled = false;
+            acceptButton.IsEnabled = false;
             AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
 
             uploadFromYandexButton.IsEnabled = true;
             uploadFromFileButton.IsEnabled = true;
             playButton.IsEnabled = true;
+            acceptButton.IsEnabled = true;
         }
 
         private void UploadAudio(object sender, RoutedEventArgs e)
