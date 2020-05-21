@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="Создание карточки" Height="320" Width="450" ResizeMode="NoResize">
+        Title="Создание карточки" Height="320" Width="470" ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="2"/>
@@ -28,7 +28,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Title</TextBlock>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Текст карточки</TextBlock>
 
         <StackPanel Grid.Column="1" Margin="2">
             <TextBox Grid.Column="1" Grid.Row="0" x:Name="captionTextBox" FontSize="16"/>
@@ -52,7 +52,7 @@
         <WrapPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right">
             <Button x:Name="uploadFromYandexButton" Click="UploadAudioFromYandex">Загрузить c Yandex</Button>
             <Button x:Name="uploadFromFileButton" Click="UploadAudio">Загрузить из файла</Button>
-            <Button x:Name="playButton" Click="Play">Play</Button>
+            <Button x:Name="playButton" Click="Play">Воспроизвести</Button>
         </WrapPanel>
 
         <WrapPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
