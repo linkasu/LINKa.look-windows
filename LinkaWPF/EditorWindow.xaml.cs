@@ -1,4 +1,5 @@
-﻿using Microsoft.DirectX.AudioVideoPlayback;
+﻿using LinkaWPF.Models;
+using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -111,7 +112,7 @@ namespace LinkaWPF
             var rows = Convert.ToInt32(rowsText.Text);
             var columns = Convert.ToInt32(columnsText.Text);
 
-            if ( rows != cardBoard.Rows) cardBoard.Rows = rows;
+            if (rows != cardBoard.Rows) cardBoard.Rows = rows;
             if (columns != cardBoard.Columns) cardBoard.Columns = columns;
         }
 
@@ -186,6 +187,32 @@ namespace LinkaWPF
             _cards[index] = nextCard;
 
             cardBoard.Update(_cards);
+        }
+
+        private void SaveCardSet(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            saveFileDialog.Filter = "Linka files(*.linka)|*.linka";
+
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            try
+            {
+                var cardSetLoader = new CardSetFile(6, 6, _cards);
+                cardSetLoader.SaveToFile(saveFileDialog.FileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("При сохранении набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            MessageBox.Show(this, "Набор успешно сохранен!", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void LoadCardSet(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void UpdatePageInfo()

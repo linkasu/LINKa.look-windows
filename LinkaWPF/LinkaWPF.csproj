@@ -43,9 +43,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Windows\assembly\GAC\Microsoft.DirectX.AudioVideoPlayback\1.0.2902.0__31bf3856ad364e35\Microsoft.DirectX.AudioVideoPlayback.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -77,6 +80,7 @@
     <Compile Include="CardEditorWindow.xaml.cs">
       <DependentUpon>CardEditorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CardSetFile.cs" />
     <Compile Include="Controls\AnimatedCardBoard.xaml.cs">
       <DependentUpon>AnimatedCardBoard.xaml</DependentUpon>
     </Compile>

@@ -10,16 +10,34 @@
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="2"/>
         </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Header="Размер сетки">
+        <GroupBox Grid.Row="0" Header="Операции над набором">
+            <WrapPanel Margin="2" VerticalAlignment="Center">
+                <Button Click="SaveCardSet">Сохранить в файл</Button>
+                <Button Click="LoadCardSet">Загрузить из файла</Button>
+            </WrapPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Размер сетки">
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -33,22 +51,22 @@
             </Grid>
         </GroupBox>
 
-        <TextBlock Grid.Row="1" x:Name="pageInfoTextBlock" Margin="5" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="2" x:Name="pageInfoTextBlock" Margin="5" HorizontalAlignment="Center"/>
 
         <!-- CardBoard -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Width="140" Click="PrevPage">Предыдущая страница</Button>
+            <Button Grid.Column="0" Width="140" Margin="0" Click="PrevPage">Предыдущая страница</Button>
             <local:CardBoard x:Name="cardBoard" Grid.Column="1" Columns="3" Rows="3"/>
-            <Button Grid.Column="2" Width="140" Click="NextPage">Следующая страница</Button>
+            <Button Grid.Column="2" Width="140" Margin="0" Click="NextPage">Следующая страница</Button>
         </Grid>
 
-        <GroupBox Grid.Row="3" Header="Операции над выделенной карточкой">
+        <GroupBox Grid.Row="4" Header="Операции над выделенной карточкой">
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
