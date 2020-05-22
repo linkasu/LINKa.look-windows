@@ -46,6 +46,7 @@ namespace LinkaWPF
             var window = sender as EditorWindow;
             window.WithoutSpace = (bool)args.NewValue;
             window.ChangeStatusPlayButton();
+            window.IsEdited = true;
         }
 
         public EditorWindow()
@@ -121,7 +122,7 @@ namespace LinkaWPF
             _cards[index].ImagePath = cardEditorWindow.ImagePath;
             _cards[index].AudioPath = cardEditorWindow.AudioPath;
 
-            cardBoard.UpdateCard(index, _cards[index]);
+            UpdateCardBoard(_cards, index);
         }
 
         private void RemoveCard(object sender, RoutedEventArgs e)
@@ -131,7 +132,7 @@ namespace LinkaWPF
             _cards.Remove(_selectedCardButton.Card);
             RemoveSelectionCard();
 
-            cardBoard.Update(_cards);
+            UpdateCardBoard(_cards);
         }
 
         private void ChangeGridSize(object sender, RoutedEventArgs e)
@@ -139,8 +140,17 @@ namespace LinkaWPF
             var rows = Convert.ToInt32(rowsText.Text);
             var columns = Convert.ToInt32(columnsText.Text);
 
-            if (rows != cardBoard.Rows) cardBoard.Rows = rows;
-            if (columns != cardBoard.Columns) cardBoard.Columns = columns;
+            if (rows != cardBoard.Rows)
+            {
+                cardBoard.Rows = rows;
+                IsEdited = true;
+            }
+
+            if (columns != cardBoard.Columns)
+            {
+                cardBoard.Columns = columns;
+                IsEdited = true;
+            }
         }
 
         private void SelectedCardChanged(Card card)
@@ -201,7 +211,7 @@ namespace LinkaWPF
             _cards[index - 1] = _cards[index];
             _cards[index] = prevCard;
 
-            cardBoard.Update(_cards);
+            UpdateCardBoard(_cards);
         }
 
         private void MoveToRight(object sender, RoutedEventArgs e)
@@ -217,15 +227,20 @@ namespace LinkaWPF
             _cards[index + 1] = _cards[index];
             _cards[index] = nextCard;
 
-            cardBoard.Update(_cards);
+            UpdateCardBoard(_cards);
         }
 
-        private void SaveCardSet(object sender, RoutedEventArgs e)
+        private void SaveCardSet_Click(object sender, RoutedEventArgs e)
+        {
+            SaveCardSet();
+        }
+
+        private bool SaveCardSet()
         {
             var saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             saveFileDialog.Filter = "Linka files(*.linka)|*.linka";
 
-            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return false;
 
             try
             {
@@ -233,15 +248,21 @@ namespace LinkaWPF
                 var cardSetLoader = new CardSetLoader();
                 cardSetLoader.SaveToFile(saveFileDialog.FileName, cardSetFile);
 
+                IsEdited = false;
+
                 MessageBox.Show(this, "Набор успешно сохранен!", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, string.Format("При сохранении набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            return false;
         }
 
-        private void LoadCardSet(object sender, RoutedEventArgs e)
+        private void LoadCardSet_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "Linka files(*.linka)|*.linka";
@@ -266,7 +287,9 @@ namespace LinkaWPF
                     if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + "\\" + card.ImagePath;
                     if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + "\\" + card.AudioPath;
                 }
-                cardBoard.Update(_cards);
+                UpdateCardBoard(_cards);
+
+                IsEdited = false;
             }
             catch (Exception ex)
             {
@@ -285,12 +308,24 @@ namespace LinkaWPF
             var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath);
             _cards.Add(card);
 
-            cardBoard.Update(_cards);
+            UpdateCardBoard(_cards);
         }
 
         private void UpdatePageInfo()
         {
             pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
+        }
+
+        private void UpdateCardBoard(IList<Card> cards)
+        {
+            cardBoard.Update(cards);
+            IsEdited = true;
+        }
+
+        private void UpdateCardBoard(IList<Card> cards, int index)
+        {
+            cardBoard.UpdateCard(index, cards[index]);
+            IsEdited = true;
         }
 
         private void ChangeStatusPlayButton()
@@ -308,5 +343,33 @@ namespace LinkaWPF
                 playButton.IsEnabled = card == null || card.AudioPath == null || card.AudioPath == string.Empty ? false : true;
             }
         }
+
+        private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (IsEdited == true)
+            {
+                var result = MessageBox.Show(this, "Сохранить изменения?", "Сохранение", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
+                switch(result)
+                {
+                    case MessageBoxResult.Yes:
+                        {
+                            // Сохраняем изменения и выходим
+                            e.Cancel = !SaveCardSet();
+                        }
+                        break;
+                    case MessageBoxResult.No:
+                        {
+                            e.Cancel = false;
+                        }break;
+                    default:
+                        {
+                            e.Cancel = true;
+                        }break;
+                }
+            } 
+        }
+
+        protected bool IsEdited { get; set; }
     }
 }
