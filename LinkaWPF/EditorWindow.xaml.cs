@@ -69,15 +69,7 @@ namespace LinkaWPF
 
         private void AddCard(object sender, RoutedEventArgs e)
         {
-            var cardEditorWindow = new CardEditorWindow();
-            cardEditorWindow.Owner = this;
-            cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            if (cardEditorWindow.ShowDialog() != true) return;
-
-            var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.WithoutSpace);
-            _cards.Add(card);
-
-            cardBoard.Update(_cards);
+            CreateCard();
         }
 
         private void EditCard(object sender, RoutedEventArgs e)
@@ -129,7 +121,11 @@ namespace LinkaWPF
 
         private void SelectCard(CardButton cardButton)
         {
-            if (cardButton == null || cardButton.Card == null) return;
+            if (cardButton == null || cardButton.Card == null)
+            {
+                CreateCard();
+                return;
+            }
 
             RemoveSelectionCard();
 
@@ -242,6 +238,19 @@ namespace LinkaWPF
                 MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }           
+        }
+
+        private void CreateCard()
+        {
+            var cardEditorWindow = new CardEditorWindow();
+            cardEditorWindow.Owner = this;
+            cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            if (cardEditorWindow.ShowDialog() != true) return;
+
+            var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.WithoutSpace);
+            _cards.Add(card);
+
+            cardBoard.Update(_cards);
         }
 
         private void UpdatePageInfo()
