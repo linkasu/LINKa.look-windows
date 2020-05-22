@@ -14,11 +14,12 @@ namespace LinkaWPF
 {
     public class CardSetFile
     {
-        public CardSetFile(int columns, int rows, IList<Card> cards)
+        public CardSetFile(int columns, int rows, bool withoutSpace, IList<Card> cards)
         {
             Version = "1.0";
             Columns = columns;
             Rows = rows;
+            WithoutSpace = withoutSpace;
             Cards = cards;
         }
 
@@ -27,6 +28,8 @@ namespace LinkaWPF
         public int Columns { get; set; }
 
         public int Rows { get; set; }
+
+        public bool WithoutSpace { get; set; }
 
         public IList<Card> Cards { get; set; }
     }

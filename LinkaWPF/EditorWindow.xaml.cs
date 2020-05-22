@@ -206,7 +206,8 @@ namespace LinkaWPF
 
             try
             {
-                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, _cards);
+                var withoutSpace = withoutSpaceCheckBox.IsChecked == null || withoutSpaceCheckBox.IsChecked == false ? false : true;
+                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, withoutSpace, _cards);
                 var cardSetLoader = new CardSetLoader();
                 cardSetLoader.SaveToFile(saveFileDialog.FileName, cardSetFile);
 
@@ -234,6 +235,8 @@ namespace LinkaWPF
 
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
+
+                withoutSpaceCheckBox.IsChecked = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
                 foreach (var card in _cards)
