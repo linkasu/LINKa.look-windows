@@ -22,8 +22,31 @@ namespace LinkaWPF
     /// </summary>
     public partial class EditorWindow : Window
     {
+        private static readonly DependencyProperty WithoutSpaceProperty;
         private IList<Card> _cards;
         private CardButton _selectedCardButton;
+
+        private bool WithoutSpace
+        {
+            get { return (bool)GetValue(WithoutSpaceProperty); }
+            set { SetValue(WithoutSpaceProperty, value); }
+        }
+
+        static EditorWindow()
+        {
+            WithoutSpaceProperty = DependencyProperty.Register(
+                "WithoutSpace",
+                typeof(bool),
+                typeof(EditorWindow),
+                new PropertyMetadata(false, new PropertyChangedCallback(OnWithoutSpaceChanged)));
+        }
+
+        private static void OnWithoutSpaceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var window = sender as EditorWindow;
+            window.WithoutSpace = (bool)args.NewValue;
+            window.ChangeStatusPlayButton();
+        }
 
         public EditorWindow()
         {
@@ -89,7 +112,7 @@ namespace LinkaWPF
 
             var index = _cards.IndexOf(_selectedCardButton.Card);
 
-            var cardEditorWindow = new CardEditorWindow(_selectedCardButton.Card.Title, _selectedCardButton.Card.ImagePath, _selectedCardButton.Card.AudioPath);
+            var cardEditorWindow = new CardEditorWindow(_selectedCardButton.Card.Title, _selectedCardButton.Card.ImagePath, _selectedCardButton.Card.AudioPath, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
@@ -122,7 +145,7 @@ namespace LinkaWPF
 
         private void SelectedCardChanged(Card card)
         {
-            playButton.IsEnabled = card == null || card.AudioPath == null || card.AudioPath == string.Empty ? false : true;
+            ChangeStatusPlayButton();
             editButton.IsEnabled = card == null ? false : true;
             deleteButton.IsEnabled = card == null ? false : true;
             moveToLeftButton.IsEnabled = card == null ? false : true;
@@ -206,8 +229,7 @@ namespace LinkaWPF
 
             try
             {
-                var withoutSpace = withoutSpaceCheckBox.IsChecked == null || withoutSpaceCheckBox.IsChecked == false ? false : true;
-                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, withoutSpace, _cards);
+                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards);
                 var cardSetLoader = new CardSetLoader();
                 cardSetLoader.SaveToFile(saveFileDialog.FileName, cardSetFile);
 
@@ -236,7 +258,7 @@ namespace LinkaWPF
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
 
-                withoutSpaceCheckBox.IsChecked = cardSetFile.WithoutSpace;
+                WithoutSpace = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
                 foreach (var card in _cards)
@@ -255,7 +277,7 @@ namespace LinkaWPF
 
         private void CreateCard()
         {
-            var cardEditorWindow = new CardEditorWindow();
+            var cardEditorWindow = new CardEditorWindow(WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
@@ -269,6 +291,22 @@ namespace LinkaWPF
         private void UpdatePageInfo()
         {
             pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
+        }
+
+        private void ChangeStatusPlayButton()
+        {
+            if (_selectedCardButton == null || _selectedCardButton.Card == null) return;
+
+            var card = _selectedCardButton.Card;
+
+            if (WithoutSpace == true)
+            {
+                playButton.IsEnabled = false;
+            }
+            else
+            {
+                playButton.IsEnabled = card == null || card.AudioPath == null || card.AudioPath == string.Empty ? false : true;
+            }
         }
     }
 }

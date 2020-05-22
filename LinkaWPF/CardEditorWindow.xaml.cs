@@ -40,12 +40,12 @@ namespace LinkaWPF
                 typeof(CardEditorWindow));
         }
 
-        public CardEditorWindow() : this("", null, null)
+        public CardEditorWindow(bool withoutSpace) : this("", null, null, withoutSpace)
         {
             acceptButton.Content = "Добавить";
         }
 
-        public CardEditorWindow(string caption, string imagePath, string audioPath)
+        public CardEditorWindow(string caption, string imagePath, string audioPath, bool withoutSpace)
         {
             InitializeComponent();
 
@@ -62,6 +62,12 @@ namespace LinkaWPF
             AudioPath = audioPath;
 
             acceptButton.Content = "Изменить";
+
+            if (withoutSpace == true)
+            {
+                panelWithAudioButtons.Visibility = Visibility.Hidden;
+                infoAboutAudioTextBlock.Visibility = Visibility.Visible;
+            }
         }
 
         private void UploadImage(object sender, RoutedEventArgs e)
