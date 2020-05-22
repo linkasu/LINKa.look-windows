@@ -18,7 +18,7 @@ namespace LinkaWPF.Utils
         {
             int largestDimension = Math.Max(originalImage.Height, originalImage.Width);
             Size squareSize = new Size(largestDimension, largestDimension);
-            Bitmap squareImage = new Bitmap(squareSize.Width, squareSize.Height);
+            Bitmap squareImage = new Bitmap(squareSize.Width, squareSize.Height);            
             using (Graphics graphics = Graphics.FromImage(squareImage))
             {
                 graphics.Clear(BACK_COLOR);
@@ -28,6 +28,10 @@ namespace LinkaWPF.Utils
 
                 graphics.DrawImage(originalImage, (squareSize.Width / 2) - (originalImage.Width / 2), (squareSize.Height / 2) - (originalImage.Height / 2), originalImage.Width, originalImage.Height);
             }
+
+            // Make transparent
+            squareImage.MakeTransparent();
+
             return squareImage;
         }
         private Image DrawText(String text)
