@@ -48,6 +48,17 @@ namespace LinkaWPF
         private void CardBoard_CountPagesChanged(object sender, EventArgs e)
         {
             UpdatePageInfo();
+
+            if (cardBoard.CountPages > 1)
+            {
+                prevPageButton.IsEnabled = true;
+                nextPageButton.IsEnabled = true;
+            }
+            else
+            {
+                prevPageButton.IsEnabled = false;
+                nextPageButton.IsEnabled = false;
+            }
         }
 
         private void ClickOnCardButton(object sender, EventArgs e)

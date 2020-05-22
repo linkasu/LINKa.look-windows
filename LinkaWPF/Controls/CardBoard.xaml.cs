@@ -179,7 +179,7 @@ namespace LinkaWPF
             // Рассчитываем максимальное количество страниц
             CountPages = Convert.ToInt32(Math.Ceiling((double)Cards.Count / _gridSize));
 
-            if (CurrentPage > CountPages) CurrentPage = CountPages;
+            if (CurrentPage >= CountPages) CurrentPage = CountPages - 1;
         }
 
         private void Render()

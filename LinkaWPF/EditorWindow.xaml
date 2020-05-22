@@ -61,9 +61,9 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Width="140" Margin="0" Click="PrevPage">Предыдущая страница</Button>
+            <Button Grid.Column="0" x:Name="prevPageButton" Width="140" Margin="0" IsEnabled="False" Click="PrevPage">Предыдущая страница</Button>
             <local:CardBoard x:Name="cardBoard" Grid.Column="1" Columns="3" Rows="3"/>
-            <Button Grid.Column="2" Width="140" Margin="0" Click="NextPage">Следующая страница</Button>
+            <Button Grid.Column="2" x:Name="nextPageButton" Width="140" Margin="0" IsEnabled="False" Click="NextPage">Следующая страница</Button>
         </Grid>
 
         <GroupBox Grid.Row="4" Header="Операции над выделенной карточкой">
