@@ -15,18 +15,12 @@ namespace LinkaWPF.Models
 
         }
 
-        public Card(int id, string title, string imagePath, string audioPath = null) : this(id, title, imagePath, audioPath, false)
-        {
-            
-        }
-
-        public Card(int id, string title, string imagePath, string audioPath, bool withoutSpace)
+        public Card(int id, string title, string imagePath, string audioPath = null)
         {
             Id = id;
             Title = title;
             ImagePath = imagePath;
             AudioPath = audioPath;
-            WithoutSpace = withoutSpace;
         }
 
         public int Id { get; set; }
@@ -36,7 +30,5 @@ namespace LinkaWPF.Models
         public string Title { get; set; }
 
         public string AudioPath { get; set; }
-
-        public bool WithoutSpace { get; set; }
     }
 }

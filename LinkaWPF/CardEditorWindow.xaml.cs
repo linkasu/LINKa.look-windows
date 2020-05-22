@@ -40,12 +40,12 @@ namespace LinkaWPF
                 typeof(CardEditorWindow));
         }
 
-        public CardEditorWindow() : this("", false, null, null)
+        public CardEditorWindow() : this("", null, null)
         {
             acceptButton.Content = "Добавить";
         }
 
-        public CardEditorWindow(string caption, bool withoutSpace, string imagePath, string audioPath)
+        public CardEditorWindow(string caption, string imagePath, string audioPath)
         {
             InitializeComponent();
 
@@ -58,7 +58,6 @@ namespace LinkaWPF
             _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", _tempPath);
 
             captionTextBox.Text = caption;
-            withoutSpaceCheckBox.IsChecked = withoutSpace;
             Image = SetImageFromPath(imagePath);
             AudioPath = audioPath;
 
@@ -197,11 +196,6 @@ namespace LinkaWPF
         {
             get;
             private set;
-        }
-
-        public bool WithoutSpace
-        {
-            get { return withoutSpaceCheckBox.IsChecked == null || withoutSpaceCheckBox.IsChecked == false ? false : true; }
         }
     }
 }

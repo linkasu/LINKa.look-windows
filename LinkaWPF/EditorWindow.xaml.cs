@@ -89,13 +89,12 @@ namespace LinkaWPF
 
             var index = _cards.IndexOf(_selectedCardButton.Card);
 
-            var cardEditorWindow = new CardEditorWindow(_selectedCardButton.Card.Title, _selectedCardButton.Card.WithoutSpace, _selectedCardButton.Card.ImagePath, _selectedCardButton.Card.AudioPath);
+            var cardEditorWindow = new CardEditorWindow(_selectedCardButton.Card.Title, _selectedCardButton.Card.ImagePath, _selectedCardButton.Card.AudioPath);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
 
             _cards[index].Title = cardEditorWindow.Caption;
-            _cards[index].WithoutSpace = cardEditorWindow.WithoutSpace;
             _cards[index].ImagePath = cardEditorWindow.ImagePath;
             _cards[index].AudioPath = cardEditorWindow.AudioPath;
 
@@ -258,7 +257,7 @@ namespace LinkaWPF
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
 
-            var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.WithoutSpace);
+            var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath);
             _cards.Add(card);
 
             cardBoard.Update(_cards);

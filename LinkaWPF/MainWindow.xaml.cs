@@ -76,14 +76,7 @@ namespace LinkaWPF
 
             if (cardButton.Card == null) return;
 
-            if (cardButton.Card.WithoutSpace == false)
-            {
-                text.Text += (text.Text != string.Empty ? " " : string.Empty) + cardButton.Card.Title;
-            }
-            else
-            {
-                text.Text += cardButton.Card.Title;
-            }
+            text.Text += (text.Text != string.Empty ? " " : string.Empty) + cardButton.Card.Title;
 
             // Переставить курсор в конец строки
             text.Select(text.Text.Length, 0);

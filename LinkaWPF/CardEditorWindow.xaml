@@ -32,7 +32,6 @@
 
         <StackPanel Grid.Column="1" Margin="2">
             <TextBox Grid.Column="1" Grid.Row="0" x:Name="captionTextBox" FontSize="16"/>
-            <CheckBox x:Name="withoutSpaceCheckBox">Не добавлять пробел после слова</CheckBox>
         </StackPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Изображение</TextBlock>
