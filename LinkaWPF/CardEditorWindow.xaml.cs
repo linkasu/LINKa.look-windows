@@ -77,9 +77,7 @@ namespace LinkaWPF
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
-            ImagePath = openFileDialog.FileName;
-
-            Image = SetImageFromPath(ImagePath);
+            Image = SetImageFromPath(openFileDialog.FileName);
         }
 
         private void CreateImageFromText(object sender, RoutedEventArgs e)
@@ -87,10 +85,10 @@ namespace LinkaWPF
             try
             {
                 var imageGenerator = new ImageGenerator();
-                ImagePath = string.Format("{0}\\{1}.png", _tempPath, Guid.NewGuid());
-                imageGenerator.GenerateImage(captionTextBox.Text, ImagePath);
+                var imagePath = string.Format("{0}\\{1}.png", _tempPath, Guid.NewGuid());
+                imageGenerator.GenerateImage(captionTextBox.Text, imagePath);
 
-                Image = SetImageFromPath(ImagePath);
+                Image = SetImageFromPath(imagePath);
             }
             catch (Exception ex)
             {
@@ -183,6 +181,8 @@ namespace LinkaWPF
         private ImageSource SetImageFromPath(string path)
         {
             if (path == null || File.Exists(path) == false) return null;
+
+            ImagePath = path;
 
             return new BitmapImage(new Uri(path));
         }
