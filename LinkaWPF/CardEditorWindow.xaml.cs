@@ -161,6 +161,12 @@ namespace LinkaWPF
                 return;
             }
 
+            if (ImagePath == null || ImagePath == string.Empty)
+            {
+                MessageBox.Show("Поле с изображением не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
+                return;
+            }
+
             DialogResult = true;
         }
 
