@@ -1,4 +1,5 @@
-﻿using Microsoft.DirectX.AudioVideoPlayback;
+﻿using LinkaWPF.Utils;
+using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,6 +24,7 @@ namespace LinkaWPF
     {
         private static readonly DependencyProperty ImageProperty;
         private YandexSpeech _yandexSpeech;
+        private readonly string _tempPath;
 
         private ImageSource Image
         {
@@ -47,12 +49,13 @@ namespace LinkaWPF
         {
             InitializeComponent();
 
+            // TODO: Перенести в родительский класс и передавать параметром
             // Создать директорию для временных файлов
-            var tempPath = Environment.CurrentDirectory + "\\temp\\";
-            Directory.CreateDirectory(tempPath);
+            _tempPath = Environment.CurrentDirectory + "\\temp\\";
+            Directory.CreateDirectory(_tempPath);
 
             // TODO: Заменить на загрузку из конфига
-            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", tempPath);
+            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", _tempPath);
 
             captionTextBox.Text = caption;
             withoutSpaceCheckBox.IsChecked = withoutSpace;
@@ -72,6 +75,22 @@ namespace LinkaWPF
             ImagePath = openFileDialog.FileName;
 
             Image = SetImageFromPath(ImagePath);
+        }
+
+        private void CreateImageFromText(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var imageGenerator = new ImageGenerator();
+                ImagePath = string.Format("{0}\\{1}.png", _tempPath, Guid.NewGuid());
+                imageGenerator.GenerateImage(captionTextBox.Text, ImagePath);
+
+                Image = SetImageFromPath(ImagePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("При создании картинки из текста произошла ошибка (возможно отсутствует интернет соединение)! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async void UploadAudioFromYandex(object sender, RoutedEventArgs e)

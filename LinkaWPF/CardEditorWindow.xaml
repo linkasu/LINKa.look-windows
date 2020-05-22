@@ -45,7 +45,10 @@
             <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" RenderOptions.EdgeMode="Aliased" Width="150" Height="150" HorizontalAlignment="Left">
                 <Image x:Name="image" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="{Binding ElementName=window, Path=Image}" />
             </Border>
-            <Button Grid.Column="1" Click="UploadImage">Загрузить из файла</Button>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <Button Click="UploadImage">Загрузить из файла</Button>
+                <Button Click="CreateImageFromText">Создать из текста</Button>
+            </StackPanel>
         </Grid>
 
         <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Аудио</TextBlock>
