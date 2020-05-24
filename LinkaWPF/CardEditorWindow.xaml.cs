@@ -1,4 +1,5 @@
-﻿using LinkaWPF.Utils;
+﻿using LinkaWPF.Models;
+using LinkaWPF.Utils;
 using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
@@ -40,12 +41,12 @@ namespace LinkaWPF
                 typeof(CardEditorWindow));
         }
 
-        public CardEditorWindow(bool withoutSpace) : this("", null, null, withoutSpace)
+        public CardEditorWindow(bool withoutSpace) : this(new Card(), withoutSpace)
         {
             acceptButton.Content = "Добавить";
         }
 
-        public CardEditorWindow(string caption, string imagePath, string audioPath, bool withoutSpace)
+        public CardEditorWindow(Card card, bool withoutSpace)
         {
             InitializeComponent();
 
@@ -57,9 +58,9 @@ namespace LinkaWPF
             // TODO: Заменить на загрузку из конфига
             _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", _tempPath);
 
-            captionTextBox.Text = caption;
-            Image = SetImageFromPath(imagePath);
-            AudioPath = audioPath;
+            Caption = card.Title;
+            Image = SetImageFromPath(card.ImagePath);
+            AudioPath = card.AudioPath;
 
             acceptButton.Content = "Изменить";
 
@@ -68,6 +69,8 @@ namespace LinkaWPF
                 panelWithAudioButtons.Visibility = Visibility.Hidden;
                 infoAboutAudioTextBlock.Visibility = Visibility.Visible;
             }
+
+            SetCardType(card.CardType);
         }
 
         private void UploadImage(object sender, RoutedEventArgs e)
@@ -80,7 +83,12 @@ namespace LinkaWPF
             Image = SetImageFromPath(openFileDialog.FileName);
         }
 
-        private void CreateImageFromText(object sender, RoutedEventArgs e)
+        private void CreateImageFromTextClick(object sender, RoutedEventArgs e)
+        {
+            CreateImageFromText();
+        }
+
+        private void CreateImageFromText()
         {
             try
             {
@@ -98,7 +106,7 @@ namespace LinkaWPF
 
         private async void UploadAudioFromYandex(object sender, RoutedEventArgs e)
         {
-            if (captionTextBox.Text == null || captionTextBox.Text == string.Empty)
+            if (Caption == null || Caption == string.Empty)
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
@@ -106,9 +114,7 @@ namespace LinkaWPF
 
             try
             {
-                uploadFromYandexButton.IsEnabled = false;
-                uploadFromFileButton.IsEnabled = false;
-                playButton.IsEnabled = false;
+                audioPanel.IsEnabled = false;
                 acceptButton.IsEnabled = false;
                 AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
             }
@@ -117,9 +123,7 @@ namespace LinkaWPF
                 MessageBox.Show(this, string.Format("При загрузке аудио произошла ошибка (возможно отсутствует интернет соединение)! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            uploadFromYandexButton.IsEnabled = true;
-            uploadFromFileButton.IsEnabled = true;
-            playButton.IsEnabled = true;
+            audioPanel.IsEnabled = true;
             acceptButton.IsEnabled = true;
         }
 
@@ -143,28 +147,86 @@ namespace LinkaWPF
             var audio = new Audio(AudioPath);
             audio.Ending += new EventHandler((s, args) => {
                 // Разблокируем кнопки после окончания воспроизведения
-                uploadFromYandexButton.IsEnabled = true;
-                uploadFromFileButton.IsEnabled = true;
-                playButton.IsEnabled = true;
+                audioPanel.IsEnabled = true;
             });
 
             // Блокируем кнопки перед воспроизведением
-            uploadFromYandexButton.IsEnabled = false;
-            uploadFromFileButton.IsEnabled = false;
-            playButton.IsEnabled = false;
+            audioPanel.IsEnabled = false;
 
             audio.Play();
         }
 
+        private void CardTypeChanged(object sender, RoutedEventArgs e)
+        {
+            if (commonCardTypeRadioButton.IsChecked == true)
+            {
+                CardType = CardType.Common;
+
+                captionPanel.IsEnabled = true;
+                imagePanel.IsEnabled = true;
+                audioPanel.IsEnabled = true;
+            } else if (spaceCardTypeRadioButton.IsChecked == true)
+            {
+                CardType = CardType.Space;
+
+                // Блокируем элементы управления
+                captionPanel.IsEnabled = false;
+                imagePanel.IsEnabled = false;
+                audioPanel.IsEnabled = false;
+
+                Caption = "" + '\u2423';
+
+                // Создадим картинку для пробела
+                CreateImageFromText();
+            } else if (fakeCardTypeRadioButton.IsChecked == true)
+            {
+                CardType = CardType.Fake;
+
+                // Блокируем элементы управления
+                captionPanel.IsEnabled = false;
+                imagePanel.IsEnabled = false;
+                audioPanel.IsEnabled = false;
+            }
+        }
+
+        private void SetCardType(CardType cardType)
+        {
+            switch (cardType)
+            {
+                case CardType.Common:
+                    {
+                        commonCardTypeRadioButton.IsChecked = true;
+                    }
+                    break;
+                case CardType.Space:
+                    {
+                        spaceCardTypeRadioButton.IsChecked = true;
+                    }
+                    break;
+                case CardType.Fake:
+                    {
+                        fakeCardTypeRadioButton.IsChecked = true;
+                    }
+                    break;
+            }
+        }
+
         private void Accept(object sender, RoutedEventArgs e)
         {
-            if (captionTextBox.Text == null || captionTextBox.Text == string.Empty)
+            if (CardType == CardType.Fake)
+            {
+                Caption = null;
+                ImagePath = null;
+                AudioPath = null;
+            }
+
+            if (CardType != CardType.Fake && (Caption == null || Caption == string.Empty))
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
 
-            if (ImagePath == null || ImagePath == string.Empty)
+            if (CardType != CardType.Fake && (ImagePath == null || ImagePath == string.Empty))
             {
                 MessageBox.Show("Поле с изображением не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
@@ -190,6 +252,7 @@ namespace LinkaWPF
         public string Caption
         {
             get { return captionTextBox.Text; }
+            private set { captionTextBox.Text = value; }
         }
 
         public string ImagePath
@@ -203,5 +266,7 @@ namespace LinkaWPF
             get;
             private set;
         }
+
+        public CardType CardType { get; set; }
     }
 }

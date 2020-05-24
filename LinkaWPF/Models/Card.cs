@@ -8,6 +8,13 @@ using System.Windows.Media.Imaging;
 
 namespace LinkaWPF.Models
 {
+    public enum CardType
+    {
+        Common,
+        Space,
+        Fake
+    }
+
     public class Card
     {
         public Card()
@@ -15,12 +22,17 @@ namespace LinkaWPF.Models
 
         }
 
-        public Card(int id, string title, string imagePath, string audioPath = null)
+        public Card(int id, string title, string imagePath, string audioPath = null) :this(id, title, imagePath, audioPath, CardType.Common)
+        {
+        }
+
+        public Card(int id, string title, string imagePath, string audioPath, CardType cardType)
         {
             Id = id;
             Title = title;
             ImagePath = imagePath;
             AudioPath = audioPath;
+            CardType = cardType;
         }
 
         public int Id { get; set; }
@@ -30,5 +42,7 @@ namespace LinkaWPF.Models
         public string Title { get; set; }
 
         public string AudioPath { get; set; }
+        
+        public CardType CardType { get; set; }
     }
 }
