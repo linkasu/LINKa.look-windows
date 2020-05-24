@@ -24,8 +24,8 @@ namespace LinkaWPF
     public partial class CardEditorWindow : Window
     {
         private static readonly DependencyProperty ImageProperty;
-        private YandexSpeech _yandexSpeech;
-        private readonly string _tempPath;
+        private readonly YandexSpeech _yandexSpeech;
+        private readonly string _tempDirPath;
 
         private ImageSource Image
         {
@@ -41,26 +41,21 @@ namespace LinkaWPF
                 typeof(CardEditorWindow));
         }
 
-        public CardEditorWindow(bool withoutSpace) : this(new Card(), withoutSpace)
+        public CardEditorWindow(string tempDirPath, YandexSpeech yandexSpeech, bool withoutSpace) : this(tempDirPath, yandexSpeech, new Card(), withoutSpace)
         {
             acceptButton.Content = "Добавить";
         }
 
-        public CardEditorWindow(Card card, bool withoutSpace)
+        public CardEditorWindow(string tempDirPath, YandexSpeech yandexSpeech, Card card, bool withoutSpace)
         {
             InitializeComponent();
-
-            // TODO: Перенести в родительский класс и передавать параметром
-            // Создать директорию для временных файлов
-            _tempPath = Environment.CurrentDirectory + "\\temp\\";
-            Directory.CreateDirectory(_tempPath);
-
-            // TODO: Заменить на загрузку из конфига
-            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", _tempPath);
 
             Caption = card.Title;
             Image = SetImageFromPath(card.ImagePath);
             AudioPath = card.AudioPath;
+
+            _yandexSpeech = yandexSpeech;
+            _tempDirPath = tempDirPath;
 
             acceptButton.Content = "Изменить";
 
@@ -93,7 +88,7 @@ namespace LinkaWPF
             try
             {
                 var imageGenerator = new ImageGenerator();
-                var imagePath = string.Format("{0}\\{1}.png", _tempPath, Guid.NewGuid());
+                var imagePath = string.Format("{0}\\{1}.png", _tempDirPath, Guid.NewGuid());
                 imageGenerator.GenerateImage(captionTextBox.Text, imagePath);
 
                 Image = SetImageFromPath(imagePath);

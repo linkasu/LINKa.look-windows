@@ -25,6 +25,8 @@ namespace LinkaWPF
         private static readonly DependencyProperty WithoutSpaceProperty;
         private IList<Card> _cards;
         private CardButton _selectedCardButton;
+        private readonly string _tempDirPath;
+        private YandexSpeech _yandexSpeech;
 
         private bool WithoutSpace
         {
@@ -49,11 +51,14 @@ namespace LinkaWPF
             window.IsEdited = true;
         }
 
-        public EditorWindow()
+        public EditorWindow(string tempDirPath, YandexSpeech yandexSpeech)
         {
             InitializeComponent();
 
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            // Создать директорию для временных файлов
+            _tempDirPath = tempDirPath;
+
+            _yandexSpeech = yandexSpeech;
 
             _cards = new List<Card>();
 
@@ -120,7 +125,7 @@ namespace LinkaWPF
                 CardType = _selectedCardButton.Card.CardType
             };
 
-            var cardEditorWindow = new CardEditorWindow(card, WithoutSpace);
+            var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, card, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
@@ -278,7 +283,7 @@ namespace LinkaWPF
 
             try
             {
-                var destPath = Environment.CurrentDirectory + "\\temp\\" + Guid.NewGuid();
+                var destPath = _tempDirPath + Guid.NewGuid() + "\\";
 
                 var cardSetLoader = new CardSetLoader();
                 var cardSetFile = cardSetLoader.LoadFromFile(openFileDialog.FileName, destPath);
@@ -291,8 +296,8 @@ namespace LinkaWPF
                 _cards = cardSetFile.Cards;
                 foreach (var card in _cards)
                 {
-                    if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + "\\" + card.ImagePath;
-                    if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + "\\" + card.AudioPath;
+                    if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + card.ImagePath;
+                    if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + card.AudioPath;
                 }
                 UpdateCardBoard(_cards);
 
@@ -307,7 +312,7 @@ namespace LinkaWPF
 
         private void CreateCard()
         {
-            var cardEditorWindow = new CardEditorWindow(WithoutSpace);
+            var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
