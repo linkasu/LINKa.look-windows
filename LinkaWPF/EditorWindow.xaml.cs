@@ -281,12 +281,17 @@ namespace LinkaWPF
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
+            LoadCardSet(openFileDialog.FileName);
+        }
+
+        public void LoadCardSet(string path)
+        {
             try
             {
                 var destPath = _tempDirPath + Guid.NewGuid() + "\\";
 
                 var cardSetLoader = new CardSetLoader();
-                var cardSetFile = cardSetLoader.LoadFromFile(openFileDialog.FileName, destPath);
+                var cardSetFile = cardSetLoader.LoadFromFile(path, destPath);
 
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
@@ -307,7 +312,7 @@ namespace LinkaWPF
             {
                 MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
-            }           
+            }
         }
 
         private void CreateCard()
