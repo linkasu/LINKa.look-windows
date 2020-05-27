@@ -74,15 +74,6 @@ namespace LinkaWPF
             pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
         }
 
-        private void ClearCach()
-        {
-            var allfiles = Directory.GetFiles("temp");
-            foreach (var filename in allfiles)
-            {
-                File.Delete(filename);
-            }
-        }
-
         private void cardButton_Click(object sender, EventArgs e)
         {
             var cardButton = sender as CardButton;
@@ -144,12 +135,6 @@ namespace LinkaWPF
             var player = new Player(_yandexSpeech);
 
             player.Play(_words);
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            // Удаляем закешированные аудиофайлы
-            ClearCach();
         }
 
         public void LoadCardSet(string path)

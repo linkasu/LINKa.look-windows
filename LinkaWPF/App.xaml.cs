@@ -78,7 +78,18 @@ namespace LinkaWPF
             // we will close the coonection to the Tobii Engine before exit.
             _host.DisableConnection();
 
+            ClearCache();
+
             base.OnExit(e);
+        }
+
+        private void ClearCache()
+        {
+            var allfiles = Directory.GetFiles(TempDirPath);
+            foreach (var filename in allfiles)
+            {
+                File.Delete(filename);
+            }
         }
 
         public static string TempDirPath { get; set; }
