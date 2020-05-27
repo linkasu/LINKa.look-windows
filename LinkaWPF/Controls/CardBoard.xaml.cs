@@ -241,24 +241,31 @@ namespace LinkaWPF
         {
             if (CountPages <= 1) return false;
 
-            CurrentPage++;
+            var index = CurrentPage + 1;
 
-            if (CurrentPage >= CountPages) CurrentPage = 0;
+            if (index >= CountPages) index = 0;
 
-            Render();
-
-            GC.Collect();
-
-            return true;
+            return GoToPage(index);
         }
 
         public bool PrevPage()
         {
             if (CountPages <= 1) return false;
 
-            CurrentPage--;
+            var index = CurrentPage - 1;
 
-            if (CurrentPage < 0) CurrentPage = CountPages - 1;
+            if (index < 0) index = CountPages - 1;
+
+            return GoToPage(index);
+        }
+
+        public bool GoToPage(int index)
+        {
+            if (CountPages <= 1) return false;
+
+            if (index < 0 || index >= CountPages) return false;
+
+            CurrentPage = index;
 
             Render();
 
