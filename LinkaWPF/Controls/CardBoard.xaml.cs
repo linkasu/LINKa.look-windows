@@ -1,6 +1,8 @@
-﻿using System;
+﻿using LinkaWPF.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +26,8 @@ namespace LinkaWPF
         private int _currentPage;
         private int _countPages;
         private int _gridSize;
+        private CardButton _selectedCardButton;
+        private Card _selectedCard;
 
         public CardBoard()
         {
@@ -101,6 +105,29 @@ namespace LinkaWPF
                 CurrentPageChanged?.Invoke(this, new EventArgs());
             }
         }
+
+        public Card SelectedCard
+        {
+            get { return _selectedCard; }
+            private set
+            {
+                _selectedCard = value;
+                SelectedCardChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public CardButton SelectedCardButton
+        {
+            get { return _selectedCardButton; }
+            private set
+            {
+                _selectedCardButton = value;
+                SelectedCard = _selectedCardButton != null ? _selectedCardButton.Card : null;
+                SelectedCardButtonChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public int SelectedIndex { get; set; }
         #endregion
 
         #region Events
@@ -110,6 +137,10 @@ namespace LinkaWPF
         public event EventHandler CountPagesChanged;
 
         public event EventHandler CurrentPageChanged;
+
+        public event EventHandler SelectedCardChanged;
+
+        public event EventHandler SelectedCardButtonChanged;
 
         #endregion
 
@@ -205,6 +236,27 @@ namespace LinkaWPF
             }
         }
 
+        private CardButton GetCardButtonFromIndex(int index)
+        {
+            if (Cards == null || index < 0 || index >= Cards.Count) return null;
+
+            // Выясним на какой странице находится карточка
+            var page = Convert.ToInt32(Math.Floor((double)index / _gridSize));
+
+            if (page != CurrentPage) GoToPage(page);
+
+            // Находится ли карточка на текущей странице
+            if (page == CurrentPage)
+            {
+                // Вычисляем индекс кнопки на которой находится карточка
+                var indexOfButtons = index - CurrentPage * _gridSize;
+
+                return _buttons[indexOfButtons];
+            }
+
+            return null;
+        }
+
         public void Update(IList<Models.Card> cards)
         {
             if (Cards != cards)
@@ -218,23 +270,13 @@ namespace LinkaWPF
 
         public void UpdateCard(int index, Models.Card card)
         {
-            if (Cards == null || index < 0 || index >= Cards.Count) return;
+            var cardButton = GetCardButtonFromIndex(index);
 
-            Cards[index] = card;
+            if (cardButton == null) return;
 
-            // Выясним на какой странице находится карточка
-            var page = Convert.ToInt32(Math.Round((double)index / _gridSize));
-
-            // Находится ли карточка на текущей странице
-            if (page == CurrentPage)
-            {
-                // Вычисляем индекс кнопки на которой находится карточка
-                var indexOfButtons = index - CurrentPage * _gridSize;
-
-                // Обновляем карточку на кнопке
-                _buttons[indexOfButtons].Card = null;
-                _buttons[indexOfButtons].Card = card;
-            }
+            // Обновляем карточку на кнопке            
+            cardButton.Card = null;
+            cardButton.Card = card;
         }
 
         public bool NextPage()
@@ -265,6 +307,8 @@ namespace LinkaWPF
 
             if (index < 0 || index >= CountPages) return false;
 
+            RemoveSelectionCard();
+
             CurrentPage = index;
 
             Render();
@@ -272,6 +316,52 @@ namespace LinkaWPF
             GC.Collect();
 
             return true;
+        }
+
+        public void SelectCard(int index)
+        {
+            var cardButton = GetCardButtonFromIndex(index);
+
+            RemoveSelectionCard();
+
+            SelectedCardButton = cardButton;
+
+            if (SelectedCardButton != null)
+            {
+                SelectedIndex = index;
+                SelectedCardButton.Background = Brushes.Yellow;
+            }
+        }
+
+        public void RemoveSelectionCard()
+        {
+            if (SelectedCardButton == null) return;
+
+            SelectedCardButton.Background = Brushes.White;
+            SelectedCardButton = null;
+            SelectedIndex = -1;
+        }
+
+        public void SelectPrevCard()
+        {
+            if (Cards.Count == 0) return;
+
+            var prevIndex = SelectedIndex >= 0 ? SelectedIndex - 1 : 0;
+
+            if (prevIndex < 0) prevIndex = Cards.Count - 1;
+
+            SelectCard(prevIndex);
+        }
+
+        public void SelectNextCard()
+        {
+            if (Cards.Count == 0) return;
+
+            var nextIndex = SelectedIndex >= 0 ? SelectedIndex + 1 : 0;
+
+            if (nextIndex >= Cards.Count) nextIndex = 0;
+
+            SelectCard(nextIndex);
         }
 
         private void Init()

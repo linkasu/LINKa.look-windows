@@ -46,6 +46,21 @@ namespace LinkaWPF
             cardBoard.Cards = _cards;
 
             _words = new List<Card>();
+
+            KeyUp += MainWindow_KeyUp;
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Right)
+            {
+                // Следующая карточка
+                cardBoard.SelectNextCard();
+            } else if (e.Key == Key.Left)
+            {
+                // Предыдущая карточка
+                cardBoard.SelectPrevCard();
+            }
         }
 
         private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
