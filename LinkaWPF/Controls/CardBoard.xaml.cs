@@ -280,7 +280,7 @@ namespace LinkaWPF
             return new CardButton();
         }
 
-        private void CardButton_Click(object sender, RoutedEventArgs e)
+        protected virtual void CardButton_Click(object sender, RoutedEventArgs e)
         {
             PressOnCardButton(sender);
         }

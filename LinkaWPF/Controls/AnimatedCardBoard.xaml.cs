@@ -30,6 +30,13 @@ namespace LinkaWPF
             _delayedClick.Ended += _delayedClick_Ended;
         }
 
+        protected override void CardButton_Click(object sender, RoutedEventArgs e)
+        {
+            _delayedClick.Stop();
+
+            base.CardButton_Click(sender, e);
+        }
+
         protected override void CardButton_HazGazeChanged(object sender, RoutedEventArgs e)
         {
             var button = sender as CardButton;
