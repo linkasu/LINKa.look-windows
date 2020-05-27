@@ -60,6 +60,9 @@ namespace LinkaWPF
             {
                 // Предыдущая карточка
                 cardBoard.SelectPrevCard();
+            } else if (e.Key == Key.Space || e.Key == Key.Enter)
+            {
+                if (cardBoard.SelectedCardButton != null) pressCardButton(cardBoard.SelectedCardButton);
             }
         }
 
@@ -89,10 +92,8 @@ namespace LinkaWPF
             pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
         }
 
-        private void cardButton_Click(object sender, EventArgs e)
+        private void pressCardButton(CardButton cardButton)
         {
-            var cardButton = sender as CardButton;
-
             if (cardButton.Card == null) return;
 
             text.Text += (text.Text != string.Empty ? " " : string.Empty) + cardButton.Card.Title;
@@ -105,6 +106,12 @@ namespace LinkaWPF
 
             // Добавить карточку в цепочку
             _words.Add(cardButton.Card);
+        }
+
+        private void cardButton_Click(object sender, EventArgs e)
+        {
+            var cardButton = sender as CardButton;
+            pressCardButton(cardButton);
         }
 
         private void prevButton_Click(object sender, RoutedEventArgs e)
