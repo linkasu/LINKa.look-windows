@@ -1,4 +1,5 @@
-﻿using Microsoft.DirectX.AudioVideoPlayback;
+﻿using LinkaWPF.Models;
+using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,41 +25,53 @@ namespace LinkaWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Models.Card> _cards;
-        private List<Models.Card> _words;
-        private YandexSpeech _yandexSpeech;
+        private IList<Card> _cards;
+        private IList<Card> _words;
+        private readonly string _tempDirPath;
+        private readonly YandexSpeech _yandexSpeech;
 
-        public MainWindow()
+        public MainWindow(string tempDirPath, YandexSpeech yandexSpeech)
         {
             InitializeComponent();
 
-            // Создать директорию для временных файлов
-            var tempPath = Environment.CurrentDirectory + "\\temp\\";
-            Directory.CreateDirectory(tempPath);
+            _tempDirPath = tempDirPath;
 
-            // TODO: Заменить на загрузку из конфига
-            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", tempPath);
+            _yandexSpeech = yandexSpeech;
 
-            _cards = new List<Models.Card>() {
-                // Page one
-                new Models.Card(0, "Один", string.Format("{0}\\images\\1.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\one.ogg", Environment.CurrentDirectory)),
-                new Models.Card(1, "Два", string.Format("{0}\\images\\2.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\two.ogg", Environment.CurrentDirectory)),
-                new Models.Card(2, "Три", string.Format("{0}\\images\\3.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\three.ogg", Environment.CurrentDirectory)),
-                new Models.Card(3, "Четыре", string.Format("{0}\\images\\4.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\four.ogg", Environment.CurrentDirectory)),
-                new Models.Card(4, "Пять", string.Format("{0}\\images\\5.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\five.ogg", Environment.CurrentDirectory)),
-                new Models.Card(5, "Шесть", string.Format("{0}\\images\\6.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\six.ogg", Environment.CurrentDirectory)),
-                new Models.Card(6, "Семь", string.Format("{0}\\images\\7.png", Environment.CurrentDirectory), string.Format("{0}\\audios\\seven.ogg", Environment.CurrentDirectory)),
-                new Models.Card(7, "Восемь", string.Format("{0}\\images\\8.png", Environment.CurrentDirectory)),
-                new Models.Card(8, "Девять", string.Format("{0}\\images\\9.png", Environment.CurrentDirectory)),
-                new Models.Card(9, "Девять", string.Format("{0}\\images\\9.png", Environment.CurrentDirectory)),
-                new Models.Card(10, "Спать", string.Format("{0}\\images\\sleep.gif", Environment.CurrentDirectory)),
-                new Models.Card(11, "Есть", string.Format("{0}\\images\\eat.gif", Environment.CurrentDirectory))
-            };
+            _cards = new List<Card>();
 
-            cardBoard.Cards = _cards;
             cardBoard.ClickOnCardButton += cardButton_Click;
+            cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
+            cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
+            cardBoard.Cards = _cards;
 
-            _words = new List<Models.Card>();
+            _words = new List<Card>();
+        }
+
+        private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
+        {
+            UpdatePageInfo();
+        }
+
+        private void CardBoard_CountPagesChanged(object sender, EventArgs e)
+        {
+            UpdatePageInfo();
+
+            if (cardBoard.CountPages > 1)
+            {
+                prevButton.IsEnabled = true;
+                nextButton.IsEnabled = true;
+            }
+            else
+            {
+                prevButton.IsEnabled = false;
+                nextButton.IsEnabled = false;
+            }
+        }
+
+        private void UpdatePageInfo()
+        {
+            pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
         }
 
         private void ClearCach()
@@ -123,7 +136,7 @@ namespace LinkaWPF
             text.Focus();
 
             // Удалить последнее слово из цепочки слов
-            _words.RemoveAt(_words.Count - 1);
+            if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
         }
 
         private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
@@ -138,5 +151,36 @@ namespace LinkaWPF
             // Удаляем закешированные аудиофайлы
             ClearCach();
         }
+
+        public void LoadCardSet(string path)
+        {
+            try
+            {
+                var destPath = _tempDirPath + Guid.NewGuid() + "\\";
+
+                var cardSetLoader = new CardSetLoader();
+                var cardSetFile = cardSetLoader.LoadFromFile(path, destPath);
+
+                cardBoard.Columns = cardSetFile.Columns;
+                cardBoard.Rows = cardSetFile.Rows;
+
+                WithoutSpace = cardSetFile.WithoutSpace;
+
+                _cards = cardSetFile.Cards;
+                foreach (var card in _cards)
+                {
+                    if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + card.ImagePath;
+                    if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + card.AudioPath;
+                }
+                cardBoard.Update(_cards);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+
+        public bool WithoutSpace { get; set; }
     }
 }

@@ -8,7 +8,8 @@
         Title="MainWindow" Height="500" Width="800" Closed="Window_Closed">
     <Grid x:Name="mainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding ElementName=text, Path=Height}"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -49,12 +50,14 @@
             </Button>
         </Grid>
 
+        <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" x:Name="pageInfoTextBlock" Margin="5" HorizontalAlignment="Center"/>
+
         <!-- Buttons -->
-        <Button x:Name="prevButton" Grid.Row="1" Grid.Column="0" Click="prevButton_Click">Prev</Button>
-        <Button x:Name="nextButton" Grid.Row="1" Grid.Column="2" Click="nextButton_Click">Next</Button>
+        <Button x:Name="prevButton" Grid.Row="2" Grid.Column="0" IsEnabled="False" Click="prevButton_Click">Prev</Button>
+        <Button x:Name="nextButton" Grid.Row="2" Grid.Column="2" IsEnabled="False" Click="nextButton_Click">Next</Button>
 
         <!-- CardBoard -->
-        <local:AnimatedCardBoard x:Name="cardBoard" Grid.Row="1" Grid.Column="1"></local:AnimatedCardBoard>
+        <local:AnimatedCardBoard x:Name="cardBoard" Grid.Row="2" Grid.Column="1" Columns="3" Rows="3"></local:AnimatedCardBoard>
         
     </Grid>
 </Window>
