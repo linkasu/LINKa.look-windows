@@ -66,7 +66,7 @@ namespace LinkaWPF
             }
             else
             {
-                var mainWindow = new MainWindow(TempDirPath, YandexSpeech);
+                var mainWindow = new MainWindow(TempDirPath, YandexSpeech, _host);
                 mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 if (_path != null) mainWindow.LoadCardSet(_path);
                 mainWindow.Show();

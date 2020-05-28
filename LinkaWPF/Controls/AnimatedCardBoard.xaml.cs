@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tobii.Interaction;
 
 namespace LinkaWPF
 {
@@ -22,12 +23,26 @@ namespace LinkaWPF
     {
         private AnimatedDelayedClick _delayedClick;
 
+        private EyePositionStream _eyePositionStream;
+        private Host _host;
+
         public AnimatedCardBoard()
         {
             InitializeComponent();
 
             _delayedClick = new AnimatedDelayedClick(3);
             _delayedClick.Ended += _delayedClick_Ended;
+        }
+
+        private void _eyePositionStream_Next(object sender, StreamData<EyePositionData> e)
+        {
+            if (e.Data.HasLeftEyePosition == false && e.Data.HasRightEyePosition == false)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    StopClick();
+                });
+            }
         }
 
         protected override void CardButton_Click(object sender, RoutedEventArgs e)
@@ -40,7 +55,12 @@ namespace LinkaWPF
         protected override void CardButton_HazGazeChanged(object sender, RoutedEventArgs e)
         {
             var button = sender as CardButton;
-            if (button.Card == null) return;
+
+            if (button.Card == null)
+            {
+                StopClick();
+                return;
+            }
 
             _delayedClick.Start(button);
 
@@ -72,6 +92,19 @@ namespace LinkaWPF
         private void StopClick()
         {
             _delayedClick.Stop();
+        }
+
+        public Host Host
+        {
+            get { return _host; }
+            set
+            {
+                _host = value;
+
+                // Наблюдение за состоянием глаз
+                _eyePositionStream = _host.Streams.CreateEyePositionStream();
+                _eyePositionStream.Next += _eyePositionStream_Next;
+            }
         }
     }
 }

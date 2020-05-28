@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Tobii.Interaction;
 
 namespace LinkaWPF
 {
@@ -29,8 +30,9 @@ namespace LinkaWPF
         private IList<Card> _words;
         private readonly string _tempDirPath;
         private readonly YandexSpeech _yandexSpeech;
+        private Host _host;
 
-        public MainWindow(string tempDirPath, YandexSpeech yandexSpeech)
+        public MainWindow(string tempDirPath, YandexSpeech yandexSpeech, Host host)
         {
             InitializeComponent();
 
@@ -38,12 +40,15 @@ namespace LinkaWPF
 
             _yandexSpeech = yandexSpeech;
 
+            _host = host;
+
             _cards = new List<Card>();
 
             cardBoard.ClickOnCardButton += cardButton_Click;
             cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
             cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
             cardBoard.Cards = _cards;
+            cardBoard.Host = _host;
 
             _words = new List<Card>();
 
