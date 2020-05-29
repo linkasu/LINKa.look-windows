@@ -36,7 +36,7 @@ namespace LinkaWPF
             {
                 if (card == null) continue;
 
-                if (card.AudioPath == null)
+                if (card.AudioPath == null || card.AudioPath == string.Empty)
                 {
                     try
                     {
