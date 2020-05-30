@@ -48,7 +48,14 @@ namespace LinkaWPF
 
             _container = container;
 
-            _progress.Radius = Convert.ToInt32((_container.Height - 20) / 2);
+            if (_container.Height < _container.Width)
+            {
+                _progress.Radius = Convert.ToInt32((_container.Height - 20) / 2);
+            }
+            else
+            {
+                _progress.Radius = Convert.ToInt32((_container.Width - 20) / 2);
+            }
             _progress.Visibility = Visibility.Visible;
 
             _sb.Stop();
