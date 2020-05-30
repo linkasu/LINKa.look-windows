@@ -188,6 +188,8 @@ namespace LinkaWPF
                     if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + card.AudioPath;
                 }
                 cardBoard.Update(_cards);
+
+                CurrentFileName = path;
             }
             catch (Exception ex)
             {
@@ -197,5 +199,34 @@ namespace LinkaWPF
         }
 
         public bool WithoutSpace { get; set; }
+
+        public Func<string, bool> ChangeMode;
+
+        public string CurrentFileName { get; set; }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Linka files(*.linka)|*.linka";
+
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            LoadCardSet(openFileDialog.FileName);
+        }
+
+        private void OpenInEditor_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeMode(CurrentFileName);
+        }
+
+        private void OpenEditor_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeMode(null);
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

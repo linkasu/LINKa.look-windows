@@ -59,18 +59,56 @@ namespace LinkaWPF
 
             if (_isEditor == true)
             {
-                var editorWindow = new EditorWindow(TempDirPath, YandexSpeech);
-                editorWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                if (_path != null) editorWindow.LoadCardSet(_path);
-                editorWindow.Show();
+                ShowEditorWindow(_path);
             }
             else
             {
-                var mainWindow = new MainWindow(TempDirPath, YandexSpeech, _host);
-                mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                if (_path != null) mainWindow.LoadCardSet(_path);
-                mainWindow.Show();
+                ShowMainWindow(_path);
             }
+        }
+
+        private void ShowEditorWindow(string path)
+        {
+            // Создаем окно редактора
+            var editorWindow = new EditorWindow(TempDirPath, YandexSpeech);
+            editorWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            // Функция смены режима работы программы
+            editorWindow.ChangeMode = () =>
+            {
+                if (editorWindow.IsSave() == false) return false;
+
+                // Открываем окно пользователя
+                ShowMainWindow(editorWindow.CurrentFileName);
+
+                // Закрываем окно редактора
+                editorWindow.Close();
+
+                return true;
+            };
+
+            if (path != null && path != string.Empty) editorWindow.LoadCardSet(path);
+
+            editorWindow.Show();
+        }
+
+        private void ShowMainWindow(string path)
+        {
+            var mainWindow = new MainWindow(TempDirPath, YandexSpeech, _host);
+            mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            mainWindow.ChangeMode = (str) =>
+            {
+                // Открываем окно редактора
+                ShowEditorWindow(str);
+
+                // Закрываем окно пользовательского режима
+                mainWindow.Close();
+
+                return true;
+            };
+
+            if (path != null && path != string.Empty) mainWindow.LoadCardSet(path);
+
+            mainWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -96,8 +134,8 @@ namespace LinkaWPF
             }
         }
 
-        public static string TempDirPath { get; set; }
+        public string TempDirPath { get; set; }
 
-        public static YandexSpeech YandexSpeech { get; set; }
+        public YandexSpeech YandexSpeech { get; set; }
     }
 }

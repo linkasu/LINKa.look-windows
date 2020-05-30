@@ -204,6 +204,11 @@ namespace LinkaWPF
             SaveCardSetAs();
         }
 
+        private void GoToUserMode_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeMode();
+        }
+
         private bool SaveCardSet()
         {
             // Сохранить
@@ -335,7 +340,7 @@ namespace LinkaWPF
             e.Cancel = !IsSave();
         }
 
-        private bool IsSave()
+        public bool IsSave()
         {
             var result = true;
 
@@ -357,6 +362,8 @@ namespace LinkaWPF
                             result = false;
                         }break;
                 }
+
+                if (result == true) IsEdited = false;
             }
 
             return result;
@@ -370,5 +377,7 @@ namespace LinkaWPF
         }
 
         public string CurrentFileName { get; set; }
+
+        public Func<bool> ChangeMode;
     }
 }
