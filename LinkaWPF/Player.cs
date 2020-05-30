@@ -27,6 +27,27 @@ namespace LinkaWPF
             PlayAudio(cachedAudio, 0);
         }
 
+        public async void Play(string text)
+        {
+            if (text == string.Empty) return;
+
+            var tempList = new List<string>();
+
+            try
+            {
+                // Cинтезируем голос из текста и кэшируем аудио
+                var path = await _yandexSpeech.GetAudio(text);
+
+                // TODO: Что-то произошло, аудиофайла нет, нужно записать в лог
+                if (path == null) return;
+
+                tempList.Add(path);
+
+                PlayAudio(tempList, 0);
+            }
+            catch { }
+        }
+
         private async Task<IList<string>> Cache(IList<Models.Card> cards)
         {
             var tempList = new List<string>();

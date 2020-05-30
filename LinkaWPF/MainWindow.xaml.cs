@@ -164,7 +164,14 @@ namespace LinkaWPF
         {
             var player = new Player(_yandexSpeech);
 
-            player.Play(_words);
+            if (WithoutSpace == true)
+            {
+                player.Play(text.Text);
+            }
+            else
+            {
+                player.Play(_words);
+            }
         }
 
         public void LoadCardSet(string path)
