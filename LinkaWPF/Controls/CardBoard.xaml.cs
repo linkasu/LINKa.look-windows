@@ -39,7 +39,7 @@ namespace LinkaWPF
         #region Properties
         // Properties
         public static readonly DependencyProperty CardsProperty =
-            DependencyProperty.Register("Cards", typeof(IList<Models.Card>), typeof(CardBoard), new PropertyMetadata(null, new PropertyChangedCallback(OnCardsChanged)));
+            DependencyProperty.Register("Cards", typeof(IList<Card>), typeof(CardBoard), new PropertyMetadata(null, new PropertyChangedCallback(OnCardsChanged)));
 
         public static readonly DependencyProperty ColumnsProperty =
             DependencyProperty.Register("Columns", typeof(int), typeof(CardBoard), new PropertyMetadata(3, new PropertyChangedCallback(GridSizeChanged)));
@@ -50,7 +50,7 @@ namespace LinkaWPF
         private static void OnCardsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             CardBoard cardBoard = sender as CardBoard;
-            var cards = (IList<Models.Card>)args.NewValue;
+            var cards = (IList<Card>)args.NewValue;
             cardBoard.Update(cards);
         }
 
@@ -60,9 +60,9 @@ namespace LinkaWPF
             cardBoard.Init();
         }
 
-        public IList<Models.Card> Cards
+        public IList<Card> Cards
         {
-            get { return (IList<Models.Card>)GetValue(CardsProperty); }
+            get { return (IList<Card>)GetValue(CardsProperty); }
             set { SetValue(CardsProperty, value); }
         }
 
@@ -146,6 +146,15 @@ namespace LinkaWPF
 
         #region Methods
         // Methods
+
+        private void Init()
+        {
+            InitGrid();
+            InitCardButtons();
+            InitPages();
+            Render();
+        }
+
         private void InitGrid()
         {
             CurrentPage = 0;
@@ -226,7 +235,7 @@ namespace LinkaWPF
 
             for (var i = CurrentPage * _gridSize; i < CurrentPage * _gridSize + _gridSize; i++)
             {
-                Models.Card card = null;
+                Card card = null;
                 if (i >= 0 && i < Cards.Count)
                 {
                     card = Cards[i];
@@ -257,7 +266,7 @@ namespace LinkaWPF
             return null;
         }
 
-        public void Update(IList<Models.Card> cards)
+        public void Update(IList<Card> cards)
         {
             if (Cards != cards)
             {
@@ -268,7 +277,7 @@ namespace LinkaWPF
             Render();
         }
 
-        public void UpdateCard(int index, Models.Card card)
+        public void UpdateCard(int index, Card card)
         {
             var cardButton = GetCardButtonFromIndex(index);
 
@@ -342,6 +351,17 @@ namespace LinkaWPF
             SelectedIndex = -1;
         }
 
+        public void RemoveCard()
+        {
+            if (SelectedCardButton == null || SelectedCardButton.Card == null) return;
+
+            Cards.Remove(SelectedCardButton.Card);
+
+            RemoveSelectionCard();
+
+            Update(Cards);
+        }
+
         public void SelectPrevCard()
         {
             if (Cards.Count == 0) return;
@@ -364,12 +384,43 @@ namespace LinkaWPF
             SelectCard(nextIndex);
         }
 
-        private void Init()
+        public void MoveToLeft()
         {
-            InitGrid();
-            InitCardButtons();
-            InitPages();
-            Render();
+            // Переместить карточку влево
+            if (SelectedCardButton == null || SelectedCardButton.Card == null || Cards.Count == 0) return;
+
+            var index = Cards.IndexOf(SelectedCardButton.Card);
+
+            if (index <= 0 || index >= Cards.Count) return;
+
+            var prevCard = Cards[index - 1];
+            Cards[index - 1] = Cards[index];
+            Cards[index] = prevCard;
+
+            Update(Cards);
+        }
+
+        public void MoveToRight()
+        {
+            // Переместить карточку вправо
+            if (SelectedCardButton == null || SelectedCardButton.Card == null) return;
+
+            var index = Cards.IndexOf(SelectedCardButton.Card);
+
+            // Если текущая карточка последняя, то перемещаем ее и подставляем фейковую карточку перед ней
+            if (index == Cards.Count - 1)
+            {
+                Cards.Add(Cards[index]);
+                Cards[index] = new Card() { CardType = CardType.Fake };
+            }
+            else
+            {
+                var nextCard = Cards[index + 1];
+                Cards[index + 1] = Cards[index];
+                Cards[index] = nextCard;
+            }
+
+            Update(Cards);
         }
 
         protected virtual CardButton CreateCardButton()

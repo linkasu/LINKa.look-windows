@@ -24,7 +24,6 @@ namespace LinkaWPF
     {
         private static readonly DependencyProperty WithoutSpaceProperty;
         private IList<Card> _cards;
-        private CardButton _selectedCardButton;
         private readonly string _tempDirPath;
         private YandexSpeech _yandexSpeech;
 
@@ -66,12 +65,21 @@ namespace LinkaWPF
             cardBoard.ClickOnCardButton += ClickOnCardButton;
             cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
             cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
+            cardBoard.SelectedCardChanged += CardBoard_SelectedCardChanged;
+        }
+
+        private void CardBoard_SelectedCardChanged(object sender, EventArgs e)
+        {
+            ChangeStatusPlayButton();
+            editButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
+            deleteButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
+            moveToLeftButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
+            moveToRightButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
         }
 
         private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
         {
             UpdatePageInfo();
-            RemoveSelectionCard();
         }
 
         private void CardBoard_CountPagesChanged(object sender, EventArgs e)
@@ -94,14 +102,22 @@ namespace LinkaWPF
         {
             var cardButton = sender as CardButton;
 
-            SelectCard(cardButton);
+            if (cardButton == null || cardButton.Card == null)
+            {
+                CreateCard();
+                return;
+            }
+
+            var index = _cards.IndexOf(cardButton.Card);
+
+            cardBoard.SelectCard(index);
         }
 
         private void Play(object sender, RoutedEventArgs e)
         {
-            if (_selectedCardButton == null || _selectedCardButton.Card == null || _selectedCardButton.Card.AudioPath == null || File.Exists(_selectedCardButton.Card.AudioPath) == false) return;
+            if (SelectedCardButton == null || SelectedCardButton.Card == null || SelectedCardButton.Card.AudioPath == null || File.Exists(SelectedCardButton.Card.AudioPath) == false) return;
 
-            var audio = new Audio(_selectedCardButton.Card.AudioPath);
+            var audio = new Audio(cardBoard.SelectedCard.AudioPath);
             playButton.IsEnabled = false;
             audio.Ending += (s, args) => { playButton.IsEnabled = true; };
             audio.Play();
@@ -114,15 +130,15 @@ namespace LinkaWPF
 
         private void EditCard(object sender, RoutedEventArgs e)
         {
-            if (_selectedCardButton == null || _selectedCardButton.Card == null) return;
+            if (SelectedCardButton == null || SelectedCardButton.Card == null) return;
 
-            var index = _cards.IndexOf(_selectedCardButton.Card);
+            var index = _cards.IndexOf(SelectedCardButton.Card);
 
             var card = new Card() {
-                Title = _selectedCardButton.Card.Title,
-                ImagePath = _selectedCardButton.Card.ImagePath,
-                AudioPath = _selectedCardButton.Card.AudioPath,
-                CardType = _selectedCardButton.Card.CardType
+                Title = SelectedCardButton.Card.Title,
+                ImagePath = SelectedCardButton.Card.ImagePath,
+                AudioPath = SelectedCardButton.Card.AudioPath,
+                CardType = SelectedCardButton.Card.CardType
             };
 
             var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, card, WithoutSpace);
@@ -139,12 +155,7 @@ namespace LinkaWPF
 
         private void RemoveCard(object sender, RoutedEventArgs e)
         {
-            if (_selectedCardButton == null || _selectedCardButton.Card == null) return;
-
-            _cards.Remove(_selectedCardButton.Card);
-            RemoveSelectionCard();
-
-            UpdateCardBoard(_cards);
+            cardBoard.RemoveCard();
         }
 
         private void ChangeGridSize(object sender, RoutedEventArgs e)
@@ -165,41 +176,6 @@ namespace LinkaWPF
             }
         }
 
-        private void SelectedCardChanged(Card card)
-        {
-            ChangeStatusPlayButton();
-            editButton.IsEnabled = card == null ? false : true;
-            deleteButton.IsEnabled = card == null ? false : true;
-            moveToLeftButton.IsEnabled = card == null ? false : true;
-            moveToRightButton.IsEnabled = card == null ? false : true;
-        }
-
-        private void SelectCard(CardButton cardButton)
-        {
-            if (cardButton == null || cardButton.Card == null)
-            {
-                CreateCard();
-                return;
-            }
-
-            RemoveSelectionCard();
-
-            _selectedCardButton = cardButton;
-            _selectedCardButton.Background = Brushes.Yellow;
-
-            SelectedCardChanged(_selectedCardButton.Card);
-        }
-
-        private void RemoveSelectionCard()
-        {
-            if (_selectedCardButton == null) return;
-
-            _selectedCardButton.Background = Brushes.White;
-            _selectedCardButton = null;
-
-            SelectedCardChanged(null);
-        }
-
         private void PrevPage(object sender, RoutedEventArgs e)
         {
             cardBoard.PrevPage();
@@ -212,34 +188,12 @@ namespace LinkaWPF
 
         private void MoveToLeft(object sender, RoutedEventArgs e)
         {
-            // Переместить карточку влево
-            if (_selectedCardButton == null || _selectedCardButton.Card == null || _cards.Count == 0) return;
-
-            var index = _cards.IndexOf(_selectedCardButton.Card);
-
-            if (index <= 0 || index >= _cards.Count) return;
-
-            var prevCard = _cards[index - 1];
-            _cards[index - 1] = _cards[index];
-            _cards[index] = prevCard;
-
-            UpdateCardBoard(_cards);
+            cardBoard.MoveToLeft();
         }
 
         private void MoveToRight(object sender, RoutedEventArgs e)
         {
-            // Переместить карточку вправо
-            if (_selectedCardButton == null || _selectedCardButton.Card == null || _cards.Count == 0) return;
-
-            var index = _cards.IndexOf(_selectedCardButton.Card);
-
-            if (index < 0 || index >= _cards.Count - 1) return;
-
-            var nextCard = _cards[index + 1];
-            _cards[index + 1] = _cards[index];
-            _cards[index] = nextCard;
-
-            UpdateCardBoard(_cards);
+            cardBoard.MoveToRight();
         }
 
         private void SaveCardSet_Click(object sender, RoutedEventArgs e)
@@ -347,9 +301,9 @@ namespace LinkaWPF
 
         private void ChangeStatusPlayButton()
         {
-            if (_selectedCardButton == null || _selectedCardButton.Card == null) return;
+            if (SelectedCardButton == null || SelectedCardButton.Card == null) return;
 
-            var card = _selectedCardButton.Card;
+            var card = SelectedCardButton.Card;
 
             if (WithoutSpace == true)
             {
@@ -388,5 +342,10 @@ namespace LinkaWPF
         }
 
         protected bool IsEdited { get; set; }
+
+        public CardButton SelectedCardButton
+        {
+            get { return cardBoard.SelectedCardButton; }
+        }
     }
 }
