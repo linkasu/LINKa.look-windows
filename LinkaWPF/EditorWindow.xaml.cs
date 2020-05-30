@@ -66,6 +66,12 @@ namespace LinkaWPF
             cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
             cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
             cardBoard.SelectedCardChanged += CardBoard_SelectedCardChanged;
+            cardBoard.Edited += CardBoard_Edited;
+        }
+
+        private void CardBoard_Edited(object sender, EventArgs e)
+        {
+            IsEdited = true;
         }
 
         private void CardBoard_SelectedCardChanged(object sender, EventArgs e)
@@ -150,7 +156,7 @@ namespace LinkaWPF
             _cards[index].ImagePath = cardEditorWindow.ImagePath;
             _cards[index].AudioPath = cardEditorWindow.AudioPath;
 
-            UpdateCardBoard(_cards, index);
+            cardBoard.UpdateCard(index, _cards[index]);
         }
 
         private void RemoveCard(object sender, RoutedEventArgs e)
@@ -163,17 +169,9 @@ namespace LinkaWPF
             var rows = Convert.ToInt32(rowsText.Text);
             var columns = Convert.ToInt32(columnsText.Text);
 
-            if (rows != cardBoard.Rows)
-            {
-                cardBoard.Rows = rows;
-                IsEdited = true;
-            }
+            if (rows != cardBoard.Rows) cardBoard.Rows = rows;
 
-            if (columns != cardBoard.Columns)
-            {
-                cardBoard.Columns = columns;
-                IsEdited = true;
-            }
+            if (columns != cardBoard.Columns) cardBoard.Columns = columns;
         }
 
         private void PrevPage(object sender, RoutedEventArgs e)
@@ -201,22 +199,37 @@ namespace LinkaWPF
             SaveCardSet();
         }
 
+        private void SaveCardSetAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveCardSetAs();
+        }
+
         private bool SaveCardSet()
         {
-            var saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            saveFileDialog.Filter = "Linka files(*.linka)|*.linka";
+            // Сохранить
+            if (CurrentFileName != null && CurrentFileName != string.Empty)
+            {
+                return SaveCardSet(CurrentFileName);
+            }
+            else
+            {
+                return SaveCardSetAs();
+            }
+        }
 
-            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return false;
-
+        private bool SaveCardSet(string fileName)
+        {
             try
             {
                 var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards);
                 var cardSetLoader = new CardSetLoader();
-                cardSetLoader.SaveToFile(saveFileDialog.FileName, cardSetFile);
-
-                IsEdited = false;
+                cardSetLoader.SaveToFile(fileName, cardSetFile);
 
                 MessageBox.Show(this, "Набор успешно сохранен!", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                CurrentFileName = fileName;
+
+                IsEdited = false;
 
                 return true;
             }
@@ -226,6 +239,16 @@ namespace LinkaWPF
             }
 
             return false;
+        }
+
+        private bool SaveCardSetAs()
+        {
+            var saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            saveFileDialog.Filter = "Linka files(*.linka)|*.linka";
+
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return false;
+
+            return SaveCardSet(saveFileDialog.FileName);
         }
 
         private void LoadCardSet_Click(object sender, RoutedEventArgs e)
@@ -242,6 +265,8 @@ namespace LinkaWPF
         {
             try
             {
+                if (IsSave() == false) return; 
+
                 var destPath = _tempDirPath + Guid.NewGuid() + "\\";
 
                 var cardSetLoader = new CardSetLoader();
@@ -258,7 +283,9 @@ namespace LinkaWPF
                     if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + card.ImagePath;
                     if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + card.AudioPath;
                 }
-                UpdateCardBoard(_cards);
+                cardBoard.Update(_cards);
+
+                CurrentFileName = path;
 
                 IsEdited = false;
             }
@@ -279,24 +306,12 @@ namespace LinkaWPF
             var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.CardType);
             _cards.Add(card);
 
-            UpdateCardBoard(_cards);
+            cardBoard.Update(_cards);
         }
 
         private void UpdatePageInfo()
         {
             pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
-        }
-
-        private void UpdateCardBoard(IList<Card> cards)
-        {
-            cardBoard.Update(cards);
-            IsEdited = true;
-        }
-
-        private void UpdateCardBoard(IList<Card> cards, int index)
-        {
-            cardBoard.UpdateCard(index, cards[index]);
-            IsEdited = true;
         }
 
         private void ChangeStatusPlayButton()
@@ -317,28 +332,34 @@ namespace LinkaWPF
 
         private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            e.Cancel = !IsSave();
+        }
+
+        private bool IsSave()
+        {
+            var result = true;
+
             if (IsEdited == true)
             {
-                var result = MessageBox.Show(this, "Сохранить изменения?", "Сохранение", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-
-                switch(result)
+                switch (MessageBox.Show(this, "Сохранить изменения?", "Сохранение", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning))
                 {
                     case MessageBoxResult.Yes:
                         {
                             // Сохраняем изменения и выходим
-                            e.Cancel = !SaveCardSet();
-                        }
-                        break;
+                            result = SaveCardSet();
+                        }break;
                     case MessageBoxResult.No:
                         {
-                            e.Cancel = false;
+                            result = true;
                         }break;
                     default:
                         {
-                            e.Cancel = true;
+                            result = false;
                         }break;
                 }
-            } 
+            }
+
+            return result;
         }
 
         protected bool IsEdited { get; set; }
@@ -347,5 +368,7 @@ namespace LinkaWPF
         {
             get { return cardBoard.SelectedCardButton; }
         }
+
+        public string CurrentFileName { get; set; }
     }
 }

@@ -52,12 +52,16 @@ namespace LinkaWPF
             CardBoard cardBoard = sender as CardBoard;
             var cards = (IList<Card>)args.NewValue;
             cardBoard.Update(cards);
+
+            cardBoard.Edit();
         }
 
         private static void GridSizeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             CardBoard cardBoard = sender as CardBoard;
             cardBoard.Init();
+
+            cardBoard.Edit();
         }
 
         public IList<Card> Cards
@@ -141,6 +145,8 @@ namespace LinkaWPF
         public event EventHandler SelectedCardChanged;
 
         public event EventHandler SelectedCardButtonChanged;
+
+        public event EventHandler Edited;
 
         #endregion
 
@@ -226,7 +232,7 @@ namespace LinkaWPF
         {
             if (Cards == null)
             {
-                for(var i = 0; i < _buttons.Count; i++)
+                for (var i = 0; i < _buttons.Count; i++)
                 {
                     _buttons[i].Card = null;
                 }
@@ -275,6 +281,8 @@ namespace LinkaWPF
 
             InitPages();
             Render();
+
+            Edit();
         }
 
         public void UpdateCard(int index, Card card)
@@ -286,6 +294,8 @@ namespace LinkaWPF
             // Обновляем карточку на кнопке            
             cardButton.Card = null;
             cardButton.Card = card;
+
+            Edit();
         }
 
         public bool NextPage()
@@ -360,6 +370,8 @@ namespace LinkaWPF
             RemoveSelectionCard();
 
             Update(Cards);
+
+            Edit();
         }
 
         public void SelectPrevCard()
@@ -398,6 +410,8 @@ namespace LinkaWPF
             Cards[index] = prevCard;
 
             Update(Cards);
+
+            Edit();
         }
 
         public void MoveToRight()
@@ -421,6 +435,8 @@ namespace LinkaWPF
             }
 
             Update(Cards);
+
+            Edit();
         }
 
         protected virtual CardButton CreateCardButton()
@@ -436,6 +452,11 @@ namespace LinkaWPF
         protected void PressOnCardButton(object sender)
         {
             ClickOnCardButton?.Invoke(sender, new EventArgs());
+        }
+
+        private void Edit()
+        {
+            Edited?.Invoke(this, new EventArgs());
         }
 
         protected virtual void CardButton_HazGazeChanged(object sender, RoutedEventArgs e)

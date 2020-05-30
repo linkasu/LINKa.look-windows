@@ -36,8 +36,9 @@
 
         <GroupBox Grid.Row="0" Header="Операции над набором">
             <WrapPanel Margin="2" VerticalAlignment="Center">
-                <Button Click="SaveCardSet_Click">Сохранить в файл</Button>
-                <Button Click="LoadCardSet_Click">Загрузить из файла</Button>
+                <Button Click="SaveCardSet_Click">Сохранить</Button>
+                <Button Click="SaveCardSetAs_Click">Сохранить как</Button>
+                <Button Click="LoadCardSet_Click">Загрузить</Button>
             </WrapPanel>
         </GroupBox>
 
