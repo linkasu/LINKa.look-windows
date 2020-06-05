@@ -47,7 +47,7 @@ namespace LinkaWPF
 
         protected override void CardButton_Click(object sender, RoutedEventArgs e)
         {
-            _delayedClick.Stop();
+            StopClick();
 
             base.CardButton_Click(sender, e);
         }
@@ -62,7 +62,7 @@ namespace LinkaWPF
                 return;
             }
 
-            _delayedClick.Start(button);
+            StartClick(button);
 
             base.CardButton_HazGazeChanged(sender, e);
         }
@@ -72,14 +72,14 @@ namespace LinkaWPF
             var button = sender as CardButton;
             if (button.Card == null) return;
 
-            _delayedClick.Start(button);
+            StartClick(button);
 
             base.CardButton_MouseEnter(sender, e);
         }
 
         protected override void CardButton_MouseLeave(object sender, MouseEventArgs e)
         {
-            _delayedClick.Stop();
+            StopClick();
 
             base.CardButton_MouseLeave(sender, e);
         }
@@ -94,6 +94,14 @@ namespace LinkaWPF
             _delayedClick.Stop();
         }
 
+        private void StartClick(CardButton cardButton)
+        {
+            if (GazeEnable == true)
+            {
+                _delayedClick.Start(cardButton);
+            }
+        }
+
         public Host Host
         {
             get { return _host; }
@@ -104,6 +112,25 @@ namespace LinkaWPF
                 // Наблюдение за состоянием глаз
                 _eyePositionStream = _host.Streams.CreateEyePositionStream();
                 _eyePositionStream.Next += _eyePositionStream_Next;
+            }
+        }
+
+        public bool GazeEnable
+        {
+            get { return (bool)GetValue(GazeEnableProperty); }
+            set { SetValue(GazeEnableProperty, value); }
+        }
+
+        public static readonly DependencyProperty GazeEnableProperty =
+            DependencyProperty.Register("GazeEnable", typeof(bool), typeof(AnimatedCardBoard), new PropertyMetadata(true, new PropertyChangedCallback(OnGazeEnableChanged)));
+
+        private static void OnGazeEnableChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var cardBoard = sender as AnimatedCardBoard;
+            cardBoard.GazeEnable = (bool)args.NewValue;
+            if (cardBoard.GazeEnable == false)
+            {
+                cardBoard.StopClick();
             }
         }
     }

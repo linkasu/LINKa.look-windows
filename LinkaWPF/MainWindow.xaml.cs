@@ -242,5 +242,19 @@ namespace LinkaWPF
         {
             Close();
         }
+
+        private void enableGazeButton_Click(object sender, RoutedEventArgs e)
+        {
+            cardBoard.GazeEnable = true;
+            enableGazeButton.Visibility = Visibility.Hidden;
+            disableGazeButton.Visibility = Visibility.Visible;
+        }
+
+        private void disableGazeButton_Click(object sender, RoutedEventArgs e)
+        {
+            cardBoard.GazeEnable = false;
+            enableGazeButton.Visibility = Visibility.Visible;
+            disableGazeButton.Visibility = Visibility.Hidden;
+        }
     }
 }
