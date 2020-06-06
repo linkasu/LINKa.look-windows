@@ -186,12 +186,12 @@ namespace LinkaWPF
 
         private void MoveToLeft(object sender, RoutedEventArgs e)
         {
-            cardBoard.MoveToLeft();
+            cardBoard.MoveCardLeft();
         }
 
         private void MoveToRight(object sender, RoutedEventArgs e)
         {
-            cardBoard.MoveToRight();
+            cardBoard.MoveCardRight();
         }
 
         private void SaveCardSet_Click(object sender, RoutedEventArgs e)

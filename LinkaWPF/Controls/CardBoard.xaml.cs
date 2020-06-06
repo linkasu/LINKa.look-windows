@@ -431,7 +431,7 @@ namespace LinkaWPF
             SelectCard(index);
         }
 
-        public void MoveToLeft()
+        public void MoveCardLeft()
         {
             // Переместить карточку влево
             if (SelectedCardButton == null || SelectedCardButton.Card == null || Cards.Count == 0) return;
@@ -449,7 +449,7 @@ namespace LinkaWPF
             Edit();
         }
 
-        public void MoveToRight()
+        public void MoveCardRight()
         {
             // Переместить карточку вправо
             if (SelectedCardButton == null || SelectedCardButton.Card == null) return;
