@@ -131,7 +131,10 @@ namespace LinkaWPF
             }
         }
 
-        public int SelectedIndex { get; set; }
+        public int SelectedIndex
+        {
+            get { return SelectedCard == null ? -1 : Cards.IndexOf(SelectedCard); }
+        }
         #endregion
 
         #region Events
@@ -345,11 +348,7 @@ namespace LinkaWPF
 
             SelectedCardButton = cardButton;
 
-            if (SelectedCardButton != null)
-            {
-                SelectedIndex = index;
-                SelectedCardButton.Background = Brushes.Yellow;
-            }
+            if (SelectedCardButton != null) SelectedCardButton.Background = Brushes.Yellow;
         }
 
         public void RemoveSelectionCard()
@@ -358,7 +357,6 @@ namespace LinkaWPF
 
             SelectedCardButton.Background = Brushes.White;
             SelectedCardButton = null;
-            SelectedIndex = -1;
         }
 
         public void RemoveCard()
@@ -374,7 +372,7 @@ namespace LinkaWPF
             Edit();
         }
 
-        public void SelectPrevCard()
+        public void MoveSelectorLeft()
         {
             if (Cards.Count == 0) return;
 
@@ -385,7 +383,7 @@ namespace LinkaWPF
             SelectCard(prevIndex);
         }
 
-        public void SelectNextCard()
+        public void MoveSelectorRight()
         {
             if (Cards.Count == 0) return;
 
@@ -394,6 +392,43 @@ namespace LinkaWPF
             if (nextIndex >= Cards.Count) nextIndex = 0;
 
             SelectCard(nextIndex);
+        }
+
+        public void MoveSelectorUp()
+        {
+            if (Cards.Count == 0) return;
+
+            if (SelectedIndex == -1)
+            {
+                SelectCard(0);
+                return;
+            }
+
+            var index = SelectedIndex - Rows;
+
+            if (index < 0) return;
+
+            SelectCard(index);
+        }
+
+        public void MoveSelectorDown()
+        {
+            if (Cards.Count == 0) return;
+
+            if (SelectedIndex == -1)
+            {
+                SelectCard(0);
+                return;
+            }
+
+            // Вычисляем строку в которой находится выделенная карточка
+            var row = Convert.ToInt32(Math.Floor((double)SelectedIndex / Rows));
+
+            var index = SelectedIndex + Rows;
+
+            if (row >= Rows - 1) return;
+
+            SelectCard(index);
         }
 
         public void MoveToLeft()

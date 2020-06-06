@@ -57,17 +57,29 @@ namespace LinkaWPF
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Right)
+            switch(e.Key)
             {
-                // Следующая карточка
-                cardBoard.SelectNextCard();
-            } else if (e.Key == Key.Left)
-            {
-                // Предыдущая карточка
-                cardBoard.SelectPrevCard();
-            } else if (e.Key == Key.Space || e.Key == Key.Enter)
-            {
-                if (cardBoard.SelectedCardButton != null) pressCardButton(cardBoard.SelectedCardButton);
+                case Key.Up:
+                    {
+                        cardBoard.MoveSelectorUp();
+                    }break;
+                case Key.Down:
+                    {
+                        cardBoard.MoveSelectorDown();
+                    }break;
+                case Key.Left:
+                    {
+                        cardBoard.MoveSelectorLeft();
+                    }break;
+                case Key.Right:
+                    {
+                        cardBoard.MoveSelectorRight();
+                    }break;
+                case (Key.Enter):
+                case (Key.Space):
+                    {
+                        if (cardBoard.SelectedCardButton != null) pressCardButton(cardBoard.SelectedCardButton);
+                    }break;
             }
         }
 
