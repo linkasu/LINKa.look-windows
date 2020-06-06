@@ -426,7 +426,7 @@ namespace LinkaWPF
 
             var index = SelectedIndex + Rows;
 
-            if (row >= Rows - 1) return;
+            if (row >= Rows - 1 || index >= Cards.Count) return;
 
             SelectCard(index);
         }
