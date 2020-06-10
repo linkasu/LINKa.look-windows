@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows;
 using Tobii.Interaction;
@@ -135,12 +136,22 @@ namespace LinkaWPF
 
         private void ClearCache()
         {
-            var allfiles = Directory.GetFiles(_tempDirPath);
-            foreach (var filename in allfiles)
+            var directories = Directory.GetDirectories(_tempDirPath);
+            foreach (var directory in directories)
             {
                 try
                 {
-                    File.Delete(filename);
+                    Directory.Delete(directory, true);
+                }
+                catch { }
+            }
+
+            var files = Directory.GetFiles(_tempDirPath);
+            foreach (var file in files)
+            {
+                try
+                {
+                    File.Delete(file);
                 }
                 catch { }
             }
