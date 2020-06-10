@@ -24,6 +24,7 @@
                 <MenuItem Header="Открыть" Click="Open_Click"/>
                 <MenuItem Header="Открыть в редакторе" Click="OpenInEditor_Click"/>
                 <MenuItem Header="Открыть пустой редактор" Click="OpenEditor_Click"/>
+                <MenuItem Header="Настройки" Click="OpenSettings_Click"/>
                 <MenuItem Header="Выйти" Click="Exit_Click"/>
             </MenuItem>
         </Menu>

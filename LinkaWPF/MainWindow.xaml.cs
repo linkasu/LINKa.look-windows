@@ -1,4 +1,5 @@
 ﻿using LinkaWPF.Models;
+using LinkaWPF.Properties;
 using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
@@ -30,17 +31,20 @@ namespace LinkaWPF
         private IList<Card> _words;
         private readonly string _tempDirPath;
         private readonly YandexSpeech _yandexSpeech;
-        private Host _host;
+        private readonly Host _host;
+        private Settings _settings;
 
-        public MainWindow(string tempDirPath, YandexSpeech yandexSpeech, Host host)
+        public MainWindow(Settings settings)
         {
             InitializeComponent();
 
-            _tempDirPath = tempDirPath;
+            _tempDirPath = settings.TempDirPath;
 
-            _yandexSpeech = yandexSpeech;
+            _yandexSpeech = settings.YandexSpeech;
 
-            _host = host;
+            _host = settings.Host;
+
+            _settings = settings;
 
             _cards = new List<Card>();
 
@@ -53,34 +57,48 @@ namespace LinkaWPF
             _words = new List<Card>();
 
             KeyUp += MainWindow_KeyUp;
+
+            var joystick = new Joysticks();
+            joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
+        }
+
+        private void RunAction(string keyName)
+        {
+            string action;
+            if (_settings.Keys.TryGetValue(keyName, out action) == false) return;
+
+            switch (action)
+            {
+                case "MoveSelectorRight":
+                    {
+                        cardBoard.MoveSelectorRight();
+                    }
+                    break;
+                case "MoveSelectorLeft":
+                    {
+                        cardBoard.MoveSelectorLeft();
+                    }
+                    break;
+                case "MoveSelectorUp":
+                    {
+                        cardBoard.MoveSelectorUp();
+                    }
+                    break;
+                case "MoveSelectorDown":
+                    {
+                        cardBoard.MoveSelectorDown();
+                    }
+                    break;
+            }
+        }
+        private void Joystick_JoystickButtonDown(object sender, int button)
+        {
+            RunAction("J" + button);
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            switch(e.Key)
-            {
-                case Key.Up:
-                    {
-                        cardBoard.MoveSelectorUp();
-                    }break;
-                case Key.Down:
-                    {
-                        cardBoard.MoveSelectorDown();
-                    }break;
-                case Key.Left:
-                    {
-                        cardBoard.MoveSelectorLeft();
-                    }break;
-                case Key.Right:
-                    {
-                        cardBoard.MoveSelectorRight();
-                    }break;
-                case (Key.Enter):
-                case (Key.Space):
-                    {
-                        if (cardBoard.SelectedCardButton != null) pressCardButton(cardBoard.SelectedCardButton);
-                    }break;
-            }
+            RunAction(e.Key.ToString());
         }
 
         private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
@@ -248,6 +266,15 @@ namespace LinkaWPF
         private void OpenEditor_Click(object sender, RoutedEventArgs e)
         {
             ChangeMode(null);
+        }
+
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(_settings);
+            settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settingsWindow.Owner = this;
+            settingsWindow.ShowDialog();
+            _settings = settingsWindow.Settings;
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

@@ -32,6 +32,9 @@ namespace LinkaWPF
         private WpfInteractorAgent _agent;
         private bool _isEditor = false;
         private string _path = null;
+        private Settings _settings;
+        private string _tempDirPath;
+        private YandexSpeech _yandexSpeech;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -42,12 +45,17 @@ namespace LinkaWPF
                     if (o.IsEditor) _isEditor = o.IsEditor;
                     if (o.Path != null) _path = o.Path;
                 });
+
+            // TODO: Реализовать загрузку настроек из файла
+            _settings = new Settings();
+            _settings.Keys = new Dictionary<string, string>();
+
             // Создать директорию для временных файлов
-            TempDirPath = Environment.CurrentDirectory + "\\temp\\";
-            Directory.CreateDirectory(TempDirPath);
+            _tempDirPath = Environment.CurrentDirectory + "\\temp\\";
+            Directory.CreateDirectory(_tempDirPath);
 
             // TODO: Заменить на загрузку из конфига
-            YandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", TempDirPath);
+            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", _tempDirPath);
 
             // Everything starts with initializing Host, which manages connection to the 
             // Tobii Engine and provides all Tobii Core SDK functionality.
@@ -56,6 +64,10 @@ namespace LinkaWPF
 
             // We need to instantiate InteractorAgent so it could control lifetime of the interactors.
             _agent = _host.InitializeWpfAgent();
+
+            _settings.TempDirPath = _tempDirPath;
+            _settings.YandexSpeech = _yandexSpeech;
+            _settings.Host = _host;
 
             if (_isEditor == true)
             {
@@ -70,7 +82,7 @@ namespace LinkaWPF
         private void ShowEditorWindow(string path)
         {
             // Создаем окно редактора
-            var editorWindow = new EditorWindow(TempDirPath, YandexSpeech);
+            var editorWindow = new EditorWindow(_tempDirPath, _yandexSpeech);
             editorWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             // Функция смены режима работы программы
             editorWindow.ChangeMode = () =>
@@ -93,7 +105,7 @@ namespace LinkaWPF
 
         private void ShowMainWindow(string path)
         {
-            var mainWindow = new MainWindow(TempDirPath, YandexSpeech, _host);
+            var mainWindow = new MainWindow(_settings);
             mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mainWindow.ChangeMode = (str) =>
             {
@@ -123,7 +135,7 @@ namespace LinkaWPF
 
         private void ClearCache()
         {
-            var allfiles = Directory.GetFiles(TempDirPath);
+            var allfiles = Directory.GetFiles(_tempDirPath);
             foreach (var filename in allfiles)
             {
                 try
@@ -133,9 +145,5 @@ namespace LinkaWPF
                 catch { }
             }
         }
-
-        public string TempDirPath { get; set; }
-
-        public YandexSpeech YandexSpeech { get; set; }
     }
 }
