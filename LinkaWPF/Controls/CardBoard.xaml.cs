@@ -404,7 +404,7 @@ namespace LinkaWPF
                 return;
             }
 
-            var index = SelectedIndex - Rows;
+            var index = SelectedIndex - Columns;
 
             if (index < 0) return;
 
@@ -422,9 +422,9 @@ namespace LinkaWPF
             }
 
             // Вычисляем строку в которой находится выделенная карточка
-            var row = Convert.ToInt32(Math.Floor((double)SelectedIndex / Rows));
+            var row = Convert.ToInt32(Math.Floor((double)SelectedIndex / Columns));
 
-            var index = SelectedIndex + Rows;
+            var index = SelectedIndex + Columns;
 
             if (row >= Rows - 1 || index >= Cards.Count) return;
 
