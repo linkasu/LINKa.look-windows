@@ -91,9 +91,9 @@ namespace LinkaWPF
                     break;
             }
         }
-        private void Joystick_JoystickButtonDown(object sender, int button)
+        private void Joystick_JoystickButtonDown(object sender, string buttonName)
         {
-            RunAction("J" + button);
+            RunAction(buttonName);
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)

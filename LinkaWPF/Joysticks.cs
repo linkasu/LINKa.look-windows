@@ -13,7 +13,7 @@ namespace LinkaWPF
         private IList<Device> _devices;
         private Dictionary<Guid, byte[]> _buttons;        
 
-        public event EventHandler<int> JoystickButtonDown;
+        public event EventHandler<string> JoystickButtonDown;
 
         public Joysticks()
         {
@@ -43,7 +43,7 @@ namespace LinkaWPF
                     {
                         if ((buttons[i] != 0 && prevButtons == null) || (buttons[i] != 0 && prevButtons[i] != buttons[i]))
                         {
-                            JoystickButtonDown?.Invoke(this, i);
+                            JoystickButtonDown?.Invoke(this, "J" + i);
                         }
                     }
 

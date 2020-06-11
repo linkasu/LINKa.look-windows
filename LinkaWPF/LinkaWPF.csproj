@@ -101,6 +101,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ActionItem.cs" />
     <Compile Include="CardEditorWindow.xaml.cs">
       <DependentUpon>CardEditorWindow.xaml</DependentUpon>
     </Compile>

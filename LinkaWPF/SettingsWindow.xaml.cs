@@ -22,9 +22,13 @@ namespace LinkaWPF
         public Settings Settings { get; }
         private Joysticks _joysticks;
 
+        private IList<ActionItem> _actionList;
+
         public SettingsWindow(Settings settings)
         {
             InitializeComponent();
+
+            InitActions();
 
             Settings = settings;
 
@@ -34,106 +38,44 @@ namespace LinkaWPF
             _joysticks.JoystickButtonDown += Joystick_JoystickButtonDown;
         }
 
-        private void Joystick_JoystickButtonDown(object sender, int button)
+        #region Events
+
+        private void Joystick_JoystickButtonDown(object sender, string buttonName)
+        {
+            SetKeyName(buttonName);
+        }
+
+        private void SetKey(object sender, KeyEventArgs e)
+        {
+            SetKeyName(e.Key.ToString());
+        }
+        #endregion
+
+        private void SetKeyName(string keyName)
         {
             var focusedElement = FocusManager.GetFocusedElement(grid);
 
             if (focusedElement == null) return;
 
-            var actionName = (string)(focusedElement as TextBox).Tag;
-
-            Settings.Keys["J" + button] = actionName;
+            Settings.Keys[keyName] = (string)(focusedElement as TextBox).Tag;
 
             Update();
         }
 
-        private void SetKey(object sender, KeyEventArgs e)
+        private void InitActions()
         {
-            var actionName = (string)(sender as TextBox).Tag;
+            _actionList = new List<ActionItem>();
+            _actionList.Add(new ActionItem() { Name = "MoveSelectorLeft", NameRU = "Селектор влево", Keys = new List<string>() });
+            _actionList.Add(new ActionItem() { Name = "MoveSelectorRight", NameRU = "Селектор вправо", Keys = new List<string>() });
+            _actionList.Add(new ActionItem() { Name = "MoveSelectorUp", NameRU = "Селектор вверх", Keys = new List<string>() });
+            _actionList.Add(new ActionItem() { Name = "MoveSelectorDown", NameRU = "Селектор вниз", Keys = new List<string>() });
 
-            Settings.Keys[e.Key.ToString()] = actionName;
-
-            Update();
-        }
-
-        private void moveSelectorLeftTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            var actionName = "MoveSelectorLeft";
-
-            Settings.Keys[e.Key.ToString()] = actionName;
-
-            Update();
-        }
-
-        private void moveSelectorRightTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            var actionName = "MoveSelectorRight";
-
-            Settings.Keys[e.Key.ToString()] = actionName;
-
-            Update();
+            actionItems.ItemsSource = _actionList;
         }
 
         private void Update()
         {
-            moveSelectorLeftTextBox.Text = "";
-            moveSelectorRightTextBox.Text = "";
-            moveSelectorUpTextBox.Text = "";
-            moveSelectorDownTextBox.Text = "";
-
-            foreach (var keyName in Settings.Keys)
-            {
-                switch (keyName.Value)
-                {
-                    case "MoveSelectorLeft":
-                        {
-                            if (moveSelectorLeftTextBox.Text == string.Empty)
-                            {
-                                moveSelectorLeftTextBox.Text = string.Format("{0};", keyName.Key);
-                            }
-                            else
-                            {
-                                moveSelectorLeftTextBox.Text += string.Format(" {0};", keyName.Key);
-                            }
-                        }break;
-                    case "MoveSelectorRight":
-                        {
-                            if (moveSelectorRightTextBox.Text == string.Empty)
-                            {
-                                moveSelectorRightTextBox.Text = string.Format("{0};", keyName.Key);
-                            }
-                            else
-                            {
-                                moveSelectorRightTextBox.Text += string.Format(" {0};", keyName.Key);
-                            }
-                        }
-                        break;
-                    case "MoveSelectorUp":
-                        {
-                            if (moveSelectorUpTextBox.Text == string.Empty)
-                            {
-                                moveSelectorUpTextBox.Text = string.Format("{0};", keyName.Key);
-                            }
-                            else
-                            {
-                                moveSelectorUpTextBox.Text += string.Format(" {0};", keyName.Key);
-                            }
-                        }
-                        break;
-                    case "MoveSelectorDown":
-                        {
-                            if (moveSelectorDownTextBox.Text == string.Empty)
-                            {
-                                moveSelectorDownTextBox.Text = string.Format("{0};", keyName.Key);
-                            }
-                            else
-                            {
-                                moveSelectorDownTextBox.Text += string.Format(" {0};", keyName.Key);
-                            }
-                        }
-                        break;
-                }
-            }
+            
         }
 
         private void Window_Closed(object sender, EventArgs e)
