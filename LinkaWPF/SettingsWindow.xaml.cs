@@ -19,20 +19,21 @@ namespace LinkaWPF
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public Settings Settings { get; }
         private Joysticks _joysticks;
 
         private IList<ActionItem> _actionList;
+
+        private Dictionary<string, int> _actionDictionary;
+
+        private Settings _settings;
 
         public SettingsWindow(Settings settings)
         {
             InitializeComponent();
 
+            _settings = settings;
+
             InitActions();
-
-            Settings = settings;
-
-            Update();
 
             _joysticks = new Joysticks();
             _joysticks.JoystickButtonDown += Joystick_JoystickButtonDown;
@@ -57,30 +58,63 @@ namespace LinkaWPF
 
             if (focusedElement == null) return;
 
-            Settings.Keys[keyName] = (string)(focusedElement as TextBox).Tag;
+            _settings.Keys[keyName] = (string)(focusedElement as TextBox).Tag;
 
             Update();
         }
 
         private void InitActions()
         {
+            _actionDictionary = new Dictionary<string, int>();
             _actionList = new List<ActionItem>();
-            _actionList.Add(new ActionItem() { Name = "MoveSelectorLeft", NameRU = "Селектор влево", Keys = new List<string>() });
-            _actionList.Add(new ActionItem() { Name = "MoveSelectorRight", NameRU = "Селектор вправо", Keys = new List<string>() });
-            _actionList.Add(new ActionItem() { Name = "MoveSelectorUp", NameRU = "Селектор вверх", Keys = new List<string>() });
-            _actionList.Add(new ActionItem() { Name = "MoveSelectorDown", NameRU = "Селектор вниз", Keys = new List<string>() });
+
+            AddAction("MoveSelectorLeft", "Селектор влево");
+            AddAction("MoveSelectorRight", "Селектор вправо");
+            AddAction("MoveSelectorUp", "Селектор вверх");
+            AddAction("MoveSelectorDown", "Селектор вниз");
+
+            _settings.Keys["J"] = "MoveSelectorLeft";
+
+            foreach (var key in _settings.Keys)
+            {
+                var index = _actionDictionary[key.Value];
+                _actionList[index].Keys.Add(key.Key);
+            }
 
             actionItems.ItemsSource = _actionList;
+
+            Update();
+        }
+
+        private void AddAction(string name, string title)
+        {
+            _actionList.Add(new ActionItem() { Name = name, Title = title, Keys = new List<string>() });
+            _actionDictionary.Add(name, _actionList.Count - 1);
         }
 
         private void Update()
         {
-            
+            actionItems.ItemsSource = null;
+            actionItems.ItemsSource = _actionList;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             _joysticks.JoystickButtonDown -= Joystick_JoystickButtonDown;
         }
+
+        private void acceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings = _settings;
+            DialogResult = true;
+        }
+
+        private void cancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings = null;
+            DialogResult = false;
+        }
+
+        public Settings Settings { get; private set; }
     }
 }

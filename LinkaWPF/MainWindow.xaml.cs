@@ -273,7 +273,8 @@ namespace LinkaWPF
             var settingsWindow = new SettingsWindow(_settings);
             settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settingsWindow.Owner = this;
-            settingsWindow.ShowDialog();
+            if (settingsWindow.ShowDialog() == false) return;
+
             _settings = settingsWindow.Settings;
         }
 

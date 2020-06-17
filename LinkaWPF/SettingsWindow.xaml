@@ -20,25 +20,22 @@
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="100"/>
-            <Setter Property="Margin" Value="2"/>
         </Style>
     </Window.Resources>
-    <Grid x:Name="grid" FocusManager.IsFocusScope="True">
+    <Grid x:Name="grid" FocusManager.IsFocusScope="True" Margin="5">
         <Grid.ColumnDefinitions/>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!--<ListBox x:Name="panelForActions" Grid.Row="0" ItemTemplate="{StaticResource ListActionItemsTemplate}"/>-->
-
         <StackPanel>
             <ItemsControl x:Name="actionItems">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel>
-                            <TextBlock Width="120" VerticalAlignment="Center" Text="{Binding Path=NameRU}"/>
-                            <TextBox IsReadOnly="True" Text="{Binding Path=KeysString}"/>
+                        <DockPanel HorizontalAlignment="Center">
+                            <TextBlock Width="120" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
+                            <TextBox IsReadOnly="True" Text="{Binding Path=KeysString, Mode=OneWay}" KeyUp="SetKey" Tag="{Binding Path=Name}"/>
                             <Button Width="40">
                                 <Viewbox Width="20" Height="20">
                                     <Canvas Width="10" Height="10">
@@ -52,25 +49,9 @@
             </ItemsControl>
         </StackPanel>
 
-        <DockPanel Grid.Row="1" HorizontalAlignment="Right" Margin="5, 2, 10, 2">
-            <Button>Ok</Button>
-            <Button>Cancel</Button>
+        <DockPanel Grid.Row="1" HorizontalAlignment="Right">
+            <Button Click="acceptButton_Click">Ok</Button>
+            <Button Click="cancelButton_Click">Cancel</Button>
         </DockPanel>
-        <!--
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Селектор влево"/>
-        <TextBox x:Name="moveSelectorLeftTextBox" Grid.Row="0" Grid.Column="1" KeyUp="SetKey" IsReadOnly="True" Tag="MoveSelectorLeft"/>
-        <Button Content="{StaticResource removeLastKey}" Click="Button_Click"/>
-        
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Селектор вправо"/>
-        <TextBox x:Name="moveSelectorRightTextBox" Grid.Row="1" Grid.Column="1" KeyUp="SetKey" IsReadOnly="True" Tag="MoveSelectorRight"/>
-        <Button Grid.Row="1" Grid.Column="2" Content="{StaticResource removeLastKey}" Click="Button_Click_1"/>
-
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Селектор вверх"/>
-        <TextBox x:Name="moveSelectorUpTextBox" Grid.Row="2" Grid.Column="1" KeyUp="SetKey" IsReadOnly="True" Tag="MoveSelectorUp"/>
-        <Button Grid.Row="2" Grid.Column="2" Content="{StaticResource removeLastKey}" Click="Button_Click_2"/>
-
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Селектор вниз"/>
-        <TextBox x:Name="moveSelectorDownTextBox" Grid.Row="3" Grid.Column="1" KeyUp="SetKey" IsReadOnly="True" Tag="MoveSelectorDown"/>
-        <Button Grid.Row="3" Grid.Column="2" Content="{StaticResource removeLastKey}" Click="Button_Click_3"/>-->
     </Grid>
 </Window>
