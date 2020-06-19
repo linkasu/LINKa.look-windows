@@ -117,6 +117,8 @@
     <Compile Include="Joysticks.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="SettingsFile.cs" />
+    <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -47,10 +48,6 @@ namespace LinkaWPF
                     if (o.Path != null) _path = o.Path;
                 });
 
-            // TODO: Реализовать загрузку настроек из файла
-            _settings = new Settings();
-            _settings.Keys = new Dictionary<string, string>();
-
             // Создать директорию для временных файлов
             _tempDirPath = Environment.CurrentDirectory + "\\temp\\";
             Directory.CreateDirectory(_tempDirPath);
@@ -66,6 +63,27 @@ namespace LinkaWPF
             // We need to instantiate InteractorAgent so it could control lifetime of the interactors.
             _agent = _host.InitializeWpfAgent();
 
+            // Загрузка настроек из файла
+            var configFile = Environment.CurrentDirectory + "\\config.json";
+            var settingsLoader = new SettingsLoader();
+            if (File.Exists(configFile) == true)
+            {
+                _settings = settingsLoader.LoadFromFile(configFile);
+            }
+            else
+            {
+                // Файла не существует, установим настройки по умолчанию
+                _settings = new Settings();
+                _settings.Keys = new Dictionary<string, string>();
+                _settings.Keys.Add("Left", "MoveSelectorLeft");
+                _settings.Keys.Add("Right", "MoveSelectorRight");
+                _settings.Keys.Add("Up", "MoveSelectorUp");
+                _settings.Keys.Add("Down", "MoveSelectorDown");
+
+                settingsLoader.SaveToFile(configFile, _settings);
+            }
+
+            _settings.SettingsLoader = settingsLoader;
             _settings.TempDirPath = _tempDirPath;
             _settings.YandexSpeech = _yandexSpeech;
             _settings.Host = _host;

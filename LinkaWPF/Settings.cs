@@ -13,6 +13,10 @@ namespace LinkaWPF
 
         public string TempDirPath { get; set; }
 
+        public string ConfigFilePath { get; set; }
+
+        public SettingsLoader SettingsLoader { get; set; }
+
         public YandexSpeech YandexSpeech { get; set; }
 
         public Host Host { get; set; }

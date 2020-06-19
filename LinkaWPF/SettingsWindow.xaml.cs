@@ -117,6 +117,7 @@ namespace LinkaWPF
                 }
             }
             Settings = _settings;
+            _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
             DialogResult = true;
         }
 
