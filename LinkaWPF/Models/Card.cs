@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,14 +36,19 @@ namespace LinkaWPF.Models
             CardType = cardType;
         }
 
+        [JsonProperty("id")]
         public int Id { get; set; }
 
+        [JsonProperty("imagePath")]
         public string ImagePath { get; set; }
 
+        [JsonProperty("title")]
         public string Title { get; set; }
 
+        [JsonProperty("audioPath")]
         public string AudioPath { get; set; }
-        
+
+        [JsonProperty("cardType")]
         public CardType CardType { get; set; }
     }
 }

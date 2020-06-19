@@ -23,14 +23,19 @@ namespace LinkaWPF
             Cards = cards;
         }
 
+        [JsonProperty("version")]
         public string Version { get; set; }
 
+        [JsonProperty("columns")]
         public int Columns { get; set; }
 
+        [JsonProperty("rows")]
         public int Rows { get; set; }
 
+        [JsonProperty("withoutSpace")]
         public bool WithoutSpace { get; set; }
 
+        [JsonProperty("cards")]
         public IList<Card> Cards { get; set; }
     }
 }

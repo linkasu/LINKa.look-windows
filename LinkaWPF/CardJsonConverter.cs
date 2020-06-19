@@ -30,10 +30,10 @@ namespace LinkaWPF
             {
                 JObject o = (JObject)t;
 
-                var imagePathProperty = o.Property("ImagePath");
+                var imagePathProperty = o.Property("imagePath");
                 imagePathProperty.Value = Path.GetFileName(imagePathProperty.Value.ToString());
 
-                var audioPathProperty = o.Property("AudioPath");
+                var audioPathProperty = o.Property("audioPath");
                 audioPathProperty.Value = Path.GetFileName(audioPathProperty.Value.ToString());
 
                 o.WriteTo(writer);
