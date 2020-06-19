@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="400" Width="600" ResizeMode="NoResize" Closed="Window_Closed">
+        Title="SettingsWindow" Height="400" Width="600" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Width" Value="400"/>
@@ -35,8 +35,28 @@
                     <DataTemplate>
                         <DockPanel HorizontalAlignment="Center">
                             <TextBlock Width="120" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
-                            <TextBox IsReadOnly="True" Text="{Binding Path=KeysString, Mode=OneWay}" KeyUp="SetKey" Tag="{Binding Path=Name}"/>
-                            <Button Width="40">
+
+                            <Border BorderThickness="1" BorderBrush="Black" Margin="2">
+                                <TextBlock Width="200" Tag="{Binding Path=Name}" MouseDown="TextBlock_MouseDown">
+                                    <ItemsControl ItemsSource="{Binding Keys}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Margin="2" Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <TextBlock Text="{Binding}"/>
+                                                    <TextBlock Text="; "/>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </TextBlock>
+                            </Border>
+
+                            <Button Width="40" Click="RemoveLastKey" Tag="{Binding Name}">
                                 <Viewbox Width="20" Height="20">
                                     <Canvas Width="10" Height="10">
                                         <Path Fill="Black" Data="M13,13H18V15H13M13,9H18V11H13M10.09,7.41L11.5,8.82L8.32,12L11.5,15.18L10.09,16.6L5.5,12M5,3C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3H5Z" Height="10" Stretch="Fill" Width="10" />

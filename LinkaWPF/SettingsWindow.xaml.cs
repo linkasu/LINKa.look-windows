@@ -23,6 +23,8 @@ namespace LinkaWPF
 
         private IList<ActionItem> _actionList;
 
+        private TextBlock _focusedElement;
+
         private Dictionary<string, int> _actionDictionary;
 
         private Settings _settings;
@@ -54,13 +56,20 @@ namespace LinkaWPF
 
         private void SetKeyName(string keyName)
         {
-            var focusedElement = FocusManager.GetFocusedElement(grid);
+            if (_focusedElement == null) return;
 
-            if (focusedElement == null) return;
+            var actionName = (string)_focusedElement.Tag;
 
-            _settings.Keys[keyName] = (string)(focusedElement as TextBox).Tag;
+            var actionItem = GetActionItemFromName(actionName);
 
-            Update();
+            if (actionItem == null) return;
+
+            foreach (var item in _actionList)
+            {
+                var result = item.Keys.Remove(keyName);
+            }
+
+            actionItem.Keys.Add(keyName);
         }
 
         private void InitActions()
@@ -73,29 +82,22 @@ namespace LinkaWPF
             AddAction("MoveSelectorUp", "Селектор вверх");
             AddAction("MoveSelectorDown", "Селектор вниз");
 
-            _settings.Keys["J"] = "MoveSelectorLeft";
-
-            foreach (var key in _settings.Keys)
+            foreach (var keyItem in _settings.Keys)
             {
-                var index = _actionDictionary[key.Value];
-                _actionList[index].Keys.Add(key.Key);
+                var actionItem = GetActionItemFromName(keyItem.Value);
+
+                if (actionItem == null) continue;
+
+                actionItem.Keys.Add(keyItem.Key);
             }
 
             actionItems.ItemsSource = _actionList;
-
-            Update();
         }
 
         private void AddAction(string name, string title)
         {
-            _actionList.Add(new ActionItem() { Name = name, Title = title, Keys = new List<string>() });
+            _actionList.Add(new ActionItem(name, title));
             _actionDictionary.Add(name, _actionList.Count - 1);
-        }
-
-        private void Update()
-        {
-            actionItems.ItemsSource = null;
-            actionItems.ItemsSource = _actionList;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -105,6 +107,15 @@ namespace LinkaWPF
 
         private void acceptButton_Click(object sender, RoutedEventArgs e)
         {
+            _settings.Keys.Clear();
+            foreach (var actionName in _actionDictionary)
+            {
+                var actionItem = GetActionItemFromName(actionName.Key);
+                foreach (var keyName in actionItem.Keys)
+                {
+                    _settings.Keys[keyName] = actionName.Key;
+                }
+            }
             Settings = _settings;
             DialogResult = true;
         }
@@ -115,6 +126,34 @@ namespace LinkaWPF
             DialogResult = false;
         }
 
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (_focusedElement != null) _focusedElement.Background = Brushes.White;
+
+            _focusedElement = sender as TextBlock;
+            _focusedElement.Background = Brushes.Orange;
+        }
+
+        private ActionItem GetActionItemFromName(string actionName)
+        {
+            int index = 0;
+
+            if (_actionDictionary.TryGetValue(actionName, out index) == false) return null;
+
+            return _actionList[index];
+        }
+
         public Settings Settings { get; private set; }
+
+        private void RemoveLastKey(object sender, RoutedEventArgs e)
+        {
+            var actionName = (string)(sender as Button).Tag;
+
+            var actionItem = GetActionItemFromName(actionName);
+
+            if (actionItem == null || actionItem.Keys.Count == 0) return;
+
+            actionItem.Keys.RemoveAt(actionItem.Keys.Count - 1);
+        }
     }
 }
