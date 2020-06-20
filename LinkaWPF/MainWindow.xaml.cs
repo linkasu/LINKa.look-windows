@@ -89,6 +89,13 @@ namespace LinkaWPF
                         cardBoard.MoveSelectorDown();
                     }
                     break;
+                case "Enter":
+                    {
+                        if (cardBoard.SelectedCardButton == null) return;
+
+                        pressCardButton(cardBoard.SelectedCardButton);
+                    }
+                    break;
             }
         }
         private void Joystick_JoystickButtonDown(object sender, string buttonName)

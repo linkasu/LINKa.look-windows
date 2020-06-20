@@ -81,6 +81,7 @@ namespace LinkaWPF
             AddAction("MoveSelectorRight", "Селектор вправо");
             AddAction("MoveSelectorUp", "Селектор вверх");
             AddAction("MoveSelectorDown", "Селектор вниз");
+            AddAction("Enter", "Выбор карточки");
 
             foreach (var keyItem in _settings.Keys)
             {

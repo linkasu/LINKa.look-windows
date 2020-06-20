@@ -79,6 +79,8 @@ namespace LinkaWPF
                 _settings.Keys.Add("Right", "MoveSelectorRight");
                 _settings.Keys.Add("Up", "MoveSelectorUp");
                 _settings.Keys.Add("Down", "MoveSelectorDown");
+                _settings.Keys.Add("Return", "Enter");
+                _settings.Keys.Add("Space", "Enter");
 
                 settingsLoader.SaveToFile(configFile, _settings);
             }
