@@ -67,23 +67,6 @@ namespace LinkaWPF
             base.CardButton_HazGazeChanged(sender, e);
         }
 
-        protected override void CardButton_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var button = sender as CardButton;
-            if (button.Card == null) return;
-
-            StartClick(button);
-
-            base.CardButton_MouseEnter(sender, e);
-        }
-
-        protected override void CardButton_MouseLeave(object sender, MouseEventArgs e)
-        {
-            StopClick();
-
-            base.CardButton_MouseLeave(sender, e);
-        }
-
         private void _delayedClick_Ended(object sender, EventArgs e)
         {
             PressOnCardButton(sender);
