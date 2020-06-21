@@ -7,19 +7,13 @@
         mc:Ignorable="d"
         Title="SettingsWindow" Height="400" Width="600" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
     <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Width" Value="400"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="2"/>
-            <Style.Triggers>
-                <Trigger Property="IsFocused" Value="true">
-                    <Setter Property="Background" Value="Orange" />
-                </Trigger>
-            </Style.Triggers>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="2, 10, 2, 2"/>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="2"/>
         </Style>
     </Window.Resources>
     <Grid x:Name="grid" FocusManager.IsFocusScope="True" Margin="5">
@@ -28,7 +22,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
@@ -39,7 +33,7 @@
                             <TextBlock Width="120" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
 
                             <Border BorderThickness="1" BorderBrush="Black" Margin="2">
-                                <TextBlock Width="200" Tag="{Binding Path=Name}" MouseDown="TextBlock_MouseDown">
+                                <TextBlock Width="400" Tag="{Binding Path=Name}" MouseDown="TextBlock_MouseDown">
                                     <ItemsControl ItemsSource="{Binding Keys}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -74,7 +68,7 @@
         <CheckBox Grid.Row="1" x:Name="IsHazGazeEnabledCheckBox" Content="Выбор карточки взглядом"/>
         <CheckBox Grid.Row="2" x:Name="IsAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
 
-        <DockPanel Grid.Row="3" HorizontalAlignment="Right">
+        <DockPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button Click="acceptButton_Click">Ok</Button>
             <Button Click="cancelButton_Click">Cancel</Button>
         </DockPanel>
