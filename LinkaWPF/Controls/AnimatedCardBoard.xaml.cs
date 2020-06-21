@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +80,7 @@ namespace LinkaWPF
 
         private void StartClick(CardButton cardButton)
         {
-            if (GazeEnable == true)
+            if (GazeEnable == true && IsAnimatedClick == true)
             {
                 _delayedClick.Start(cardButton);
             }
@@ -112,6 +113,25 @@ namespace LinkaWPF
             var cardBoard = sender as AnimatedCardBoard;
             cardBoard.GazeEnable = (bool)args.NewValue;
             if (cardBoard.GazeEnable == false)
+            {
+                cardBoard.StopClick();
+            }
+        }
+
+        public bool IsAnimatedClick
+        {
+            get { return (bool)GetValue(IsAnimatedClickProperty); }
+            set { SetValue(IsAnimatedClickProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsAnimatedClickProperty =
+            DependencyProperty.Register("IsAnimatedProperty", typeof(bool), typeof(AnimatedCardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsAnimatedClickChanged)));
+
+        private static void IsAnimatedClickChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var cardBoard = sender as AnimatedCardBoard;
+            cardBoard.IsAnimatedClick = (bool)args.NewValue;
+            if (cardBoard.IsAnimatedClick == false)
             {
                 cardBoard.StopClick();
             }
