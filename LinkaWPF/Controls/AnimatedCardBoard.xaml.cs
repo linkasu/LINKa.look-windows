@@ -63,6 +63,8 @@ namespace LinkaWPF
                 return;
             }
 
+            if (IsHazGazeEnabled == true) SelectCard(button);
+
             StartClick(button);
 
             base.CardButton_HazGazeChanged(sender, e);
@@ -80,7 +82,7 @@ namespace LinkaWPF
 
         private void StartClick(CardButton cardButton)
         {
-            if (GazeEnable == true && IsAnimatedClick == true)
+            if (IsHazGazeEnabled == true && IsAnimatedClickEnabled == true)
             {
                 _delayedClick.Start(cardButton);
             }
@@ -99,39 +101,39 @@ namespace LinkaWPF
             }
         }
 
-        public bool GazeEnable
+        public bool IsHazGazeEnabled
         {
-            get { return (bool)GetValue(GazeEnableProperty); }
-            set { SetValue(GazeEnableProperty, value); }
+            get { return (bool)GetValue(IsHazGazeEnabledProperty); }
+            set { SetValue(IsHazGazeEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty GazeEnableProperty =
-            DependencyProperty.Register("GazeEnable", typeof(bool), typeof(AnimatedCardBoard), new PropertyMetadata(true, new PropertyChangedCallback(OnGazeEnableChanged)));
+        public static readonly DependencyProperty IsHazGazeEnabledProperty =
+            DependencyProperty.Register("IsHazGazeEnabled", typeof(bool), typeof(AnimatedCardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsHazGazeEnabledChanged)));
 
-        private static void OnGazeEnableChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        private static void IsHazGazeEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             var cardBoard = sender as AnimatedCardBoard;
-            cardBoard.GazeEnable = (bool)args.NewValue;
-            if (cardBoard.GazeEnable == false)
+            cardBoard.IsHazGazeEnabled = (bool)args.NewValue;
+            if (cardBoard.IsHazGazeEnabled == false)
             {
                 cardBoard.StopClick();
             }
         }
 
-        public bool IsAnimatedClick
+        public bool IsAnimatedClickEnabled
         {
-            get { return (bool)GetValue(IsAnimatedClickProperty); }
-            set { SetValue(IsAnimatedClickProperty, value); }
+            get { return (bool)GetValue(IsAnimatedClickEnabledProperty); }
+            set { SetValue(IsAnimatedClickEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty IsAnimatedClickProperty =
-            DependencyProperty.Register("IsAnimatedProperty", typeof(bool), typeof(AnimatedCardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsAnimatedClickChanged)));
+        public static readonly DependencyProperty IsAnimatedClickEnabledProperty =
+            DependencyProperty.Register("IsAnimatedProperty", typeof(bool), typeof(AnimatedCardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsAnimatedClickEnabledChanged)));
 
-        private static void IsAnimatedClickChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        private static void IsAnimatedClickEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             var cardBoard = sender as AnimatedCardBoard;
-            cardBoard.IsAnimatedClick = (bool)args.NewValue;
-            if (cardBoard.IsAnimatedClick == false)
+            cardBoard.IsAnimatedClickEnabled = (bool)args.NewValue;
+            if (cardBoard.IsAnimatedClickEnabled == false)
             {
                 cardBoard.StopClick();
             }

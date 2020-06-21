@@ -501,8 +501,6 @@ namespace LinkaWPF
 
         protected virtual void CardButton_HazGazeChanged(object sender, RoutedEventArgs e)
         {
-            var cardButton = sender as CardButton;
-            SelectCard(cardButton);
         }
 
         protected virtual void CardButton_MouseEnter(object sender, MouseEventArgs e)

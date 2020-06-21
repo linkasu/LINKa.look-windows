@@ -44,7 +44,7 @@ namespace LinkaWPF
 
             _host = settings.Host;
 
-            _settings = settings;
+            Settings = settings;
 
             _cards = new List<Card>();
 
@@ -65,7 +65,7 @@ namespace LinkaWPF
         private void RunAction(string keyName)
         {
             string action;
-            if (_settings.Keys.TryGetValue(keyName, out action) == false) return;
+            if (Settings.Keys.TryGetValue(keyName, out action) == false) return;
 
             switch (action)
             {
@@ -251,6 +251,19 @@ namespace LinkaWPF
 
         public bool WithoutSpace { get; set; }
 
+        public Settings Settings
+        {
+            get { return _settings; }
+            set {
+                _settings = value;
+
+                ChangeHazGazeStatus(_settings.IsHazGazeEnabled);
+                cardBoard.IsAnimatedClickEnabled = _settings.IsAnimatedClickEnabled;
+
+                _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
+            }
+        }
+
         public Func<string, bool> ChangeMode;
 
         public string CurrentFileName { get; set; }
@@ -277,12 +290,12 @@ namespace LinkaWPF
 
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(_settings);
+            var settingsWindow = new SettingsWindow(Settings);
             settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settingsWindow.Owner = this;
             if (settingsWindow.ShowDialog() == false) return;
 
-            _settings = settingsWindow.Settings;
+            Settings = settingsWindow.Settings;
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -290,18 +303,29 @@ namespace LinkaWPF
             Close();
         }
 
+        private void ChangeHazGazeStatus(bool status)
+        {
+            if (status == true)
+            {
+                enableGazeButton.Visibility = Visibility.Hidden;
+                disableGazeButton.Visibility = Visibility.Visible;
+            } else
+            {
+                enableGazeButton.Visibility = Visibility.Visible;
+                disableGazeButton.Visibility = Visibility.Hidden;
+            }
+            Settings.IsHazGazeEnabled = status;
+            cardBoard.IsHazGazeEnabled = status;
+        }
+
         private void enableGazeButton_Click(object sender, RoutedEventArgs e)
         {
-            cardBoard.GazeEnable = true;
-            enableGazeButton.Visibility = Visibility.Hidden;
-            disableGazeButton.Visibility = Visibility.Visible;
+            ChangeHazGazeStatus(true);
         }
 
         private void disableGazeButton_Click(object sender, RoutedEventArgs e)
         {
-            cardBoard.GazeEnable = false;
-            enableGazeButton.Visibility = Visibility.Visible;
-            disableGazeButton.Visibility = Visibility.Hidden;
+            ChangeHazGazeStatus(false);
         }
     }
 }

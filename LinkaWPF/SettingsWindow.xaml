@@ -25,11 +25,13 @@
     <Grid x:Name="grid" FocusManager.IsFocusScope="True" Margin="5">
         <Grid.ColumnDefinitions/>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel>
+        <StackPanel Grid.Row="0">
             <ItemsControl x:Name="actionItems">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -69,7 +71,10 @@
             </ItemsControl>
         </StackPanel>
 
-        <DockPanel Grid.Row="1" HorizontalAlignment="Right">
+        <CheckBox Grid.Row="1" x:Name="IsHazGazeEnabledCheckBox" Content="Выбор карточки взглядом"/>
+        <CheckBox Grid.Row="2" x:Name="IsAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
+
+        <DockPanel Grid.Row="3" HorizontalAlignment="Right">
             <Button Click="acceptButton_Click">Ok</Button>
             <Button Click="cancelButton_Click">Cancel</Button>
         </DockPanel>

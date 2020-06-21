@@ -20,5 +20,9 @@ namespace LinkaWPF
         public YandexSpeech YandexSpeech { get; set; }
 
         public Host Host { get; set; }
+
+        public bool IsHazGazeEnabled { get; set; }
+
+        public bool IsAnimatedClickEnabled { get; set; }
     }
 }

@@ -83,7 +83,7 @@
         <Button x:Name="nextButton" Grid.Row="3" Grid.Column="2" IsEnabled="False" Click="nextButton_Click">Next</Button>
 
         <!-- CardBoard -->
-        <local:AnimatedCardBoard x:Name="cardBoard" Grid.Row="3" Grid.Column="1" Columns="3" Rows="3" GazeEnable="True" IsAnimatedClick="False"/>
+        <local:AnimatedCardBoard x:Name="cardBoard" Grid.Row="3" Grid.Column="1" Columns="3" Rows="3" IsHazGazeEnabled="True" IsAnimatedClickEnabled="False"/>
 
     </Grid>
 </Window>

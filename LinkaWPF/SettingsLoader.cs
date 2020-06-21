@@ -12,7 +12,11 @@ namespace LinkaWPF
     {
         public void SaveToFile(string configFile, Settings settings)
         {
-            var settingsFile = new SettingsFile() { Keys = settings.Keys };
+            var settingsFile = new SettingsFile() {
+                Keys = settings.Keys,
+                IsHazGazeEnabled = settings.IsHazGazeEnabled,
+                IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled
+            };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
 
@@ -28,7 +32,12 @@ namespace LinkaWPF
             {
                 var serializer = new JsonSerializer();
                 var settingsFile = (SettingsFile)serializer.Deserialize(file, typeof(SettingsFile));
-                return new Settings() { ConfigFilePath = configFile, Keys = settingsFile.Keys };
+                return new Settings() {
+                    ConfigFilePath = configFile,
+                    Keys = settingsFile.Keys,
+                    IsHazGazeEnabled = settingsFile.IsHazGazeEnabled,
+                    IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled
+                };
             }
         }
     }

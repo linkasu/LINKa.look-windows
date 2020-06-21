@@ -39,6 +39,9 @@ namespace LinkaWPF
 
             _joysticks = new Joysticks();
             _joysticks.JoystickButtonDown += Joystick_JoystickButtonDown;
+
+            IsHazGazeEnabledCheckBox.IsChecked = _settings.IsHazGazeEnabled;
+            IsAnimatedClickEnabledCheckBox.IsChecked = _settings.IsAnimatedClickEnabled;
         }
 
         #region Events
@@ -117,8 +120,11 @@ namespace LinkaWPF
                     _settings.Keys[keyName] = actionName.Key;
                 }
             }
+
+            _settings.IsHazGazeEnabled = IsHazGazeEnabledCheckBox.IsChecked ?? false;
+            _settings.IsAnimatedClickEnabled = IsAnimatedClickEnabledCheckBox.IsChecked ?? false;
+
             Settings = _settings;
-            _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
             DialogResult = true;
         }
 
