@@ -15,7 +15,8 @@ namespace LinkaWPF
             var settingsFile = new SettingsFile() {
                 Keys = settings.Keys,
                 IsHazGazeEnabled = settings.IsHazGazeEnabled,
-                IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled
+                IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled,
+                ClickDelay = settings.ClickDelay
             };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
@@ -35,8 +36,9 @@ namespace LinkaWPF
                 return new Settings() {
                     ConfigFilePath = configFile,
                     Keys = settingsFile.Keys,
-                    IsHazGazeEnabled = settingsFile.IsHazGazeEnabled,
-                    IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled
+                    IsHazGazeEnabled = settingsFile.IsHazGazeEnabled ?? true,
+                    IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled ?? true,
+                    ClickDelay = settingsFile.ClickDelay ?? 3
                 };
             }
         }

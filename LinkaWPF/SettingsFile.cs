@@ -13,9 +13,12 @@ namespace LinkaWPF
         public Dictionary<string, string> Keys { get; set; }
 
         [JsonProperty("isHazGazeEnabled")]
-        public bool IsHazGazeEnabled { get; set; }
+        public bool? IsHazGazeEnabled { get; set; }
 
         [JsonProperty("isAnimatedClickEnabled")]
-        public bool IsAnimatedClickEnabled { get; set; }
+        public bool? IsAnimatedClickEnabled { get; set; }
+
+        [JsonProperty("clickDelay")]
+        public double? ClickDelay { get; set; }
     }
 }

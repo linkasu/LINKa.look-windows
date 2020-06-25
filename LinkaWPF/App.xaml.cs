@@ -84,6 +84,7 @@ namespace LinkaWPF
 
                 _settings.IsHazGazeEnabled = false;
                 _settings.IsAnimatedClickEnabled = false;
+                _settings.ClickDelay = 3;
 
                 settingsLoader.SaveToFile(configFile, _settings);
             }

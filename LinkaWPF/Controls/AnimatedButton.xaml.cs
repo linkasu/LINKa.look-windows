@@ -23,6 +23,7 @@ namespace LinkaWPF
         private Storyboard _sb;
         private Grid _grid;
         private Brush _prevBackground;
+        private DoubleAnimation _animation;
 
         public AnimatedButton()
         {
@@ -64,16 +65,19 @@ namespace LinkaWPF
                 Visibility = Visibility.Hidden
             };
 
-            var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(3));
-            animation.Completed += new EventHandler((sender, e) => {
+            _animation = new DoubleAnimation();
+            _animation.From = 0;
+            _animation.To = 100;
+            _animation.Duration = TimeSpan.FromSeconds(3);
+            _animation.Completed += new EventHandler((sender, e) => {
                 _progress.Visibility = Visibility.Hidden;
                 OnClick();
             });
-            Storyboard.SetTarget(animation, _progress);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(CircularProgressBar.PercentageProperty));
+            Storyboard.SetTarget(_animation, _progress);
+            Storyboard.SetTargetProperty(_animation, new PropertyPath(CircularProgressBar.PercentageProperty));
 
             _sb = new Storyboard();
-            _sb.Children.Add(animation);
+            _sb.Children.Add(_animation);
         }
 
         public override void OnApplyTemplate()
@@ -82,6 +86,23 @@ namespace LinkaWPF
 
             _grid = this.Template.FindName("grid", this) as Grid;
             _grid.Children.Add(_progress);
+        }
+
+        public double ClickDelay
+        {
+            get { return (double)GetValue(ClickDelayProperty); }
+            set { SetValue(ClickDelayProperty, value); }
+        }
+
+        public static readonly DependencyProperty ClickDelayProperty =
+            DependencyProperty.Register("ClickDelay",
+                typeof(double), typeof(AnimatedButton),
+                new PropertyMetadata((double)3, new PropertyChangedCallback(ClickDelayChanged)));
+
+        private static void ClickDelayChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var button = sender as AnimatedButton;
+            button._animation.Duration = TimeSpan.FromSeconds((double)args.NewValue);
         }
     }
 }

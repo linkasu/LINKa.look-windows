@@ -42,6 +42,8 @@ namespace LinkaWPF
 
             IsHazGazeEnabledCheckBox.IsChecked = _settings.IsHazGazeEnabled;
             IsAnimatedClickEnabledCheckBox.IsChecked = _settings.IsAnimatedClickEnabled;
+
+            DataContext = _settings;
         }
 
         #region Events
@@ -162,6 +164,18 @@ namespace LinkaWPF
             if (actionItem == null || actionItem.Keys.Count == 0) return;
 
             actionItem.Keys.RemoveAt(actionItem.Keys.Count - 1);
+        }
+
+        private void decreaseButton_Click(object sender, RoutedEventArgs e)
+        {
+            _settings.ClickDelay -= 0.1;
+
+            if (_settings.ClickDelay < 1) _settings.ClickDelay = 1;
+        }
+
+        private void increaseButton_Click(object sender, RoutedEventArgs e)
+        {
+            _settings.ClickDelay += 0.1;
         }
     }
 }
