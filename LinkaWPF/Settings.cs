@@ -9,9 +9,11 @@ using Tobii.Interaction;
 
 namespace LinkaWPF
 {
-    public class Settings : INotifyPropertyChanged
+    public class Settings : INotifyPropertyChanged, ICloneable
     {
-        private double _delayClick;
+        private bool _isHasGazeEnabled;
+        private bool _isAnimatedClickEnabled;
+        private double _clickDelay;
 
         public Dictionary<string, string> Keys { get; set; }
 
@@ -25,16 +27,32 @@ namespace LinkaWPF
 
         public Host Host { get; set; }
 
-        public bool IsHazGazeEnabled { get; set; }
+        public bool IsHasGazeEnabled
+        {
+            get { return _isHasGazeEnabled; }
+            set
+            {
+                _isHasGazeEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public bool IsAnimatedClickEnabled { get; set; }
+        public bool IsAnimatedClickEnabled
+        {
+            get { return _isAnimatedClickEnabled; }
+            set
+            {
+                _isAnimatedClickEnabled = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double ClickDelay
         {
-            get { return _delayClick; }
+            get { return _clickDelay; }
             set {
-                _delayClick = value;
-                OnPropertyChanged("ClickDelay");
+                _clickDelay = value;
+                OnPropertyChanged();
             }
         }
 
@@ -43,6 +61,11 @@ namespace LinkaWPF
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public virtual object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

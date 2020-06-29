@@ -33,14 +33,14 @@ namespace LinkaWPF
         {
             InitializeComponent();
 
-            _settings = settings;
+            _settings = settings.Clone() as Settings;
 
             InitActions();
 
             _joysticks = new Joysticks();
             _joysticks.JoystickButtonDown += Joystick_JoystickButtonDown;
 
-            IsHazGazeEnabledCheckBox.IsChecked = _settings.IsHazGazeEnabled;
+            IsHazGazeEnabledCheckBox.IsChecked = _settings.IsHasGazeEnabled;
             IsAnimatedClickEnabledCheckBox.IsChecked = _settings.IsAnimatedClickEnabled;
 
             DataContext = _settings;
@@ -123,7 +123,7 @@ namespace LinkaWPF
                 }
             }
 
-            _settings.IsHazGazeEnabled = IsHazGazeEnabledCheckBox.IsChecked ?? false;
+            _settings.IsHasGazeEnabled = IsHazGazeEnabledCheckBox.IsChecked ?? false;
             _settings.IsAnimatedClickEnabled = IsAnimatedClickEnabledCheckBox.IsChecked ?? false;
 
             Settings = _settings;
@@ -170,7 +170,7 @@ namespace LinkaWPF
         {
             _settings.ClickDelay -= 0.1;
 
-            if (_settings.ClickDelay < 1) _settings.ClickDelay = 1;
+            if (_settings.ClickDelay < 0.5) _settings.ClickDelay = 0.5;
         }
 
         private void increaseButton_Click(object sender, RoutedEventArgs e)

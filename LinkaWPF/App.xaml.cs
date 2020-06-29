@@ -82,7 +82,7 @@ namespace LinkaWPF
                 _settings.Keys.Add("Return", "Enter");
                 _settings.Keys.Add("Space", "Enter");
 
-                _settings.IsHazGazeEnabled = false;
+                _settings.IsHasGazeEnabled = false;
                 _settings.IsAnimatedClickEnabled = false;
                 _settings.ClickDelay = 3;
 

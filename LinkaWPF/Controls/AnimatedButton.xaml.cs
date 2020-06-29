@@ -24,6 +24,7 @@ namespace LinkaWPF
         private Grid _grid;
         private Brush _prevBackground;
         private DoubleAnimation _animation;
+        private bool _isHasGaze;
 
         public AnimatedButton()
         {
@@ -41,19 +42,15 @@ namespace LinkaWPF
             Behaviors.AddHasGazeChangedHandler(this, (sender, e) =>
             {
                 var button = sender as Button;
+                _isHasGaze = e.HasGaze;
 
                 if (e.HasGaze == true)
                 {
-                    Background = Brushes.Yellow;
-                    _progress.Visibility = Visibility.Visible;
-                    _progress.Radius = Convert.ToInt32((ActualHeight - 20) / 2);
-                    _sb.Begin();
+                    StartClick();
                 }
                 else
                 {
-                    Background = _prevBackground;
-                    _progress.Visibility = Visibility.Hidden;
-                    _sb.Stop();
+                    StopClick();
                 }
             });
 
@@ -88,6 +85,28 @@ namespace LinkaWPF
             _grid.Children.Add(_progress);
         }
 
+        protected void StartClick()
+        {
+            if (IsHasGazeEnabled == true)
+            {
+                Background = Brushes.Yellow;
+
+                if (IsAnimatedClickEnabled == true)
+                {
+                    _progress.Visibility = Visibility.Visible;
+                    _progress.Radius = Convert.ToInt32((ActualHeight - 20) / 2);
+                    _sb.Begin();
+                }
+            }
+        }
+
+        protected void StopClick()
+        {
+            if (_isHasGaze == false || (_isHasGaze == true && IsHasGazeEnabled == false)) Background = _prevBackground;
+            _progress.Visibility = Visibility.Hidden;
+            _sb.Stop();
+        }
+
         public double ClickDelay
         {
             get { return (double)GetValue(ClickDelayProperty); }
@@ -102,7 +121,50 @@ namespace LinkaWPF
         private static void ClickDelayChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             var button = sender as AnimatedButton;
+            button.ClickDelay = (double)args.NewValue;
             button._animation.Duration = TimeSpan.FromSeconds((double)args.NewValue);
+        }
+
+        public bool IsHasGazeEnabled
+        {
+            get { return (bool)GetValue(IsHasGazeEnabledProperty); }
+            set { SetValue(IsHasGazeEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsHasGazeEnabledProperty =
+            DependencyProperty.Register("IsHasGazeEnabled",
+                typeof(bool), typeof(AnimatedButton),
+                new PropertyMetadata(new PropertyChangedCallback(IsHasGazeEnabledChanged)));
+
+        private static void IsHasGazeEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var button = sender as AnimatedButton;
+            button.IsHasGazeEnabled = (bool)args.NewValue;
+            if (button.IsHasGazeEnabled == false)
+            {
+                button.StopClick();
+            }
+        }
+
+        public bool IsAnimatedClickEnabled
+        {
+            get { return (bool)GetValue(IsAnimatedClickEnabledProperty); }
+            set { SetValue(IsAnimatedClickEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsAnimatedClickEnabledProperty =
+            DependencyProperty.Register("IsAnimatedClickEnabled",
+                typeof(bool), typeof(AnimatedButton),
+                new PropertyMetadata(false, new PropertyChangedCallback(IsAnimatedClickEnabledChanged)));
+
+        private static void IsAnimatedClickEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var button = sender as AnimatedButton;
+            button.IsAnimatedClickEnabled = (bool)args.NewValue;
+            if (button.IsAnimatedClickEnabled == false)
+            {
+                button.StopClick();
+            }
         }
     }
 }

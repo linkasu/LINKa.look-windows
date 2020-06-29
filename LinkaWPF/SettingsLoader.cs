@@ -14,7 +14,7 @@ namespace LinkaWPF
         {
             var settingsFile = new SettingsFile() {
                 Keys = settings.Keys,
-                IsHazGazeEnabled = settings.IsHazGazeEnabled,
+                IsHasGazeEnabled = settings.IsHasGazeEnabled,
                 IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled,
                 ClickDelay = settings.ClickDelay
             };
@@ -36,7 +36,7 @@ namespace LinkaWPF
                 return new Settings() {
                     ConfigFilePath = configFile,
                     Keys = settingsFile.Keys,
-                    IsHazGazeEnabled = settingsFile.IsHazGazeEnabled ?? true,
+                    IsHasGazeEnabled = settingsFile.IsHasGazeEnabled ?? true,
                     IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled ?? true,
                     ClickDelay = settingsFile.ClickDelay ?? 3
                 };
