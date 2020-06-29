@@ -159,10 +159,10 @@ namespace LinkaWPF
             DependencyProperty.Register("ClickDelay", typeof(double), typeof(CardBoard), new PropertyMetadata((double)3, new PropertyChangedCallback(ClickDelayChanged)));
 
         public static readonly DependencyProperty IsHasGazeEnabledProperty =
-            DependencyProperty.Register("IsHasGazeEnabled", typeof(bool), typeof(CardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsHasGazeEnabledChanged)));
+            DependencyProperty.Register("IsHasGazeEnabled", typeof(bool), typeof(CardBoard), new PropertyMetadata(new PropertyChangedCallback(IsHasGazeEnabledChanged)));
 
         public static readonly DependencyProperty IsAnimatedClickEnabledProperty =
-            DependencyProperty.Register("IsAnimatedClickEnabled", typeof(bool), typeof(CardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsAnimatedClickEnabledChanged)));
+            DependencyProperty.Register("IsAnimatedClickEnabled", typeof(bool), typeof(CardBoard), new PropertyMetadata(new PropertyChangedCallback(IsAnimatedClickEnabledChanged)));
 
         private static void ClickDelayChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
