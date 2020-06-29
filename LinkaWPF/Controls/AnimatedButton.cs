@@ -17,7 +17,7 @@ using Tobii.Interaction.Wpf;
 
 namespace LinkaWPF
 {
-    public partial class AnimatedButton : Button
+    public class AnimatedButton : Button
     {
         private CircularProgressBar _progress;
         private Storyboard _sb;
@@ -26,12 +26,14 @@ namespace LinkaWPF
         private DoubleAnimation _animation;
         private bool _isHasGaze;
 
+        static AnimatedButton()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AnimatedButton), new FrameworkPropertyMetadata(typeof(AnimatedButton)));
+        }
+
         public AnimatedButton()
         {
-            InitializeComponent();
-
-            _prevBackground = Background;
-
+            IsHasGaze = true;
             // Behaviors.SetIsGazeAware(this, true);
             // Behaviors.SetIsActivatable(this, true);
             // Behaviors.SetGazeAwareDelayTime(this, 200);
@@ -39,20 +41,7 @@ namespace LinkaWPF
             // Behaviors.SetIsTentativeFocusEnabled(this, true);
 
             Behaviors.SetIsGazeAware(this, true);
-            Behaviors.AddHasGazeChangedHandler(this, (sender, e) =>
-            {
-                var button = sender as Button;
-                _isHasGaze = e.HasGaze;
-
-                if (e.HasGaze == true)
-                {
-                    StartClick();
-                }
-                else
-                {
-                    StopClick();
-                }
-            });
+            Behaviors.AddHasGazeChangedHandler(this, OnHasGazeChanged);
 
             _progress = new CircularProgressBar()
             {
@@ -77,17 +66,33 @@ namespace LinkaWPF
             _sb.Children.Add(_animation);
         }
 
+        protected virtual void OnHasGazeChanged(object sender, HasGazeChangedRoutedEventArgs e)
+        {
+            var button = sender as Button;
+            _isHasGaze = e.HasGaze;
+
+            if (e.HasGaze == true)
+            {
+                StartClick();
+            }
+            else
+            {
+                StopClick();
+            }
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            _grid = this.Template.FindName("grid", this) as Grid;
+            _prevBackground = Background;
+            _grid = Template.FindName("grid", this) as Grid;
             _grid.Children.Add(_progress);
         }
 
         protected void StartClick()
         {
-            if (IsHasGazeEnabled == true)
+            if (IsHasGazeEnabled == true && IsHasGaze == true)
             {
                 Background = Brushes.Yellow;
 
@@ -166,5 +171,7 @@ namespace LinkaWPF
                 button.StopClick();
             }
         }
+
+        protected bool IsHasGaze { get; set; }
     }
 }

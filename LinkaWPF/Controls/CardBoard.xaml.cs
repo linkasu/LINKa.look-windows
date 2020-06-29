@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tobii.Interaction.Wpf;
 
 namespace LinkaWPF
 {
@@ -135,6 +136,66 @@ namespace LinkaWPF
         {
             get { return SelectedCard == null ? -1 : Cards.IndexOf(SelectedCard); }
         }
+
+        public bool IsHasGazeEnabled
+        {
+            get { return (bool)GetValue(IsHasGazeEnabledProperty); }
+            set { SetValue(IsHasGazeEnabledProperty, value); }
+        }
+
+        public bool IsAnimatedClickEnabled
+        {
+            get { return (bool)GetValue(IsAnimatedClickEnabledProperty); }
+            set { SetValue(IsAnimatedClickEnabledProperty, value); }
+        }
+
+        public double ClickDelay
+        {
+            get { return (double)GetValue(ClickDelayProperty); }
+            set { SetValue(ClickDelayProperty, value); }
+        }
+
+        public static readonly DependencyProperty ClickDelayProperty =
+            DependencyProperty.Register("ClickDelay", typeof(double), typeof(CardBoard), new PropertyMetadata((double)3, new PropertyChangedCallback(ClickDelayChanged)));
+
+        public static readonly DependencyProperty IsHasGazeEnabledProperty =
+            DependencyProperty.Register("IsHasGazeEnabled", typeof(bool), typeof(CardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsHasGazeEnabledChanged)));
+
+        public static readonly DependencyProperty IsAnimatedClickEnabledProperty =
+            DependencyProperty.Register("IsAnimatedClickEnabled", typeof(bool), typeof(CardBoard), new PropertyMetadata(true, new PropertyChangedCallback(IsAnimatedClickEnabledChanged)));
+
+        private static void ClickDelayChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var cardBoard = sender as CardBoard;
+            cardBoard.ClickDelay = (double)args.NewValue;
+
+            foreach (var cardButton in cardBoard._buttons)
+            {
+                cardButton.ClickDelay = cardBoard.ClickDelay;
+            }
+        }
+
+        private static void IsHasGazeEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var cardBoard = sender as CardBoard;
+            cardBoard.IsHasGazeEnabled = (bool)args.NewValue;
+
+            foreach (var cardButton in cardBoard._buttons)
+            {
+                cardButton.IsHasGazeEnabled = cardBoard.IsHasGazeEnabled;
+            }
+        }
+
+        private static void IsAnimatedClickEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var cardBoard = sender as CardBoard;
+            cardBoard.IsAnimatedClickEnabled = (bool)args.NewValue;
+
+            foreach (var cardButton in cardBoard._buttons)
+            {
+                cardButton.IsAnimatedClickEnabled = cardBoard.IsAnimatedClickEnabled;
+            }
+        }
         #endregion
 
         #region Events
@@ -203,7 +264,7 @@ namespace LinkaWPF
                 {
                     var button = CreateCardButton();
                     button.Click += new RoutedEventHandler(CardButton_Click);
-                    button.HazGazeChanged += new RoutedEventHandler(CardButton_HazGazeChanged);
+                    button.HasGazeChanged += CardButton_HasGazeChanged;
                     button.MouseEnter += CardButton_MouseEnter;
                     button.MouseLeave += CardButton_MouseLeave;
 
@@ -499,8 +560,23 @@ namespace LinkaWPF
             Edited?.Invoke(this, new EventArgs());
         }
 
-        protected virtual void CardButton_HazGazeChanged(object sender, RoutedEventArgs e)
+        protected virtual void CardButton_HasGazeChanged(object sender, HasGazeChangedRoutedEventArgs e)
         {
+            var cardButton = sender as CardButton;
+
+            if (cardButton.Card == null) return;
+
+            if (IsHasGazeEnabled == true)
+            {
+                if (e.HasGaze == true)
+                {
+                    SelectCard(cardButton);
+                }
+                else
+                {
+                    RemoveSelectionCard();
+                }
+            }
         }
 
         protected virtual void CardButton_MouseEnter(object sender, MouseEventArgs e)

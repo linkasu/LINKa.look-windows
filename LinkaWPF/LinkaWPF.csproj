@@ -108,9 +108,6 @@
     <Compile Include="CardJsonConverter.cs" />
     <Compile Include="CardSetFile.cs" />
     <Compile Include="CardSetLoader.cs" />
-    <Compile Include="Controls\AnimatedCardBoard.xaml.cs">
-      <DependentUpon>AnimatedCardBoard.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
@@ -122,8 +119,9 @@
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\AnimatedButton.xaml.cs">
-      <DependentUpon>AnimatedButton.xaml</DependentUpon>
+    <Compile Include="Controls\AnimatedButton.cs" />
+    <Compile Include="CardButton.xaml.cs">
+      <DependentUpon>CardButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\ImageGenerator.cs" />
     <Compile Include="YandexSpeech.cs" />
@@ -131,15 +129,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\AnimatedCardBoard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\CardBoard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\CardButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -163,9 +153,6 @@
     <Compile Include="Controls\CardBoard.xaml.cs">
       <DependentUpon>CardBoard.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CardButton.xaml.cs">
-      <DependentUpon>CardButton.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
@@ -180,9 +167,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\AnimatedButton.xaml">
+    <Page Include="CardButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

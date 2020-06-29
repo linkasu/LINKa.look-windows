@@ -54,7 +54,6 @@ namespace LinkaWPF
             cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
             cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
             cardBoard.Cards = _cards;
-            cardBoard.Host = _host;
 
             _words = new List<Card>();
 
@@ -81,9 +80,6 @@ namespace LinkaWPF
             _settings.IsHasGazeEnabled = settings.IsHasGazeEnabled;
             _settings.IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled;
             _settings.ClickDelay =  settings.ClickDelay;
-
-            //cardBoard.IsAnimatedClickEnabled = _settings.IsAnimatedClickEnabled;
-            //cardBoard.IsHazGazeEnabled = settings.IsHasGazeEnabled;
 
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }
