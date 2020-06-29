@@ -35,6 +35,7 @@ namespace LinkaWPF
         private readonly YandexSpeech _yandexSpeech;
         private readonly Host _host;
         private Settings _settings;
+        private Player _player;
 
         public MainWindow(Settings settings)
         {
@@ -61,6 +62,8 @@ namespace LinkaWPF
 
             var joystick = new Joysticks();
             joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
+
+            _player = new Player(_yandexSpeech);
         }
 
         public Settings Settings
@@ -80,6 +83,7 @@ namespace LinkaWPF
             _settings.IsHasGazeEnabled = settings.IsHasGazeEnabled;
             _settings.IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled;
             _settings.ClickDelay =  settings.ClickDelay;
+            _settings.IsPlayAudioFromCard = settings.IsPlayAudioFromCard;
 
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }
@@ -160,26 +164,35 @@ namespace LinkaWPF
         {
             if (cardButton.Card == null) return;
 
-            if (WithoutSpace == false)
-                text.Text += (text.Text != string.Empty ? " " : string.Empty);
-
-            if (cardButton.Card.CardType == CardType.Space)
+            if (_settings.IsPlayAudioFromCard == true)
             {
-                text.Text += " ";
+                var cards = new List<Card>();
+                cards.Add(cardButton.Card);
+                _player.Play(cards);
             }
             else
             {
-                text.Text += cardButton.Card.Title;
+                if (WithoutSpace == false)
+                    text.Text += (text.Text != string.Empty ? " " : string.Empty);
+
+                if (cardButton.Card.CardType == CardType.Space)
+                {
+                    text.Text += " ";
+                }
+                else
+                {
+                    text.Text += cardButton.Card.Title;
+                }
+
+                // Переставить курсор в конец строки
+                text.Select(text.Text.Length, 0);
+
+                // Передать фокус текстовому полю
+                text.Focus();
+
+                // Добавить карточку в цепочку
+                _words.Add(cardButton.Card);
             }
-
-            // Переставить курсор в конец строки
-            text.Select(text.Text.Length, 0);
-
-            // Передать фокус текстовому полю
-            text.Focus();
-
-            // Добавить карточку в цепочку
-            _words.Add(cardButton.Card);
         }
 
         private void cardButton_Click(object sender, EventArgs e)
@@ -235,15 +248,13 @@ namespace LinkaWPF
 
         private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
         {
-            var player = new Player(_yandexSpeech);
-
             if (WithoutSpace == true)
             {
-                player.Play(text.Text);
+                _player.Play(text.Text);
             }
             else
             {
-                player.Play(_words);
+                _player.Play(_words);
             }
         }
 

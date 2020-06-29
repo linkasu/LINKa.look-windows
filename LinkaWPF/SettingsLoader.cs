@@ -16,7 +16,8 @@ namespace LinkaWPF
                 Keys = settings.Keys,
                 IsHasGazeEnabled = settings.IsHasGazeEnabled,
                 IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled,
-                ClickDelay = settings.ClickDelay
+                ClickDelay = settings.ClickDelay,
+                IsPlayAudioFromCard = settings.IsPlayAudioFromCard
             };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
@@ -38,7 +39,8 @@ namespace LinkaWPF
                     Keys = settingsFile.Keys,
                     IsHasGazeEnabled = settingsFile.IsHasGazeEnabled ?? true,
                     IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled ?? true,
-                    ClickDelay = settingsFile.ClickDelay ?? 3
+                    ClickDelay = settingsFile.ClickDelay ?? 3,
+                    IsPlayAudioFromCard = settingsFile.IsPlayAudioFromCard ?? false
                 };
             }
         }

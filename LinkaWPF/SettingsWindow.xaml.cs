@@ -40,8 +40,9 @@ namespace LinkaWPF
             _joysticks = new Joysticks();
             _joysticks.JoystickButtonDown += Joystick_JoystickButtonDown;
 
-            IsHazGazeEnabledCheckBox.IsChecked = _settings.IsHasGazeEnabled;
-            IsAnimatedClickEnabledCheckBox.IsChecked = _settings.IsAnimatedClickEnabled;
+            isHazGazeEnabledCheckBox.IsChecked = _settings.IsHasGazeEnabled;
+            isAnimatedClickEnabledCheckBox.IsChecked = _settings.IsAnimatedClickEnabled;
+            isPlayAudioFromCardCheckBox.IsChecked = _settings.IsPlayAudioFromCard;
 
             DataContext = _settings;
         }
@@ -123,8 +124,9 @@ namespace LinkaWPF
                 }
             }
 
-            _settings.IsHasGazeEnabled = IsHazGazeEnabledCheckBox.IsChecked ?? false;
-            _settings.IsAnimatedClickEnabled = IsAnimatedClickEnabledCheckBox.IsChecked ?? false;
+            _settings.IsHasGazeEnabled = isHazGazeEnabledCheckBox.IsChecked ?? false;
+            _settings.IsAnimatedClickEnabled = isAnimatedClickEnabledCheckBox.IsChecked ?? false;
+            _settings.IsPlayAudioFromCard = isPlayAudioFromCardCheckBox.IsChecked ?? false;
 
             Settings = _settings;
             DialogResult = true;

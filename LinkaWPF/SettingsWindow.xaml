@@ -22,7 +22,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -66,17 +65,20 @@
             </ItemsControl>
         </StackPanel>
 
-        <CheckBox Grid.Row="1" x:Name="IsHazGazeEnabledCheckBox" Content="Выбор карточки взглядом"/>
-        <CheckBox Grid.Row="2" x:Name="IsAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
+        <StackPanel Grid.Row="1">
+            <CheckBox x:Name="isHazGazeEnabledCheckBox" Content="Выбор карточки взглядом"/>
+            <CheckBox x:Name="isAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
+            <CheckBox x:Name="isPlayAudioFromCardCheckBox" Content="Воспроизводить аудио с карточки при нажатии"/>
+        </StackPanel>
 
-        <DockPanel Grid.Row="3" Margin="2">
+        <DockPanel Grid.Row="2" Margin="2">
             <TextBlock Text="Время задержки (сек.)" VerticalAlignment="Center"/>
             <TextBox x:Name="clickDelayTextBlock" Width="100" Margin="2" VerticalContentAlignment="Center" IsReadOnly="True" Text="{Binding ClickDelay}" />
             <Button Content="-" Click="decreaseButton_Click" />
             <Button Content="+" Click="increaseButton_Click" />
         </DockPanel>
 
-        <DockPanel Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <DockPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button Click="acceptButton_Click">Ok</Button>
             <Button Click="cancelButton_Click">Cancel</Button>
         </DockPanel>

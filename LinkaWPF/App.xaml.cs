@@ -85,6 +85,7 @@ namespace LinkaWPF
                 _settings.IsHasGazeEnabled = false;
                 _settings.IsAnimatedClickEnabled = false;
                 _settings.ClickDelay = 3;
+                _settings.IsPlayAudioFromCard = false;
 
                 settingsLoader.SaveToFile(configFile, _settings);
             }

@@ -14,6 +14,7 @@ namespace LinkaWPF
         private bool _isHasGazeEnabled;
         private bool _isAnimatedClickEnabled;
         private double _clickDelay;
+        private bool _isPlayAudioFromCard;
 
         public Dictionary<string, string> Keys { get; set; }
 
@@ -55,6 +56,17 @@ namespace LinkaWPF
                 OnPropertyChanged();
             }
         }
+
+        public bool IsPlayAudioFromCard
+        {
+            get { return _isPlayAudioFromCard; }
+            set
+            {
+                _isPlayAudioFromCard = value;
+                OnPropertyChanged();
+            }
+        }
+            
 
         public event PropertyChangedEventHandler PropertyChanged;
 
