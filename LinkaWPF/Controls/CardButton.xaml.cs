@@ -25,8 +25,6 @@ namespace LinkaWPF
             InitializeComponent();
 
             IsHasGaze = false;
-            IsHasGazeEnabled = true;
-            IsAnimatedClickEnabled = true;
         }
 
         public Card Card

@@ -120,7 +120,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\AnimatedButton.cs" />
-    <Compile Include="CardButton.xaml.cs">
+    <Compile Include="Controls\CardButton.xaml.cs">
       <DependentUpon>CardButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\ImageGenerator.cs" />
@@ -167,7 +167,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CardButton.xaml">
+    <Page Include="Controls\CardButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
