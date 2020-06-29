@@ -212,18 +212,25 @@ namespace LinkaWPF
 
         private void removeLastWordButton_Click(object sender, RoutedEventArgs e)
         {
-            // Удалить последнее слово из текстового поля
-            var end = text.Text.LastIndexOf(' ');
-            text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
+            if (WithoutSpace == true)
+            {
+                if (text.Text.Length > 0) text.Text = text.Text.Remove(text.Text.Length - 1, 1);
+            }
+            else
+            {
+                // Удалить последнее слово из текстового поля
+                var end = text.Text.LastIndexOf(' ');
+                text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
 
-            // Переставить курсор в конец строки
-            text.Select(text.Text.Length, 0);
+                // Переставить курсор в конец строки
+                text.Select(text.Text.Length, 0);
 
-            // Передать фокус текстовому полю
-            text.Focus();
+                // Передать фокус текстовому полю
+                text.Focus();
 
-            // Удалить последнее слово из цепочки слов
-            if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
+                // Удалить последнее слово из цепочки слов
+                if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
+            }
         }
 
         private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
