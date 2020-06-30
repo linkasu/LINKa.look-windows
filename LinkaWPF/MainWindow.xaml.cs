@@ -188,9 +188,6 @@ namespace LinkaWPF
                 // Переставить курсор в конец строки
                 text.Select(text.Text.Length, 0);
 
-                // Передать фокус текстовому полю
-                text.Focus();
-
                 // Добавить карточку в цепочку
                 _words.Add(cardButton.Card);
             }
@@ -218,7 +215,6 @@ namespace LinkaWPF
         {
             // Очистка текстового поля
             text.Text = "";
-            text.Focus();
 
             // Очистить цепочку слов
             _words.Clear();
@@ -238,9 +234,6 @@ namespace LinkaWPF
 
                 // Переставить курсор в конец строки
                 text.Select(text.Text.Length, 0);
-
-                // Передать фокус текстовому полю
-                text.Focus();
 
                 // Удалить последнее слово из цепочки слов
                 if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
