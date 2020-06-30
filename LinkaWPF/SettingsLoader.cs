@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,8 @@ namespace LinkaWPF
                 IsHasGazeEnabled = settings.IsHasGazeEnabled,
                 IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled,
                 ClickDelay = settings.ClickDelay,
-                IsPlayAudioFromCard = settings.IsPlayAudioFromCard
+                IsPlayAudioFromCard = settings.IsPlayAudioFromCard,
+                IsPageButtonVisible = settings.IsPageButtonVisible
             };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
@@ -40,7 +42,8 @@ namespace LinkaWPF
                     IsHasGazeEnabled = settingsFile.IsHasGazeEnabled ?? true,
                     IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled ?? true,
                     ClickDelay = settingsFile.ClickDelay ?? 3,
-                    IsPlayAudioFromCard = settingsFile.IsPlayAudioFromCard ?? false
+                    IsPlayAudioFromCard = settingsFile.IsPlayAudioFromCard ?? false,
+                    IsPageButtonVisible = settingsFile.IsPageButtonVisible ?? true
                 };
             }
         }

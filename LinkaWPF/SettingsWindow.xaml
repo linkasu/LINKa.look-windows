@@ -69,6 +69,7 @@
             <CheckBox x:Name="isHazGazeEnabledCheckBox" Content="Выбор карточки взглядом"/>
             <CheckBox x:Name="isAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
             <CheckBox x:Name="isPlayAudioFromCardCheckBox" Content="Воспроизводить аудио с карточки при нажатии"/>
+            <CheckBox x:Name="isPageButtonVisibleCheckBox" Content="Показывать кнопки перемотки страниц"/>
         </StackPanel>
 
         <DockPanel Grid.Row="2" Margin="2">

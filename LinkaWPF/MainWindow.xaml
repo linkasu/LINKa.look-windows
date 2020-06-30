@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="900">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="visibleIfTrueConverter" />
+    </Window.Resources>
     <Grid x:Name="mainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -100,10 +103,10 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" x:Name="pageInfoTextBlock" Margin="5" HorizontalAlignment="Center"/>
 
         <!-- Buttons -->
-        <local:AnimatedButton x:Name="prevButton" Grid.Row="3" Grid.Column="0" IsEnabled="False" Width="130" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="prevButton_Click">
+        <local:AnimatedButton x:Name="prevButton" Grid.Row="3" Grid.Column="0" IsEnabled="False" Width="130" Visibility="{Binding Path=IsPageButtonVisible, Converter={StaticResource visibleIfTrueConverter}}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="prevButton_Click">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Назад"/>
         </local:AnimatedButton>
-        <local:AnimatedButton x:Name="nextButton" Grid.Row="3" Grid.Column="2" IsEnabled="False" Width="130" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="nextButton_Click">
+        <local:AnimatedButton x:Name="nextButton" Grid.Row="3" Grid.Column="2" IsEnabled="False" Width="130" Visibility="{Binding Path=IsPageButtonVisible, Converter={StaticResource visibleIfTrueConverter}}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="nextButton_Click">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Вперед"/>
         </local:AnimatedButton>
 

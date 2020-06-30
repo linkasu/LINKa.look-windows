@@ -15,6 +15,7 @@ namespace LinkaWPF
         private bool _isAnimatedClickEnabled;
         private double _clickDelay;
         private bool _isPlayAudioFromCard;
+        private bool _isPageButtonVisible;
 
         public Dictionary<string, string> Keys { get; set; }
 
@@ -63,6 +64,16 @@ namespace LinkaWPF
             set
             {
                 _isPlayAudioFromCard = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsPageButtonVisible
+        {
+            get { return _isPageButtonVisible; }
+            set
+            {
+                _isPageButtonVisible = value;
                 OnPropertyChanged();
             }
         }

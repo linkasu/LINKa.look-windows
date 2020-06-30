@@ -86,6 +86,7 @@ namespace LinkaWPF
                 _settings.IsAnimatedClickEnabled = false;
                 _settings.ClickDelay = 3;
                 _settings.IsPlayAudioFromCard = false;
+                _settings.IsPageButtonVisible = true;
 
                 settingsLoader.SaveToFile(configFile, _settings);
             }

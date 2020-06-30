@@ -21,7 +21,10 @@ namespace LinkaWPF
         [JsonProperty("clickDelay")]
         public double? ClickDelay { get; set; }
 
-        [JsonProperty("_isPlayAudioFromCard")]
+        [JsonProperty("isPlayAudioFromCard")]
         public bool? IsPlayAudioFromCard { get; set; }
+
+        [JsonProperty("isPageButtonVisible")]
+        public bool? IsPageButtonVisible { get; set; }
     }
 }

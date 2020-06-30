@@ -43,6 +43,7 @@ namespace LinkaWPF
             isHazGazeEnabledCheckBox.IsChecked = _settings.IsHasGazeEnabled;
             isAnimatedClickEnabledCheckBox.IsChecked = _settings.IsAnimatedClickEnabled;
             isPlayAudioFromCardCheckBox.IsChecked = _settings.IsPlayAudioFromCard;
+            isPageButtonVisibleCheckBox.IsChecked = _settings.IsPageButtonVisible;
 
             DataContext = _settings;
         }
@@ -127,6 +128,7 @@ namespace LinkaWPF
             _settings.IsHasGazeEnabled = isHazGazeEnabledCheckBox.IsChecked ?? false;
             _settings.IsAnimatedClickEnabled = isAnimatedClickEnabledCheckBox.IsChecked ?? false;
             _settings.IsPlayAudioFromCard = isPlayAudioFromCardCheckBox.IsChecked ?? false;
+            _settings.IsPageButtonVisible = isPageButtonVisibleCheckBox.IsChecked ?? true;
 
             Settings = _settings;
             DialogResult = true;
