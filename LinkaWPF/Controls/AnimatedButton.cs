@@ -92,14 +92,14 @@ namespace LinkaWPF
 
         protected void StartClick()
         {
-            if (IsHasGazeEnabled == true && IsHasGaze == true)
+            if (IsEnabled == true && IsHasGazeEnabled == true && IsHasGaze == true)
             {
                 Background = Brushes.Yellow;
 
                 if (IsAnimatedClickEnabled == true)
                 {
                     _progress.Visibility = Visibility.Visible;
-                    _progress.Radius = Convert.ToInt32((ActualHeight - 20) / 2);
+                    _progress.Radius = ActualHeight < ActualWidth ? Convert.ToInt32((ActualHeight - 20) / 2) : Convert.ToInt32((ActualWidth - 20) / 2);
                     _sb.Begin();
                 }
             }
