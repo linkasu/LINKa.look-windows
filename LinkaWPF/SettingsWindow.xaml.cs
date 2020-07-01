@@ -45,6 +45,10 @@ namespace LinkaWPF
             isPlayAudioFromCardCheckBox.IsChecked = _settings.IsPlayAudioFromCard;
             isPageButtonVisibleCheckBox.IsChecked = _settings.IsPageButtonVisible;
 
+            isJoystickEnabledCheckBox.IsChecked = _settings.IsJoystickEnabled;
+            isKeyboardEnabledCheckBox.IsChecked = _settings.IsKeyboardEnabled;
+            isMouseEnabledCheckBox.IsChecked = _settings.IsMouseEnabled;
+
             DataContext = _settings;
         }
 
@@ -129,6 +133,10 @@ namespace LinkaWPF
             _settings.IsAnimatedClickEnabled = isAnimatedClickEnabledCheckBox.IsChecked ?? false;
             _settings.IsPlayAudioFromCard = isPlayAudioFromCardCheckBox.IsChecked ?? false;
             _settings.IsPageButtonVisible = isPageButtonVisibleCheckBox.IsChecked ?? true;
+
+            _settings.IsJoystickEnabled = isJoystickEnabledCheckBox.IsChecked ?? true;
+            _settings.IsKeyboardEnabled = isKeyboardEnabledCheckBox.IsChecked ?? true;
+            _settings.IsMouseEnabled = isMouseEnabledCheckBox.IsChecked ?? true;
 
             Settings = _settings;
             DialogResult = true;

@@ -34,6 +34,7 @@ namespace LinkaWPF
         public AnimatedButton()
         {
             IsHasGaze = true;
+            IsMouseEnabled = true;
             // Behaviors.SetIsGazeAware(this, true);
             // Behaviors.SetIsActivatable(this, true);
             // Behaviors.SetGazeAwareDelayTime(this, 200);
@@ -69,6 +70,13 @@ namespace LinkaWPF
         protected override void OnKeyDown(KeyEventArgs e)
         {
             // base.OnKeyDown(e);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (IsMouseEnabled == false)
+                e.Handled = true;
+            base.OnMouseDown(e);
         }
 
         protected virtual void OnHasGazeChanged(object sender, HasGazeChangedRoutedEventArgs e)
@@ -176,6 +184,23 @@ namespace LinkaWPF
             {
                 button.StopClick();
             }
+        }
+
+        public bool IsMouseEnabled
+        {
+            get { return (bool)GetValue(IsMouseEnabledProperty); }
+            set { SetValue(IsMouseEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsMouseEnabledProperty =
+            DependencyProperty.Register("IsMouseEnabled",
+                typeof(bool), typeof(AnimatedButton),
+                new PropertyMetadata(false, new PropertyChangedCallback(IsMouseEnabledChanged)));
+
+        private static void IsMouseEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var button = sender as AnimatedButton;
+            button.IsMouseEnabled = (bool)args.NewValue;
         }
 
         protected bool IsHasGaze { get; set; }

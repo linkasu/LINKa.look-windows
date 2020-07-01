@@ -19,7 +19,10 @@ namespace LinkaWPF
                 IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled,
                 ClickDelay = settings.ClickDelay,
                 IsPlayAudioFromCard = settings.IsPlayAudioFromCard,
-                IsPageButtonVisible = settings.IsPageButtonVisible
+                IsPageButtonVisible = settings.IsPageButtonVisible,
+                IsJoystickEnabled = settings.IsJoystickEnabled,
+                IsKeyboardEnabled = settings.IsKeyboardEnabled,
+                IsMouseEnabled = settings.IsMouseEnabled
             };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
@@ -43,7 +46,10 @@ namespace LinkaWPF
                     IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled ?? true,
                     ClickDelay = settingsFile.ClickDelay ?? 3,
                     IsPlayAudioFromCard = settingsFile.IsPlayAudioFromCard ?? false,
-                    IsPageButtonVisible = settingsFile.IsPageButtonVisible ?? true
+                    IsPageButtonVisible = settingsFile.IsPageButtonVisible ?? true,
+                    IsJoystickEnabled = settingsFile.IsJoystickEnabled ?? true,
+                    IsKeyboardEnabled = settingsFile.IsKeyboardEnabled ?? true,
+                    IsMouseEnabled = settingsFile.IsMouseEnabled ?? true
                 };
             }
         }

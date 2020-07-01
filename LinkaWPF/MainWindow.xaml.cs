@@ -85,6 +85,10 @@ namespace LinkaWPF
             _settings.IsPlayAudioFromCard = settings.IsPlayAudioFromCard;
             _settings.IsPageButtonVisible = settings.IsPageButtonVisible;
 
+            _settings.IsJoystickEnabled = settings.IsJoystickEnabled;
+            _settings.IsKeyboardEnabled = settings.IsKeyboardEnabled;
+            _settings.IsMouseEnabled = settings.IsMouseEnabled;
+
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }
 
@@ -139,12 +143,15 @@ namespace LinkaWPF
         }
         private void Joystick_JoystickButtonDown(object sender, string buttonName)
         {
-            RunAction(buttonName);
+            if (Settings.IsJoystickEnabled == true) RunAction(buttonName);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            RunAction(e.Key.ToString());
+            if (Settings.IsKeyboardEnabled == true)
+            {
+                RunAction(e.Key.ToString());
+            }
             e.Handled = true;
             base.OnKeyDown(e);
         }

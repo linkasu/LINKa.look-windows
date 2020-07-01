@@ -16,6 +16,9 @@ namespace LinkaWPF
         private double _clickDelay;
         private bool _isPlayAudioFromCard;
         private bool _isPageButtonVisible;
+        private bool _isKeyboardEnabled;
+        private bool _isJoystickEnabled;
+        private bool _isMouseEnabled;
 
         public Dictionary<string, string> Keys { get; set; }
 
@@ -74,6 +77,36 @@ namespace LinkaWPF
             set
             {
                 _isPageButtonVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsKeyboardEnabled
+        {
+            get { return _isKeyboardEnabled; }
+            set
+            {
+                _isKeyboardEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsJoystickEnabled
+        {
+            get { return _isJoystickEnabled; }
+            set
+            {
+                _isJoystickEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsMouseEnabled
+        {
+            get { return _isMouseEnabled; }
+            set
+            {
+                _isMouseEnabled = value;
                 OnPropertyChanged();
             }
         }

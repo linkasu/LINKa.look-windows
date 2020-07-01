@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="400" Width="600" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
+        Title="SettingsWindow" Height="550" Width="750" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
     <Window.Resources>
         <Style TargetType="CheckBox">
             <Setter Property="Margin" Value="2, 10, 2, 2"/>
@@ -70,6 +70,9 @@
             <CheckBox x:Name="isAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
             <CheckBox x:Name="isPlayAudioFromCardCheckBox" Content="Воспроизводить аудио с карточки при нажатии"/>
             <CheckBox x:Name="isPageButtonVisibleCheckBox" Content="Показывать кнопки перемотки страниц"/>
+            <CheckBox x:Name="isJoystickEnabledCheckBox" Content="Включить управление с помощью джойстика"/>
+            <CheckBox x:Name="isKeyboardEnabledCheckBox" Content="Включить управление с помощью клавиатуры"/>
+            <CheckBox x:Name="isMouseEnabledCheckBox" Content="Включить управление с помощью мыши"/>
         </StackPanel>
 
         <DockPanel Grid.Row="2" Margin="2">

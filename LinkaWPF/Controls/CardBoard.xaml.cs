@@ -196,6 +196,28 @@ namespace LinkaWPF
                 cardButton.IsAnimatedClickEnabled = cardBoard.IsAnimatedClickEnabled;
             }
         }
+
+        public bool IsMouseEnabled
+        {
+            get { return (bool)GetValue(IsMouseEnabledProperty); }
+            set { SetValue(IsMouseEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsMouseEnabledProperty =
+            DependencyProperty.Register("IsMouseEnabled",
+                typeof(bool), typeof(CardBoard),
+                new PropertyMetadata(false, new PropertyChangedCallback(IsMouseEnabledChanged)));
+
+        private static void IsMouseEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            var cardBoard = sender as CardBoard;
+            cardBoard.IsMouseEnabled = (bool)args.NewValue;
+
+            foreach (var cardButton in cardBoard._buttons)
+            {
+                cardButton.IsMouseEnabled = cardBoard.IsMouseEnabled;
+            }
+        }
         #endregion
 
         #region Events

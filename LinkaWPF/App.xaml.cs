@@ -87,6 +87,9 @@ namespace LinkaWPF
                 _settings.ClickDelay = 3;
                 _settings.IsPlayAudioFromCard = false;
                 _settings.IsPageButtonVisible = true;
+                _settings.IsJoystickEnabled = true;
+                _settings.IsKeyboardEnabled = true;
+                _settings.IsMouseEnabled = true;
 
                 settingsLoader.SaveToFile(configFile, _settings);
             }

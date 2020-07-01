@@ -42,7 +42,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <local:AnimatedButton Grid.Column="0" Margin="2" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="changeGazeStatusButton_Click">
+            <local:AnimatedButton Grid.Column="0" Margin="2" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="changeGazeStatusButton_Click">
                 <local:AnimatedButton.Style>
                     <Style TargetType="local:AnimatedButton">
                         <Style.Triggers>
@@ -73,7 +73,7 @@
                 </local:AnimatedButton.Style>
             </local:AnimatedButton>
 
-            <local:AnimatedButton Grid.Column="1" Margin="2" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="clearTextBoxButton_Click">
+            <local:AnimatedButton Grid.Column="1" Margin="2" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="clearTextBoxButton_Click">
                 <Viewbox Width="48" Height="48">
                     <Canvas Width="24" Height="24">
                         <Path Fill="Black" Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
@@ -83,7 +83,7 @@
 
             <TextBox x:Name="text" Grid.Column="2" FontSize="20" Margin="2" Focusable="False" IsReadOnly="True" VerticalContentAlignment="Center"></TextBox>
 
-            <local:AnimatedButton Grid.Column="3" Margin="2" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="pronounceWordsButton_Click">
+            <local:AnimatedButton Grid.Column="3" Margin="2" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="pronounceWordsButton_Click">
                 <Viewbox Width="48" Height="48">
                     <Canvas Width="24" Height="24">
                         <Path Fill="Black" Data="M9,5A4,4 0 0,1 13,9A4,4 0 0,1 9,13A4,4 0 0,1 5,9A4,4 0 0,1 9,5M9,15C11.67,15 17,16.34 17,19V21H1V19C1,16.34 6.33,15 9,15M16.76,5.36C18.78,7.56 18.78,10.61 16.76,12.63L15.08,10.94C15.92,9.76 15.92,8.23 15.08,7.05L16.76,5.36M20.07,2C24,6.05 23.97,12.11 20.07,16L18.44,14.37C21.21,11.19 21.21,6.65 18.44,3.63L20.07,2Z" />
@@ -91,7 +91,7 @@
                 </Viewbox>
             </local:AnimatedButton>
 
-            <local:AnimatedButton x:Name="btn" Grid.Column="4" Margin="2" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="removeLastWordButton_Click">
+            <local:AnimatedButton x:Name="btn" Grid.Column="4" Margin="2" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="removeLastWordButton_Click">
                 <Viewbox Width="48" Height="48">
                     <Canvas Width="24" Height="24">
                         <Path Fill="Black" Data="M13,13H18V15H13M13,9H18V11H13M10.09,7.41L11.5,8.82L8.32,12L11.5,15.18L10.09,16.6L5.5,12M5,3C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3H5Z" />
@@ -103,15 +103,15 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" x:Name="pageInfoTextBlock" Margin="5" HorizontalAlignment="Center"/>
 
         <!-- Buttons -->
-        <local:AnimatedButton x:Name="prevButton" Grid.Row="3" Grid.Column="0" IsEnabled="False" Width="130" Visibility="{Binding Path=IsPageButtonVisible, Converter={StaticResource visibleIfTrueConverter}}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="prevButton_Click">
+        <local:AnimatedButton x:Name="prevButton" Grid.Row="3" Grid.Column="0" IsEnabled="False" Width="130" Visibility="{Binding Path=IsPageButtonVisible, Converter={StaticResource visibleIfTrueConverter}}" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="prevButton_Click">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Назад"/>
         </local:AnimatedButton>
-        <local:AnimatedButton x:Name="nextButton" Grid.Row="3" Grid.Column="2" IsEnabled="False" Width="130" Visibility="{Binding Path=IsPageButtonVisible, Converter={StaticResource visibleIfTrueConverter}}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="nextButton_Click">
+        <local:AnimatedButton x:Name="nextButton" Grid.Row="3" Grid.Column="2" IsEnabled="False" Width="130" Visibility="{Binding Path=IsPageButtonVisible, Converter={StaticResource visibleIfTrueConverter}}" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="nextButton_Click">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Вперед"/>
         </local:AnimatedButton>
 
         <!-- CardBoard -->
-        <local:CardBoard x:Name="cardBoard" Grid.Row="3" Grid.Column="1" Columns="3" Rows="3"  IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}"/>
+        <local:CardBoard x:Name="cardBoard" Grid.Row="3" Grid.Column="1" Columns="3" Rows="3"  IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}"/>
 
     </Grid>
 </Window>

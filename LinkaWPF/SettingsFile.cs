@@ -26,5 +26,14 @@ namespace LinkaWPF
 
         [JsonProperty("isPageButtonVisible")]
         public bool? IsPageButtonVisible { get; set; }
+
+        [JsonProperty("isJoystickEnabled")]
+        public bool? IsJoystickEnabled { get; set; }
+
+        [JsonProperty("isKeyboardEnabled")]
+        public bool? IsKeyboardEnabled { get; set; }
+
+        [JsonProperty("isMouseEnabled")]
+        public bool? IsMouseEnabled { get; set; }
     }
 }
