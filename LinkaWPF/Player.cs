@@ -1,4 +1,5 @@
-﻿using Microsoft.DirectX.AudioVideoPlayback;
+﻿using LinkaWPF.Models;
+using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +23,7 @@ namespace LinkaWPF
             if (cards == null) return;
 
             // Получаем кэшированый список с аудиофайлами и воспроизводим его
-            IList<string> cachedAudio = await Cache(cards);
+            IList<string> cachedAudio = await Cache(new List<Card>(cards));
 
             PlayAudio(cachedAudio, 0);
         }
