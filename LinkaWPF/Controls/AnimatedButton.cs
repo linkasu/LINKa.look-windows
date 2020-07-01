@@ -103,12 +103,19 @@ namespace LinkaWPF
             _grid.Children.Add(_progress);
         }
 
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            StopClick();
+            Background = _prevBackground;
+            base.OnLostFocus(e);
+        }
+
         protected void StartClick()
         {
             if (IsEnabled == true && IsHasGazeEnabled == true && IsHasGaze == true)
             {
                 Focus();
-                Background = Brushes.Yellow;
+                // Background = Brushes.Yellow;
 
                 if (IsAnimatedClickEnabled == true)
                 {
@@ -121,7 +128,7 @@ namespace LinkaWPF
 
         protected void StopClick()
         {
-            if (_isHasGaze == false || (_isHasGaze == true && IsHasGazeEnabled == false)) Background = _prevBackground;
+            // if (_isHasGaze == false || (_isHasGaze == true && IsHasGazeEnabled == false)) Background = _prevBackground;
             _progress.Visibility = Visibility.Hidden;
             _sb.Stop();
         }
