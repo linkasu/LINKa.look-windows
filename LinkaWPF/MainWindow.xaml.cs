@@ -317,7 +317,9 @@ namespace LinkaWPF
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
+            Settings.IsHasGazeEnabled = false;
             LoadCardSet(openFileDialog.FileName);
+            Settings.IsHasGazeEnabled = true;
         }
 
         private void OpenInEditor_Click(object sender, RoutedEventArgs e)
