@@ -68,7 +68,7 @@
         <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Аудио</TextBlock>
         <Grid Grid.Column="1" Grid.Row="3" x:Name="audioPanel">
             <WrapPanel x:Name="panelWithAudioButtons" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button x:Name="uploadFromYandexButton" Click="UploadAudioFromYandex">Загрузить c Yandex</Button>
+                <Button x:Name="uploadFromYandexButton" Click="uploadFromYandexButton_Click">Загрузить c Yandex</Button>
                 <Button x:Name="uploadFromFileButton" Click="UploadAudio">Загрузить из файла</Button>
                 <Button x:Name="playButton" Click="Play">Воспроизвести</Button>
             </WrapPanel>

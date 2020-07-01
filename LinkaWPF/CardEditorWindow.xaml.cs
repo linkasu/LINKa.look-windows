@@ -26,6 +26,7 @@ namespace LinkaWPF
         private static readonly DependencyProperty ImageProperty;
         private readonly YandexSpeech _yandexSpeech;
         private readonly string _tempDirPath;
+        private bool _withoutSpace;
 
         private ImageSource Image
         {
@@ -58,6 +59,8 @@ namespace LinkaWPF
             _tempDirPath = tempDirPath;
 
             acceptButton.Content = "Изменить";
+
+            _withoutSpace = withoutSpace;
 
             if (withoutSpace == true)
             {
@@ -99,12 +102,13 @@ namespace LinkaWPF
             }
         }
 
-        private async void UploadAudioFromYandex(object sender, RoutedEventArgs e)
+        private async Task<bool> UploadAudioFromYandex()
         {
+            var result = false;
             if (Caption == null || Caption == string.Empty)
             {
                 MessageBox.Show("Поле Title не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
-                return;
+                return result;
             }
 
             try
@@ -112,6 +116,8 @@ namespace LinkaWPF
                 audioPanel.IsEnabled = false;
                 acceptButton.IsEnabled = false;
                 AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
+
+                result = true;
             }
             catch (Exception ex)
             {
@@ -120,6 +126,12 @@ namespace LinkaWPF
 
             audioPanel.IsEnabled = true;
             acceptButton.IsEnabled = true;
+            return result;
+        }
+
+        private async void uploadFromYandexButton_Click(object sender, RoutedEventArgs e)
+        {
+            await UploadAudioFromYandex();
         }
 
         private void UploadAudio(object sender, RoutedEventArgs e)
@@ -206,7 +218,7 @@ namespace LinkaWPF
             }
         }
 
-        private void Accept(object sender, RoutedEventArgs e)
+        private async void Accept(object sender, RoutedEventArgs e)
         {
             if (CardType == CardType.Fake)
             {
@@ -225,6 +237,15 @@ namespace LinkaWPF
             {
                 MessageBox.Show("Поле с изображением не может быть пустым!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
+            }
+
+            if (CardType == CardType.Common && _withoutSpace == false && AudioPath == null)
+            {
+                if (MessageBox.Show("У карточки отсутствует аудио! Создать аудио из текста?", "Вопрос", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    // Создаем аудио из тектса
+                    await UploadAudioFromYandex();
+                }
             }
 
             DialogResult = true;
