@@ -78,7 +78,6 @@ namespace LinkaWPF
 
             if (e.HasGaze == true)
             {
-                Focus();
                 StartClick();
             }
             else
@@ -100,6 +99,7 @@ namespace LinkaWPF
         {
             if (IsEnabled == true && IsHasGazeEnabled == true && IsHasGaze == true)
             {
+                Focus();
                 Background = Brushes.Yellow;
 
                 if (IsAnimatedClickEnabled == true)
