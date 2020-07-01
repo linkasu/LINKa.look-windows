@@ -78,6 +78,7 @@ namespace LinkaWPF
 
             if (e.HasGaze == true)
             {
+                Focus();
                 StartClick();
             }
             else
