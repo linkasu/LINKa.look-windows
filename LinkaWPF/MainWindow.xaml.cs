@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -58,8 +59,6 @@ namespace LinkaWPF
 
             _words = new List<Card>();
 
-            KeyUp += MainWindow_KeyUp;
-
             var joystick = new Joysticks();
             joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
 
@@ -89,6 +88,15 @@ namespace LinkaWPF
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }
 
+        private void NextElement(FocusNavigationDirection direction)
+        {
+            var request = new TraversalRequest(direction);
+
+            var elementWithFocus = Keyboard.FocusedElement as UIElement;
+
+            if (elementWithFocus != null) elementWithFocus.MoveFocus(request);
+        }
+
         private void RunAction(string keyName)
         {
             string action;
@@ -98,29 +106,33 @@ namespace LinkaWPF
             {
                 case "MoveSelectorRight":
                     {
-                        cardBoard.MoveSelectorRight();
+                        NextElement(FocusNavigationDirection.Next);
                     }
                     break;
                 case "MoveSelectorLeft":
                     {
-                        cardBoard.MoveSelectorLeft();
+                        NextElement(FocusNavigationDirection.Previous);
                     }
                     break;
                 case "MoveSelectorUp":
                     {
-                        cardBoard.MoveSelectorUp();
+                        NextElement(FocusNavigationDirection.Up);
                     }
                     break;
                 case "MoveSelectorDown":
                     {
-                        cardBoard.MoveSelectorDown();
+                        NextElement(FocusNavigationDirection.Down);
                     }
                     break;
                 case "Enter":
                     {
-                        if (cardBoard.SelectedCardButton == null) return;
+                        /*if (cardBoard.SelectedCardButton == null) return;
 
-                        pressCardButton(cardBoard.SelectedCardButton);
+                        pressCardButton(cardBoard.SelectedCardButton);*/
+
+                        var button = Keyboard.FocusedElement as Button;
+
+                        if (button != null) button.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
                     }
                     break;
             }
@@ -130,9 +142,11 @@ namespace LinkaWPF
             RunAction(buttonName);
         }
 
-        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             RunAction(e.Key.ToString());
+            e.Handled = true;
+            base.OnKeyDown(e);
         }
 
         private void CardBoard_CurrentPageChanged(object sender, EventArgs e)

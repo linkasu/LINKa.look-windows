@@ -263,6 +263,7 @@ namespace LinkaWPF
                 for (var j = 0; j < Columns; j++)
                 {
                     var button = CreateCardButton();
+                    button.Focusable = false;
                     button.Click += new RoutedEventHandler(CardButton_Click);
                     button.HasGazeChanged += CardButton_HasGazeChanged;
                     button.MouseEnter += CardButton_MouseEnter;
@@ -312,6 +313,15 @@ namespace LinkaWPF
                 }
                 var count = i - CurrentPage * _gridSize;
                 _buttons[count].Card = card;
+
+                if (card == null)
+                {
+                    _buttons[count].Focusable = false;
+                }
+                else
+                {
+                    _buttons[count].Focusable = true;
+                }
             }
         }
 

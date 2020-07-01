@@ -66,6 +66,11 @@ namespace LinkaWPF
             _sb.Children.Add(_animation);
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            // base.OnKeyDown(e);
+        }
+
         protected virtual void OnHasGazeChanged(object sender, HasGazeChangedRoutedEventArgs e)
         {
             var button = sender as Button;
