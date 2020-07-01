@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
-            <MenuItem Header="Файл">
+            <MenuItem Header="Файл" Focusable="False">
                 <MenuItem Header="Открыть" Click="Open_Click"/>
                 <MenuItem Header="Открыть в редакторе" Click="OpenInEditor_Click"/>
                 <MenuItem Header="Открыть пустой редактор" Click="OpenEditor_Click"/>
@@ -81,7 +81,7 @@
                 </Viewbox>
             </local:AnimatedButton>
 
-            <TextBox x:Name="text" Grid.Column="2" FontSize="20" Margin="2" IsReadOnly="True" VerticalContentAlignment="Center"></TextBox>
+            <TextBox x:Name="text" Grid.Column="2" FontSize="20" Margin="2" Focusable="False" IsReadOnly="True" VerticalContentAlignment="Center"></TextBox>
 
             <local:AnimatedButton Grid.Column="3" Margin="2" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="pronounceWordsButton_Click">
                 <Viewbox Width="48" Height="48">
