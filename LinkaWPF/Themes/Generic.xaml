@@ -33,7 +33,7 @@
                             <Setter TargetName="border" Property="Background" Value="Yellow"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="LightBlue"/>
+                            <!--<Setter TargetName="border" Property="Background" Value="LightBlue"/>-->
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="border" Property="Background" Value="Azure" />
