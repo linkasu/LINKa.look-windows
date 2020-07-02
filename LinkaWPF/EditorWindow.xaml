@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="EditorWindow" Height="600" Width="800" Closing="window_Closing">
+        Title="Редактор набора." Height="600" Width="800" Closing="window_Closing">
     <Window.Resources>
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="2"/>
