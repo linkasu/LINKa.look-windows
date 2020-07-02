@@ -74,6 +74,9 @@ namespace LinkaWPF
             {
                 // Файла не существует, установим настройки по умолчанию
                 _settings = new Settings();
+
+                _settings.ConfigFilePath = configFile;
+
                 _settings.Keys = new Dictionary<string, string>();
                 _settings.Keys.Add("Left", "MoveSelectorLeft");
                 _settings.Keys.Add("Right", "MoveSelectorRight");
