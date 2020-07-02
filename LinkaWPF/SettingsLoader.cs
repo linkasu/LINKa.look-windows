@@ -44,11 +44,11 @@ namespace LinkaWPF
                     Keys = settingsFile.Keys,
                     IsHasGazeEnabled = settingsFile.IsHasGazeEnabled ?? true,
                     IsAnimatedClickEnabled = settingsFile.IsAnimatedClickEnabled ?? true,
-                    ClickDelay = settingsFile.ClickDelay ?? 3,
+                    ClickDelay = settingsFile.ClickDelay ?? 1,
                     IsPlayAudioFromCard = settingsFile.IsPlayAudioFromCard ?? false,
                     IsPageButtonVisible = settingsFile.IsPageButtonVisible ?? true,
-                    IsJoystickEnabled = settingsFile.IsJoystickEnabled ?? true,
-                    IsKeyboardEnabled = settingsFile.IsKeyboardEnabled ?? true,
+                    IsJoystickEnabled = settingsFile.IsJoystickEnabled ?? false,
+                    IsKeyboardEnabled = settingsFile.IsKeyboardEnabled ?? false,
                     IsMouseEnabled = settingsFile.IsMouseEnabled ?? true
                 };
             }
