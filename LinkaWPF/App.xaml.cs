@@ -40,6 +40,9 @@ namespace LinkaWPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
+
+            StaticServer.instance.CheckUpdateAsync();
+
             var options = new Options();
             Parser.Default.ParseArguments<Options>(e.Args)
                 .WithParsed<Options>(o =>
