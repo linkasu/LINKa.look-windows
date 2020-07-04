@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DeviceId;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace LinkaWPF
 {
     class StaticServer
     {
-        private static string SERVER = "http://linka.su:5511";
+        private static string SERVER = "http://mac:5443/";
         private static string DISTFOLDER = "https://linka.su/dist/linka.looks/";
         private static StaticServer _instance;
 
@@ -25,6 +26,35 @@ namespace LinkaWPF
                     _instance = new StaticServer();
                 return _instance;
             }
+        }
+
+
+        public async Task ReportEvent(string eventType, Dictionary<string, string> parameters)
+        {
+            var uuid = new DeviceIdBuilder()
+                .AddSystemUUID()
+                .AddOSVersion()
+                .AddUserName()
+                .ToString();
+            JObject obj = new JObject();
+            obj.Add("event", eventType);
+            obj.Add("uiid", uuid);
+            if (parameters!=null) obj.Add("params", JObject.FromObject(parameters));
+
+            var httpContent = new StringContent(obj.ToString());
+            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+            httpContent.Headers.ContentType = mediaType;
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(mediaType);
+            var response = await client.PostAsync(SERVER+"report", httpContent);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var jobject = JObject.Parse(responseBody);
+                
+        }
+
+        internal Task ReportEvent(string eventType)
+        {
+            return ReportEvent(eventType, null);
         }
 
         public async Task CheckUpdateAsync()

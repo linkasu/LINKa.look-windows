@@ -40,6 +40,11 @@ namespace LinkaWPF
 
         public MainWindow(Settings settings)
         {
+            StaticServer.instance.ReportEvent("startupApp", new Dictionary<string, string>
+            {
+                { "dat", "dat" }
+            });
+            
             InitializeComponent();
 
             _tempDirPath = settings.TempDirPath;
