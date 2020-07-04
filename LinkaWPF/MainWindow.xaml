@@ -9,7 +9,10 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="visibleIfTrueConverter" />
     </Window.Resources>
+
+
     <Grid x:Name="mainGrid">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -21,6 +24,33 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+
+        <Grid x:Name="overflowGrid" Panel.ZIndex="1000" Grid.RowSpan="4" Grid.ColumnSpan="3" >
+            <Grid.Background>
+                <SolidColorBrush Color="White" Opacity="0.8">
+
+                </SolidColorBrush>
+            </Grid.Background>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+
+                <RowDefinition />
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Image   Grid.Column="1" HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100" Source="LINKa.looks-logo.png"/>
+
+            <Button Content="Открыть набор" Grid.Row="1" Grid.Column="1" Click="Open_Click"></Button>
+            <Button Content="Создать набор" Grid.Row="2" Grid.Column="1" Click="OpenEditor_Click"></Button>
+        </Grid>
+
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="Файл" Focusable="False">
@@ -112,6 +142,6 @@
 
         <!-- CardBoard -->
         <local:CardBoard x:Name="cardBoard" Grid.Row="3" Grid.Column="1" Columns="3" Rows="3"  IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}"/>
-
+    
     </Grid>
 </Window>

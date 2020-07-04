@@ -293,6 +293,7 @@ namespace LinkaWPF
 
                     grid.Children.Add(button);
                     Grid.SetRow(button, i);
+        
                     Grid.SetColumn(button, j);
 
                     _buttons.Add(button);

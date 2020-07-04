@@ -289,11 +289,12 @@ namespace LinkaWPF
 
         public void LoadCardSet(string path)
         {
+            overflowGrid.Visibility = Visibility.Hidden;
+
             StaticServer.instance.ReportEvent("LoadCardSet", new Dictionary<string, string>
             {
                 {"path", path }
             });
-
             try
             {
                 var destPath = _tempDirPath + Guid.NewGuid() + "\\";
@@ -321,6 +322,7 @@ namespace LinkaWPF
                 MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
         }
 
         public bool WithoutSpace { get; set; }
