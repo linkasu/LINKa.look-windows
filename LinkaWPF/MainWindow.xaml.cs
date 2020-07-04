@@ -333,7 +333,7 @@ namespace LinkaWPF
         {
             var openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "Linka files(*.linka)|*.linka";
-
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\LINKa";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
             Settings.IsHasGazeEnabled = false;
