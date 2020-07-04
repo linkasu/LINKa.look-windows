@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.DirectX.DirectInput;
 using System.Windows.Threading;
 
@@ -11,7 +8,9 @@ namespace LinkaWPF
     public class Joysticks
     {
         private IList<Device> _devices;
-        private Dictionary<Guid, byte[]> _buttons;        
+        private Dictionary<Guid, byte[]> _buttons;
+        private readonly int STRANGENUMBER = 32767;
+        private int[] _axis;
 
         public event EventHandler<string> JoystickButtonDown;
 
@@ -19,7 +18,7 @@ namespace LinkaWPF
         {
             _devices = new List<Device>();
             _buttons = new Dictionary<Guid, byte[]>();
-
+            _axis = new int[] { STRANGENUMBER, STRANGENUMBER };
             UpdateDevices();
         }
 
@@ -32,8 +31,11 @@ namespace LinkaWPF
                 foreach (var device in _devices)
                 {
                     var j = device.CurrentJoystickState;
+                    var prevAxis = _axis;
+                    _axis = new int[] { j.X, j.Y };
 
                     // Состояние кнопок на предыдущей итерации
+                    
                     var prevButtons = _buttons[device.DeviceInformation.ProductGuid];
 
                     // Текущее состояние кнопок для устройства
@@ -45,6 +47,14 @@ namespace LinkaWPF
                         {
                             JoystickButtonDown?.Invoke(this, "J" + i);
                         }
+                    }
+                    if (_axis[0] != prevAxis[0] && _axis[0] != STRANGENUMBER)
+                    {
+                        JoystickButtonDown?.Invoke(this, "JX" + (_axis[0] > STRANGENUMBER ? "R" : "L"));
+                    }
+                    if (_axis[1] != prevAxis[1] && _axis[1] != STRANGENUMBER)
+                    {
+                        JoystickButtonDown?.Invoke(this, "JY" + (_axis[1] > STRANGENUMBER ? "R" : "L"));
                     }
 
                     _buttons[device.DeviceInformation.ProductGuid] = buttons;
@@ -69,7 +79,7 @@ namespace LinkaWPF
                 var device = new Device(instance.ProductGuid);
 
                 // device.SetCooperativeLevel(null, CooperativeLevelFlags.Background | CooperativeLevelFlags.NonExclusive);
-
+                
                 device.Acquire();
 
                 _devices.Add(device);
