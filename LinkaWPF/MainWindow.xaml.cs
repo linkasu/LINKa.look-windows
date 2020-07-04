@@ -40,10 +40,7 @@ namespace LinkaWPF
 
         public MainWindow(Settings settings)
         {
-            StaticServer.instance.ReportEvent("startupApp", new Dictionary<string, string>
-            {
-                { "dat", "dat" }
-            });
+            StaticServer.instance.ReportEvent("startupApp") ;
             
             InitializeComponent();
 
@@ -280,6 +277,11 @@ namespace LinkaWPF
 
         public void LoadCardSet(string path)
         {
+            StaticServer.instance.ReportEvent("LoadCardSet", new Dictionary<string, string>
+            {
+                {"path", path }
+            });
+
             try
             {
                 var destPath = _tempDirPath + Guid.NewGuid() + "\\";

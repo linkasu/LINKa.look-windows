@@ -14,7 +14,7 @@ namespace LinkaWPF
 {
     class StaticServer
     {
-        private static string SERVER = "http://mac:5443/";
+        private static string SERVER = "http://linka.su:5443/";
         private static string DISTFOLDER = "https://linka.su/dist/linka.looks/";
         private static StaticServer _instance;
 
@@ -38,7 +38,7 @@ namespace LinkaWPF
                 .ToString();
             JObject obj = new JObject();
             obj.Add("event", eventType);
-            obj.Add("uiid", uuid);
+            obj.Add("uuid", uuid);
             if (parameters!=null) obj.Add("params", JObject.FromObject(parameters));
 
             var httpContent = new StringContent(obj.ToString());
