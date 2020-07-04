@@ -43,9 +43,11 @@ Source: "C:\Users\Ivan Bakaidov\source\repos\LINKa.look-windows\DefaultSets\*"; 
  [Registry]
 
 Root: HKCR; Subkey: ".linka";                             ValueData: "{#MyAppName}";          Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}";                     ValueData: "Program {#MyAppName}";  Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" -s ""%1""";  ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}";                     ValueData: "Набор карточек {#MyAppName}";  Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" -p ""%1""";  ValueType: string;  ValueName: ""
 
+
+Root: HKCR;  Subkey: "{#MyAppName}\DefaultIcon";        ValueData: "{app}\linka_looks_logo_mp5_icon.ico";               ValueType: string;  ValueName: "" ;
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
