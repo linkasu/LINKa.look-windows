@@ -107,6 +107,7 @@ namespace LinkaWPF
         {
             string action;
             if (Settings.Keys.TryGetValue(keyName, out action) == false) return;
+            StaticServer.instance.ReportEvent("MoveCursor", new Dictionary<string, string> { { "action", action } });
 
             switch (action)
             {
@@ -145,7 +146,15 @@ namespace LinkaWPF
         }
         private void Joystick_JoystickButtonDown(object sender, string buttonName)
         {
-            if (Settings.IsJoystickEnabled == true) RunAction(buttonName);
+            if (Settings.IsJoystickEnabled == true)
+            {
+                RunAction(buttonName);
+                StaticServer.instance.ReportEvent("JoystickAction", new Dictionary<string, string>()
+                {
+                    {"buttonName", buttonName }
+                });
+
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -187,7 +196,8 @@ namespace LinkaWPF
         private void pressCardButton(CardButton cardButton)
         {
             if (cardButton.Card == null) return;
-
+            
+            StaticServer.instance.ReportEvent("CardSelected") ;
             if (_settings.IsPlayAudioFromCard == true)
             {
                 var cards = new List<Card>();
@@ -265,6 +275,8 @@ namespace LinkaWPF
 
         private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
         {
+            StaticServer.instance.ReportEvent("Pronounce");
+
             if (WithoutSpace == true)
             {
                 _player.Play(text.Text);
@@ -331,16 +343,22 @@ namespace LinkaWPF
 
         private void OpenInEditor_Click(object sender, RoutedEventArgs e)
         {
+            StaticServer.instance.ReportEvent("OpenInEditor");
+
             ChangeMode(CurrentFileName);
         }
 
         private void OpenEditor_Click(object sender, RoutedEventArgs e)
         {
+            StaticServer.instance.ReportEvent("OpenEditor");
+
             ChangeMode(null);
         }
 
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
+            StaticServer.instance.ReportEvent("OpenSettings");
+
             var settingsWindow = new SettingsWindow(Settings);
             settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settingsWindow.Owner = this;
@@ -351,6 +369,8 @@ namespace LinkaWPF
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
+            StaticServer.instance.ReportEvent("Exit");
+
             Close();
         }
 
