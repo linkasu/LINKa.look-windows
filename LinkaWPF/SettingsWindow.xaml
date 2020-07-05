@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="550" Width="750" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
+        Title="Настройкиы" Height="550" Width="750" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
     <Window.Resources>
         <Style TargetType="CheckBox">
             <Setter Property="Margin" Value="2, 10, 2, 2"/>
