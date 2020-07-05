@@ -39,6 +39,7 @@ namespace LinkaWPF
             JObject obj = new JObject();
             obj.Add("event", eventType);
             obj.Add("uuid", uuid);
+            obj.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             if (parameters!=null) obj.Add("params", JObject.FromObject(parameters));
 
             var httpContent = new StringContent(obj.ToString());
