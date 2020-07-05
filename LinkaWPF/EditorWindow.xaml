@@ -84,7 +84,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" x:Name="prevPageButton" Width="140" Margin="0" IsEnabled="False" Click="PrevPage">Предыдущая страница</Button>
-            <local:CardBoard x:Name="cardBoard" Grid.Column="1" Columns="3" Rows="3"/>
+            <local:CardBoard x:Name="cardBoard" Grid.Column="1" Columns="3" Rows="3" IsMouseEnabled="True"/>
             <Button Grid.Column="2" x:Name="nextPageButton" Width="140" Margin="0" IsEnabled="False" Click="NextPage">Следующая страница</Button>
         </Grid>
 
