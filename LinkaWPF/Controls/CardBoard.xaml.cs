@@ -291,6 +291,11 @@ namespace LinkaWPF
                     button.MouseEnter += CardButton_MouseEnter;
                     button.MouseLeave += CardButton_MouseLeave;
 
+                    button.IsMouseEnabled = IsMouseEnabled;
+                    button.IsHasGazeEnabled = IsHasGazeEnabled;
+                    button.IsAnimatedClickEnabled = IsAnimatedClickEnabled;
+                    button.ClickDelay = ClickDelay;
+
                     grid.Children.Add(button);
                     Grid.SetRow(button, i);
         

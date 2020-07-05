@@ -338,10 +338,7 @@ namespace LinkaWPF
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\LINKa";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
-            var prevHasGazeStatus = Settings.IsHasGazeEnabled;
-            Settings.IsHasGazeEnabled = false;
             LoadCardSet(openFileDialog.FileName);
-            Settings.IsHasGazeEnabled = prevHasGazeStatus;
         }
 
         private void OpenInEditor_Click(object sender, RoutedEventArgs e)
