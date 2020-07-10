@@ -1,6 +1,8 @@
-﻿using System;
+﻿using LinkaWPF.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,69 +14,43 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tobii.Interaction.Wpf;
 
 namespace LinkaWPF
 {
-    /// <summary>
-    /// Логика взаимодействия для CardButton.xaml
-    /// </summary>
-    public partial class CardButton : UserControl
+    public partial class CardButton : AnimatedButton
     {
-        private bool _isMouseDown;
         public CardButton()
         {
             InitializeComponent();
+
+            IsHasGaze = false;
         }
 
-        public Models.Card Card
+        public Card Card
         {
-            get { return (Models.Card)GetValue(CardProperty); }
+            get { return (Card)GetValue(CardProperty); }
             set { SetValue(CardProperty, value); }
         }
 
+        public event EventHandler<HasGazeChangedRoutedEventArgs> HasGazeChanged;
+
         public static readonly DependencyProperty CardProperty =
-            DependencyProperty.Register("Card", typeof(Models.Card), typeof(CardButton), new PropertyMetadata(null, new PropertyChangedCallback(OnCardChanged)));
+            DependencyProperty.Register("Card", typeof(Card), typeof(CardButton), new PropertyMetadata(null, new PropertyChangedCallback(OnCardChanged)));
 
         private static void OnCardChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            CardButton button = sender as CardButton;
-            button.Card = (Models.Card)args.NewValue;
+            var button = sender as CardButton;
+            button.Card = (Card)args.NewValue;
+
+            button.IsHasGaze = button.Card == null ? false : true;
         }
 
-        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CardButton));
-        public static readonly RoutedEvent HazGazeChangedEvent = EventManager.RegisterRoutedEvent("HazGazeChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CardButton));
-
-        public event RoutedEventHandler Click
+        protected override void OnHasGazeChanged(object sender, HasGazeChangedRoutedEventArgs e)
         {
-            add { AddHandler(ClickEvent, value); }
-            remove { RemoveHandler(ClickEvent, value); }
-        }
+            base.OnHasGazeChanged(sender, e);
 
-        public event RoutedEventHandler HazGazeChanged
-        {
-            add { AddHandler(HazGazeChangedEvent, value); }
-            remove { RemoveHandler(HazGazeChangedEvent, value); }
-        }
-
-        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _isMouseDown = true;
-        }
-
-        private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (_isMouseDown == false) return;
-
-            RoutedEventArgs newEventArgs = new RoutedEventArgs(CardButton.ClickEvent);
-            RaiseEvent(newEventArgs);
-
-            _isMouseDown = false;
-        }
-
-        private void OnHasGazeChanged(object sender, Tobii.Interaction.Wpf.HasGazeChangedRoutedEventArgs e)
-        {
-            RoutedEventArgs newEventArgs = new RoutedEventArgs(CardButton.HazGazeChangedEvent);
-            RaiseEvent(newEventArgs);
+            HasGazeChanged?.Invoke(sender, e);
         }
     }
 }

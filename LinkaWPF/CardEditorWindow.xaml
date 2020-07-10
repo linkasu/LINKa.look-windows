@@ -1,0 +1,85 @@
+﻿<Window x:Name="window" x:Class="LinkaWPF.CardEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:local="clr-namespace:LinkaWPF"
+        mc:Ignorable="d"
+        Title="Создание карточки" Height="320" Width="470" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="MaxHeight" Value="25"/>
+            <Setter Property="MaxWidth" Value="140"/>
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!-- CardType block -->
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">Тип карточки</TextBlock>
+        <WrapPanel Grid.Column="1" Grid.Row="0" Margin="2" VerticalAlignment="Center">
+            <RadioButton x:Name="commonCardTypeRadioButton" GroupName="CardType" Checked="CardTypeChanged">Обычная</RadioButton>
+            <RadioButton x:Name="spaceCardTypeRadioButton" GroupName="CardType" Checked="CardTypeChanged">Карточка-пробел</RadioButton>
+            <RadioButton x:Name="fakeCardTypeRadioButton" GroupName="CardType" Checked="CardTypeChanged">Пустая карточка</RadioButton>
+        </WrapPanel>
+        
+        <!-- Text Block -->
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">Текст карточки</TextBlock>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" x:Name="captionPanel" Margin="2">
+            <TextBox x:Name="captionTextBox" FontSize="16"/>
+        </StackPanel>
+
+        <!-- Image block -->
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">Изображение</TextBlock>
+        <Grid Grid.Column="1" Grid.Row="2" x:Name="imagePanel" Margin="0,5,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" RenderOptions.EdgeMode="Aliased" Width="150" Height="150" HorizontalAlignment="Left">
+                <Image x:Name="image" gif:ImageBehavior.RepeatBehavior="Forever" gif:ImageBehavior.AnimatedSource="{Binding ElementName=window, Path=Image}" />
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <Button x:Name="uploadImageButton" Click="UploadImage">Загрузить из файла</Button>
+                <Button x:Name="createImageFromTextButton" Click="CreateImageFromTextClick">Создать из текста</Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Audio block -->
+        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Аудио</TextBlock>
+        <Grid Grid.Column="1" Grid.Row="3" x:Name="audioPanel">
+            <WrapPanel x:Name="panelWithAudioButtons" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button x:Name="uploadFromYandexButton" Click="uploadFromYandexButton_Click">Загрузить c Yandex</Button>
+                <Button x:Name="uploadFromFileButton" Click="UploadAudio">Загрузить из файла</Button>
+                <Button x:Name="playButton" Click="Play">Воспроизвести</Button>
+            </WrapPanel>
+
+            <!-- Information block -->
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="3" x:Name="infoAboutAudioTextBlock" TextWrapping="Wrap" Visibility="Hidden">При установленном параметре "Добавлять текст без пробела", добавить аудио нельзя</TextBlock>
+        </Grid>
+
+        <WrapPanel Grid.Column="1" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="acceptButton" Click="Accept">Добавить</Button>
+            <Button Click="Cancel">Отменить</Button>
+        </WrapPanel>
+    </Grid>
+</Window>

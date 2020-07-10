@@ -1,10 +1,17 @@
-﻿using System;
+﻿using LinkaWPF.Models;
+using LinkaWPF.Properties;
+using Microsoft.DirectX.AudioVideoPlayback;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -14,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Tobii.Interaction;
 
 namespace LinkaWPF
 {
@@ -22,200 +30,353 @@ namespace LinkaWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Models.Card> _cards;
-        private List<CardButton> _buttons;
-        private int _currentPage;
-        private int _countPages;
-        private int _gridSize;
-        private int _rows;
-        private int _columns;
-        private CircularProgressBar _progress;
-        private Storyboard _sb;
+        private IList<Card> _cards;
+        private IList<Card> _words;
+        private readonly string _tempDirPath;
+        private readonly YandexSpeech _yandexSpeech;
+        private readonly Host _host;
+        private Settings _settings;
+        private Player _player;
 
-        public MainWindow()
+        public MainWindow(Settings settings)
         {
+            StaticServer.instance.ReportEvent("startupApp") ;
+            
             InitializeComponent();
 
-            Init();
-            Render();
+            _tempDirPath = settings.TempDirPath;
+
+            _yandexSpeech = settings.YandexSpeech;
+
+            _host = settings.Host;
+
+            ChangeSettings(settings);
+
+            _cards = new List<Card>();
+
+            cardBoard.ClickOnCardButton += cardButton_Click;
+            cardBoard.CountPagesChanged += CardBoard_CountPagesChanged;
+            cardBoard.CurrentPageChanged += CardBoard_CurrentPageChanged;
+            cardBoard.Cards = _cards;
+
+            _words = new List<Card>();
+
+            var joystick = new Joysticks();
+            joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
+
+            _player = new Player(_yandexSpeech);
         }
 
-        private void Init()
+        public Settings Settings
         {
-            this._currentPage = 0;
-            this._rows = 6;
-            this._columns = 6;
-            this._gridSize = this._rows * this._columns;
-
-            for (var i = 0; i < this._rows; i++)
-            {
-                var rowDefinition = new RowDefinition();
-                gridCard.RowDefinitions.Add(rowDefinition);
-            }
-
-            for (var i = 0; i < this._columns; i++)
-            {
-                var columnDefinition = new ColumnDefinition();
-                gridCard.ColumnDefinitions.Add(columnDefinition);
-            }
-
-            this._cards = new List<Models.Card>() {
-                // Page one
-                new Models.Card(0, "One", "1.png"),
-                new Models.Card(1, "Two", "2.png"),
-                new Models.Card(2, "Three", "3.png"),
-                new Models.Card(3, "Four", "4.png"),
-                new Models.Card(4, "Five", "5.png"),
-                new Models.Card(5, "Six", "6.png"),
-                new Models.Card(6, "Seven", "7.png"),
-                new Models.Card(7, "Eight", "8.png"),
-                new Models.Card(8, "Nine", "9.png"),
-                new Models.Card(9, "Nine", "9.png"),
-                new Models.Card(10, "Sleep", "sleep.gif"),
-                new Models.Card(11, "Sleep", "eat.gif")
-            };
-
-            // Рассчитываем максимальное количество страниц
-            this._countPages = Convert.ToInt32(Math.Round(Convert.ToDouble(this._cards.Count) / this._gridSize, 0));
-
-            this._buttons = new List<CardButton>();
-
-            // Создаем кнопки и раскладываем их по клеткам таблицы
-            for (var i = 0; i < this._gridSize; i++)
-            {
-                var button = new CardButton();
-                button.Click += new RoutedEventHandler(cardButton_Click);
-                button.HazGazeChanged += new RoutedEventHandler(cardButton_HazGazeChanged);
-                button.MouseEnter += new MouseEventHandler(cardButton_MouseEnter);
-                button.MouseLeave += new MouseEventHandler(cardButton_MouseLeave);
-
-                var row = Convert.ToInt32(Math.Round(Convert.ToDouble(i / this._rows), 0));
-                int column = i - (this._rows * row);
-
-                this.gridCard.Children.Add(button);
-                Grid.SetRow(button, row);
-                Grid.SetColumn(button, column);
-
-                this._buttons.Add(button);
-            }
-
-            _progress = new CircularProgressBar();
-            _progress.StrokeThickness = 6;
-            _progress.HorizontalAlignment = HorizontalAlignment.Center;
-            _progress.VerticalAlignment = VerticalAlignment.Center;
-            _progress.Visibility = Visibility.Hidden;
-
-            var animation = new DoubleAnimation(0, 100, TimeSpan.FromSeconds(3));
-            animation.Completed += new EventHandler((o, args) => {                
-                _progress.Visibility = Visibility.Hidden;
-            });
-            Storyboard.SetTarget(animation, _progress);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(CircularProgressBar.PercentageProperty));
-
-            _sb = new Storyboard();
-            _sb.Children.Add(animation);
+            get { return _settings; }
+            set { ChangeSettings(value); }
         }
 
-        private void Render()
+        public void ChangeSettings(Settings settings)
         {
-            for (var i = this._currentPage * this._gridSize; i < this._currentPage * this._gridSize + this._gridSize; i++)
+            if (_settings == null)
             {
-                Models.Card card = null;
-                if (i >= 0 && i < this._cards.Count)
+                _settings = settings;
+                DataContext = _settings;
+            }
+
+            _settings.IsHasGazeEnabled = settings.IsHasGazeEnabled;
+            _settings.IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled;
+            _settings.ClickDelay =  settings.ClickDelay;
+            _settings.IsPlayAudioFromCard = settings.IsPlayAudioFromCard;
+            _settings.IsPageButtonVisible = settings.IsPageButtonVisible;
+
+            _settings.IsJoystickEnabled = settings.IsJoystickEnabled;
+            _settings.IsKeyboardEnabled = settings.IsKeyboardEnabled;
+            _settings.IsMouseEnabled = settings.IsMouseEnabled;
+
+            _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
+        }
+
+        private void NextElement(FocusNavigationDirection direction)
+        {
+            var request = new TraversalRequest(direction);
+
+            var elementWithFocus = Keyboard.FocusedElement as UIElement;
+
+            if (elementWithFocus != null) elementWithFocus.MoveFocus(request);
+        }
+
+        private void RunAction(string keyName)
+        {
+            string action;
+            if (Settings.Keys.TryGetValue(keyName, out action) == false) return;
+            StaticServer.instance.ReportEvent("MoveCursor", new Dictionary<string, string> { { "action", action } });
+
+            switch (action)
+            {
+                case "MoveSelectorRight":
+                    {
+                        NextElement(FocusNavigationDirection.Next);
+                    }
+                    break;
+                case "MoveSelectorLeft":
+                    {
+                        NextElement(FocusNavigationDirection.Previous);
+                    }
+                    break;
+                case "MoveSelectorUp":
+                    {
+                        NextElement(FocusNavigationDirection.Up);
+                    }
+                    break;
+                case "MoveSelectorDown":
+                    {
+                        NextElement(FocusNavigationDirection.Down);
+                    }
+                    break;
+                case "Enter":
+                    {
+                        /*if (cardBoard.SelectedCardButton == null) return;
+
+                        pressCardButton(cardBoard.SelectedCardButton);*/
+
+                        var button = Keyboard.FocusedElement as Button;
+
+                        if (button != null) button.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+                    }
+                    break;
+            }
+        }
+        private void Joystick_JoystickButtonDown(object sender, string buttonName)
+        {
+            if (Settings.IsJoystickEnabled == true)
+            {
+                RunAction(buttonName);
+                StaticServer.instance.ReportEvent("JoystickAction", new Dictionary<string, string>()
                 {
-                    card = this._cards[i];
+                    {"buttonName", buttonName }
+                });
+
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (Settings.IsKeyboardEnabled == true)
+            {
+                RunAction(e.Key.ToString());
+            }
+            e.Handled = true;
+            base.OnKeyDown(e);
+        }
+
+        private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
+        {
+            UpdatePageInfo();
+        }
+
+        private void CardBoard_CountPagesChanged(object sender, EventArgs e)
+        {
+            UpdatePageInfo();
+
+            if (cardBoard.CountPages > 1)
+            {
+                prevButton.IsEnabled = true;
+                nextButton.IsEnabled = true;
+            }
+            else
+            {
+                prevButton.IsEnabled = false;
+                nextButton.IsEnabled = false;
+            }
+        }
+
+        private void UpdatePageInfo()
+        {
+            pageInfoTextBlock.Text = string.Format("Текущая страница: {0} из {1}", cardBoard.CurrentPage + 1, cardBoard.CountPages);
+        }
+
+        private void pressCardButton(CardButton cardButton)
+        {
+            if (cardButton.Card == null) return;
+            
+            StaticServer.instance.ReportEvent("CardSelected") ;
+            if (_settings.IsPlayAudioFromCard == true)
+            {
+                var cards = new List<Card>();
+                cards.Add(cardButton.Card);
+                _player.Play(cards);
+            }
+            else
+            {
+                if (WithoutSpace == false)
+                    text.Text += (text.Text != string.Empty ? " " : string.Empty);
+
+                if (cardButton.Card.CardType == CardType.Space)
+                {
+                    text.Text += " ";
                 }
-                var count = i - this._currentPage * this._gridSize;
-                this._buttons[count].Card = card;
+                else
+                {
+                    text.Text += cardButton.Card.Title;
+                }
+
+                // Переставить курсор в конец строки
+                text.Select(text.Text.Length, 0);
+
+                // Добавить карточку в цепочку
+                _words.Add(cardButton.Card);
             }
         }
 
-        private void NextPage()
+        private void cardButton_Click(object sender, EventArgs e)
         {
-            if (this._currentPage == this._countPages - 1)
-            {
-                this._currentPage = 0;
-            }
-            else
-            {
-                this._currentPage++;
-            }
-            Render();
-        }
-
-        private void PrevPage()
-        {
-            if (this._currentPage - 1 < 0)
-            {
-                this._currentPage = this._countPages - 1;
-            }
-            else
-            {
-                this._currentPage--;
-            }
-            Render();
-        }
-
-        private void cardButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as CardButton;
-            text.Text = button.Card.Title;
-        }
-
-        private void cardButton_HazGazeChanged(object sender, RoutedEventArgs e)
-        {
-            var button = sender as CardButton;
-            startClick(button);
-        }
-
-        private void startClick(CardButton button)
-        {
-            if (_progress.Parent != null)
-            {
-                (_progress.Parent as Grid).Children.Remove(_progress);
-            }
-
-            // Добавляем прогресс на карточку
-            button.grid.Children.Add(_progress);
-
-            _progress.Radius = Convert.ToInt32((button.ActualHeight - 20) / 2);
-            _progress.Visibility = Visibility.Visible;
-
-            _sb.Stop();
-            _sb.Begin();
-        }
-
-        private void stopClick()
-        {
-            _progress.Visibility = Visibility.Hidden;
-        }
-
-        private void cardButton_MouseEnter(object sender, RoutedEventArgs e)
-        {
-            var button = sender as CardButton;
-
-            startClick(button);
-        }
-
-        private void cardButton_MouseLeave(object sender, RoutedEventArgs e)
-        {
-            stopClick();
+            var cardButton = sender as CardButton;
+            pressCardButton(cardButton);
         }
 
         private void prevButton_Click(object sender, RoutedEventArgs e)
         {
             // Prev
-            this.PrevPage();
-
-            GC.Collect();
+            cardBoard.PrevPage();
         }
 
         private void nextButton_Click(object sender, RoutedEventArgs e)
         {
             // Next
-            this.NextPage();
+            cardBoard.NextPage();
+        }
 
-            GC.Collect();
+        private void clearTextBoxButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Очистка текстового поля
+            text.Text = "";
+
+            // Очистить цепочку слов
+            _words.Clear();
+        }
+
+        private void removeLastWordButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (WithoutSpace == true)
+            {
+                if (text.Text.Length > 0) text.Text = text.Text.Remove(text.Text.Length - 1, 1);
+            }
+            else
+            {
+                // Удалить последнее слово из текстового поля
+                var end = text.Text.LastIndexOf(' ');
+                text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
+
+                // Переставить курсор в конец строки
+                text.Select(text.Text.Length, 0);
+
+                // Удалить последнее слово из цепочки слов
+                if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
+            }
+        }
+
+        private void pronounceWordsButton_Click(object sender, RoutedEventArgs e)
+        {
+            StaticServer.instance.ReportEvent("Pronounce");
+
+            if (WithoutSpace == true)
+            {
+                _player.Play(text.Text);
+            }
+            else
+            {
+                _player.Play(_words);
+            }
+        }
+
+        public void LoadCardSet(string path)
+        {
+            overflowGrid.Visibility = Visibility.Hidden;
+
+            StaticServer.instance.ReportEvent("LoadCardSet", new Dictionary<string, string>
+            {
+                {"path", path }
+            });
+            try
+            {
+                var destPath = _tempDirPath + Guid.NewGuid() + "\\";
+
+                var cardSetLoader = new CardSetLoader();
+                var cardSetFile = cardSetLoader.LoadFromFile(path, destPath);
+
+                cardBoard.Columns = cardSetFile.Columns;
+                cardBoard.Rows = cardSetFile.Rows;
+
+                WithoutSpace = cardSetFile.WithoutSpace;
+
+                _cards = cardSetFile.Cards;
+                foreach (var card in _cards)
+                {
+                    if (card.ImagePath != null && card.ImagePath != string.Empty) card.ImagePath = destPath + card.ImagePath;
+                    if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + card.AudioPath;
+                }
+                cardBoard.Update(_cards);
+
+                CurrentFileName = path;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+        }
+
+        public bool WithoutSpace { get; set; }
+
+        public Func<string, bool> ChangeMode;
+
+        public string CurrentFileName { get; set; }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Linka files(*.linka)|*.linka";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\LINKa";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            LoadCardSet(openFileDialog.FileName);
+        }
+
+        private void OpenInEditor_Click(object sender, RoutedEventArgs e)
+        {
+            StaticServer.instance.ReportEvent("OpenInEditor");
+
+            ChangeMode(CurrentFileName);
+        }
+
+        private void OpenEditor_Click(object sender, RoutedEventArgs e)
+        {
+            StaticServer.instance.ReportEvent("OpenEditor");
+
+            ChangeMode(null);
+        }
+
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            StaticServer.instance.ReportEvent("OpenSettings");
+
+            var settingsWindow = new SettingsWindow(Settings);
+            settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settingsWindow.Owner = this;
+            if (settingsWindow.ShowDialog() == false) return;
+
+            Settings = settingsWindow.Settings;
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            StaticServer.instance.ReportEvent("Exit");
+
+            Close();
+        }
+
+        private void changeGazeStatusButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.IsHasGazeEnabled = !Settings.IsHasGazeEnabled;
         }
     }
 }

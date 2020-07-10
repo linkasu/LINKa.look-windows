@@ -1,0 +1,90 @@
+﻿<Window x:Class="LinkaWPF.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LinkaWPF"
+        mc:Ignorable="d"
+        Title="Настройкиы" Height="550" Width="750" ResizeMode="NoResize" Closed="Window_Closed" KeyUp="SetKey">
+    <Window.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="2, 10, 2, 2"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="grid" FocusManager.IsFocusScope="True" Margin="5">
+        <Grid.ColumnDefinitions/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <ItemsControl x:Name="actionItems">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel HorizontalAlignment="Center">
+                            <TextBlock Width="120" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
+
+                            <Border BorderThickness="1" BorderBrush="Black" Margin="2">
+                                <TextBlock Width="400" Tag="{Binding Path=Name}" MouseDown="TextBlock_MouseDown">
+                                    <ItemsControl ItemsSource="{Binding Keys}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Margin="2" Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <TextBlock Text="{Binding}"/>
+                                                    <TextBlock Text="; "/>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </TextBlock>
+                            </Border>
+
+                            <Button Width="40" Click="RemoveLastKey" Tag="{Binding Name}">
+                                <Viewbox Width="20" Height="20">
+                                    <Canvas Width="10" Height="10">
+                                        <Path Fill="Black" Data="M13,13H18V15H13M13,9H18V11H13M10.09,7.41L11.5,8.82L8.32,12L11.5,15.18L10.09,16.6L5.5,12M5,3C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3H5Z" Height="10" Stretch="Fill" Width="10" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1">
+            <CheckBox x:Name="isHazGazeEnabledCheckBox" Content="Выбор карточки взглядом"/>
+            <CheckBox x:Name="isAnimatedClickEnabledCheckBox" Content="Нажатие взглядом с задержкой"/>
+            <CheckBox x:Name="isPlayAudioFromCardCheckBox" Content="Воспроизводить аудио с карточки при нажатии"/>
+            <CheckBox x:Name="isPageButtonVisibleCheckBox" Content="Показывать кнопки перемотки страниц"/>
+            <CheckBox x:Name="isJoystickEnabledCheckBox" Content="Включить управление с помощью джойстика"/>
+            <CheckBox x:Name="isKeyboardEnabledCheckBox" Content="Включить управление с помощью клавиатуры"/>
+            <CheckBox x:Name="isMouseEnabledCheckBox" Content="Включить управление с помощью мыши"/>
+        </StackPanel>
+
+        <DockPanel Grid.Row="2" Margin="2">
+            <TextBlock Text="Время задержки (сек.)" VerticalAlignment="Center"/>
+            <TextBox x:Name="clickDelayTextBlock" Width="100" Margin="2" VerticalContentAlignment="Center" IsReadOnly="True" Text="{Binding ClickDelay}" />
+            <Button Content="-" Click="decreaseButton_Click" />
+            <Button Content="+" Click="increaseButton_Click" />
+        </DockPanel>
+
+        <DockPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Click="acceptButton_Click">Ok</Button>
+            <Button Click="cancelButton_Click">Cancel</Button>
+        </DockPanel>
+    </Grid>
+</Window>
