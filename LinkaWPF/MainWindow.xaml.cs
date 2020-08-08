@@ -206,6 +206,9 @@ namespace LinkaWPF
             }
             else
             {
+                Stream str = Properties.Resources.type;
+                System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+                snd.Play(); 
                 if (WithoutSpace == false)
                     text.Text += (text.Text != string.Empty ? " " : string.Empty);
 
