@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,13 +41,21 @@ namespace LinkaWPF
                 var path = await _yandexSpeech.GetAudio(text);
 
                 // TODO: Что-то произошло, аудиофайла нет, нужно записать в лог
-                if (path == null) return;
-
+                if (path == null)
+                {
+                    throw new Exception();
+                  
+                }
                 tempList.Add(path);
 
                 PlayAudio(tempList, 0);
             }
-            catch { }
+            catch
+            {
+                var synthesizer = new SpeechSynthesizer();
+                synthesizer.SetOutputToDefaultAudioDevice();
+                synthesizer.Speak(text);
+            }
         }
 
         private async Task<IList<string>> Cache(IList<Models.Card> cards)

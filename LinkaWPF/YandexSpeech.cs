@@ -22,7 +22,7 @@ namespace LinkaWPF
         public async Task<string> GetAudio(string text)
         {
             var client = new HttpClient();
-
+            client.Timeout = TimeSpan.FromMilliseconds(500);
             var values = new Dictionary<string, string>
             {
                 { "text", text },
