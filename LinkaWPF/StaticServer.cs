@@ -68,9 +68,7 @@ namespace LinkaWPF
             var jobject = JObject.Parse(responseBody);
             var newVersion = new Version(jobject.Value<string>("version"));
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            
-                var window = (new UpdateWindow());
-            window.Show();
+
             if (newVersion.CompareTo(currentVersion) == 1)
             {
 
@@ -86,7 +84,10 @@ namespace LinkaWPF
                 if (result == DialogResult.Yes)
                 {
 
-                //    System.Diagnostics.Process.Start();
+                    var window = (new UpdateWindow());
+                    window.Show();
+
+                    //    System.Diagnostics.Process.Start();
                 }
 
             }

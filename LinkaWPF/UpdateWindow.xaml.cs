@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -20,22 +25,51 @@ namespace LinkaWPF
     /// </summary>
     public partial class UpdateWindow : Window
     {
+        string downloadFileUrl = StaticServer.DISTFOLDER + "linka.looks.setup.exe";
+        string destinationFilePath = "C:\\users\\aacidov\\test.exe";
+
         public UpdateWindow()
         {
             InitializeComponent();
 
 
-            var downloadFileUrl = StaticServer.DISTFOLDER + "linka.looks.setup.exe";
-            var destinationFilePath = ("c:\\file.zip");
+            startDownload();
+        }
+        private void startDownload()
+        {
 
-            using (var client = new HttpClientDownloadWithProgress(downloadFileUrl, destinationFilePath))
+            Thread thread = new Thread(() => {
+                WebClient client = new WebClient();
+                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
+                client.DownloadFileCompleted += client_DownloadFileCompleted;
+
+                client.DownloadFileAsync(new Uri(downloadFileUrl), destinationFilePath);
+            });
+            thread.Start();
+        }
+
+
+        void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            Dispatcher.
+            BeginInvoke((MethodInvoker)delegate {
+                double bytesIn = double.Parse(e.BytesReceived.ToString());
+                double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+                double percentage = bytesIn / totalBytes * 100;
+                label.Text = "Загружено " + e.BytesReceived / (1024*1024)+ "мб из " +( e.TotalBytesToReceive /(1024*1024))+" мб. ("+Math.Round( percentage)+"%).";
+                progressBar.Value = int.Parse(Math.Truncate(percentage).ToString());
+            });
+        }
+        void client_DownloadFileCompleted(object o, object a)
+                {
+
+            System.Diagnostics.Process.Start(new ProcessStartInfo(
+                destinationFilePath
+                )
             {
-                client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) => {
-                   progressBar.Value = Double.Parse( totalBytesDownloaded/totalFileSize+"");
-                };
-
-                 client.StartDownload();
-            }
+                Arguments = "/silent /restartapplications"
+            });
+            Environment.Exit(0);
         }
     }
 }

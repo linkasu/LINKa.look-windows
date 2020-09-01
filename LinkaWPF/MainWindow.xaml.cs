@@ -60,10 +60,14 @@ namespace LinkaWPF
             cardBoard.Cards = _cards;
 
             _words = new List<Card>();
+            try
+            {
+                var joystick = new Joysticks();
+                joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
+            } catch(Exception e)
+            {
 
-            var joystick = new Joysticks();
-            joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
-
+            }
             _player = new Player(_yandexSpeech);
         }
 

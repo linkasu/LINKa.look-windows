@@ -63,10 +63,10 @@
     <StartupObject>LinkaWPF.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>F4C3905059C5E2AD9571C742F03E64D850E11195</ManifestCertificateThumbprint>
