@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="Создание карточки" Height="320" Width="470" ResizeMode="NoResize">
+        Title="Создание карточки" Height="340" Width="470" >
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="2"/>
@@ -66,6 +66,7 @@
 
         <!-- Audio block -->
         <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Аудио</TextBlock>
+        
         <Grid Grid.Column="1" Grid.Row="3" x:Name="audioPanel">
             <WrapPanel x:Name="panelWithAudioButtons" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Button x:Name="uploadFromYandexButton" Click="uploadFromYandexButton_Click">Загрузить c Yandex</Button>

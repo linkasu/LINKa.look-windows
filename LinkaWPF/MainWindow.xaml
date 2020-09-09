@@ -9,16 +9,28 @@
            Title="LINKa. смотри" Height="600" Width="900">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="visibleIfTrueConverter" />
-    </Window.Resources>
+        
+        </Window.Resources>
 
 
     <Grid x:Name="mainGrid">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition >
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="1*" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPlayAudioFromCard}" Value="True">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>

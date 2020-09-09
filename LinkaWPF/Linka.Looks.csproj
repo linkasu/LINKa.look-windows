@@ -30,8 +30,8 @@
     <ProductName>LINKa. смотри</ProductName>
     <PublisherName>LINKa</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.1.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -143,6 +143,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ActionItem.cs" />
+    <Compile Include="BoolToGridRowHeightConverter.cs" />
     <Compile Include="CardEditorWindow.xaml.cs">
       <DependentUpon>CardEditorWindow.xaml</DependentUpon>
     </Compile>
