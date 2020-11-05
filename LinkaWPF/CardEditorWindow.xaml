@@ -68,11 +68,23 @@
         <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">Аудио</TextBlock>
         
         <Grid Grid.Column="1" Grid.Row="3" x:Name="audioPanel">
-            <WrapPanel x:Name="panelWithAudioButtons" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <WrapPanel Grid.Row="0" x:Name="panelWithAudioButtons" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Button x:Name="uploadFromYandexButton" Click="uploadFromYandexButton_Click">Загрузить c Yandex</Button>
                 <Button x:Name="uploadFromFileButton" Click="UploadAudio">Загрузить из файла</Button>
                 <Button x:Name="playButton" Click="Play">Воспроизвести</Button>
+                
             </WrapPanel>
+            <ComboBox Grid.Row="1" x:Name="voiceSelect">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <!-- Information block -->
             <TextBlock Grid.Column="0" Grid.ColumnSpan="3" x:Name="infoAboutAudioTextBlock" TextWrapping="Wrap" Visibility="Hidden">При установленном параметре "Добавлять текст без пробела", добавить аудио нельзя</TextBlock>

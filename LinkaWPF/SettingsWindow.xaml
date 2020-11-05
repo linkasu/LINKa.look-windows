@@ -73,6 +73,16 @@
             <CheckBox x:Name="isJoystickEnabledCheckBox" Content="Включить управление с помощью джойстика"/>
             <CheckBox x:Name="isKeyboardEnabledCheckBox" Content="Включить управление с помощью клавиатуры"/>
             <CheckBox x:Name="isMouseEnabledCheckBox" Content="Включить управление с помощью мыши"/>
+            <StackPanel>
+                <TextBox>Настройки голоса;</TextBox>
+                <ComboBox x:Name="voiceSelect" >
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Title}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
         </StackPanel>
 
         <DockPanel Grid.Row="2" Margin="2">

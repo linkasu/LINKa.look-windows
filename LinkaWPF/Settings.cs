@@ -19,7 +19,7 @@ namespace LinkaWPF
         private bool _isKeyboardEnabled;
         private bool _isJoystickEnabled;
         private bool _isMouseEnabled;
-
+        private string _voiceId;
         public Dictionary<string, string> Keys { get; set; }
 
         public string TempDirPath { get; set; }
@@ -57,6 +57,18 @@ namespace LinkaWPF
             get { return _clickDelay; }
             set {
                 _clickDelay = value;
+                OnPropertyChanged();
+            }
+        }
+        public string VoiceId
+        {
+            get
+            {
+                return _voiceId;
+            }
+            set
+            {
+                _voiceId = value;
                 OnPropertyChanged();
             }
         }

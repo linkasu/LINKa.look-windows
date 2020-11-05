@@ -27,6 +27,7 @@ namespace LinkaWPF
         private readonly YandexSpeech _yandexSpeech;
         private readonly string _tempDirPath;
         private bool _withoutSpace;
+        private Settings _settings;
 
         private ImageSource Image
         {
@@ -42,12 +43,12 @@ namespace LinkaWPF
                 typeof(CardEditorWindow));
         }
 
-        public CardEditorWindow(string tempDirPath, YandexSpeech yandexSpeech, bool withoutSpace) : this(tempDirPath, yandexSpeech, new Card(), withoutSpace)
+        public CardEditorWindow(Settings settings, string tempDirPath, YandexSpeech yandexSpeech, bool withoutSpace) : this(settings, tempDirPath, yandexSpeech, new Card(), withoutSpace)
         {
             acceptButton.Content = "Добавить";
         }
 
-        public CardEditorWindow(string tempDirPath, YandexSpeech yandexSpeech, Card card, bool withoutSpace)
+        public CardEditorWindow(Settings settings, string tempDirPath, YandexSpeech yandexSpeech, Card card, bool withoutSpace)
         {
             InitializeComponent();
 
@@ -57,7 +58,9 @@ namespace LinkaWPF
 
             _yandexSpeech = yandexSpeech;
             _tempDirPath = tempDirPath;
-
+            _settings = settings;
+            voiceSelect.ItemsSource = YandexVoice.VOICES;
+            voiceSelect.SelectedItem = YandexVoice.FindById(settings.VoiceId);
             acceptButton.Content = "Изменить";
 
             _withoutSpace = withoutSpace;
@@ -115,7 +118,7 @@ namespace LinkaWPF
             {
                 audioPanel.IsEnabled = false;
                 acceptButton.IsEnabled = false;
-                AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text);
+                AudioPath = await _yandexSpeech.GetAudio(captionTextBox.Text, (YandexVoice) voiceSelect.SelectedItem);
 
                 result = true;
             }

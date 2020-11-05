@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,10 +14,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LinkaWPF
 {
@@ -26,7 +23,7 @@ namespace LinkaWPF
     public partial class UpdateWindow : Window
     {
         string downloadFileUrl = StaticServer.DISTFOLDER + "linka.looks.setup.exe";
-        string destinationFilePath = "C:\\users\\aacidov\\test.exe";
+        string destinationFilePath = Path.GetTempPath()+ "\\linka.exe";
 
         public UpdateWindow()
         {

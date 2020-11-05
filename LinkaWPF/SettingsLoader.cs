@@ -22,7 +22,8 @@ namespace LinkaWPF
                 IsPageButtonVisible = settings.IsPageButtonVisible,
                 IsJoystickEnabled = settings.IsJoystickEnabled,
                 IsKeyboardEnabled = settings.IsKeyboardEnabled,
-                IsMouseEnabled = settings.IsMouseEnabled
+                IsMouseEnabled = settings.IsMouseEnabled,
+                VoiceId = settings.VoiceId
             };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
@@ -49,7 +50,8 @@ namespace LinkaWPF
                     IsPageButtonVisible = settingsFile.IsPageButtonVisible ?? true,
                     IsJoystickEnabled = settingsFile.IsJoystickEnabled ?? false,
                     IsKeyboardEnabled = settingsFile.IsKeyboardEnabled ?? false,
-                    IsMouseEnabled = settingsFile.IsMouseEnabled ?? true
+                    IsMouseEnabled = settingsFile.IsMouseEnabled ?? true,
+                    VoiceId = settingsFile.VoiceId??"jane"
                 };
             }
         }

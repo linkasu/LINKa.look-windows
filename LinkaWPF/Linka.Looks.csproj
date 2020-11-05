@@ -31,7 +31,7 @@
     <PublisherName>LINKa</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.1.1.%2a</ApplicationVersion>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -172,6 +172,7 @@
     </Compile>
     <Compile Include="Utils\ImageGenerator.cs" />
     <Compile Include="YandexSpeech.cs" />
+    <Compile Include="YandexVoice.cs" />
     <Page Include="CardEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -35,5 +35,8 @@ namespace LinkaWPF
 
         [JsonProperty("isMouseEnabled")]
         public bool? IsMouseEnabled { get; set; }
+        
+        [JsonProperty("voiceId")]
+        public string VoiceId { get; set; }
     }
 }

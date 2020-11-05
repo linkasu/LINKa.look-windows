@@ -94,6 +94,7 @@ namespace LinkaWPF
             _settings.IsJoystickEnabled = settings.IsJoystickEnabled;
             _settings.IsKeyboardEnabled = settings.IsKeyboardEnabled;
             _settings.IsMouseEnabled = settings.IsMouseEnabled;
+            _settings.VoiceId = settings.VoiceId;
 
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }

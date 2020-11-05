@@ -50,8 +50,9 @@ namespace LinkaWPF
             window.IsEdited = true;
         }
 
-        public EditorWindow(string tempDirPath, YandexSpeech yandexSpeech)
+        public EditorWindow(Settings settings, string tempDirPath, YandexSpeech yandexSpeech)
         {
+            _settings = settings;
             InitializeComponent();
 
             // Создать директорию для временных файлов
@@ -147,7 +148,7 @@ namespace LinkaWPF
                 CardType = SelectedCardButton.Card.CardType
             };
 
-            var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, card, WithoutSpace);
+            var cardEditorWindow = new CardEditorWindow(_settings, _tempDirPath, _yandexSpeech, card, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
@@ -303,10 +304,10 @@ namespace LinkaWPF
 
         private void CreateCard()
         {
-            var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, WithoutSpace);
+            var cardEditorWindow = new CardEditorWindow(_settings, _tempDirPath, _yandexSpeech, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            if (cardEditorWindow.ShowDialog() != true) return;
+         if (cardEditorWindow.ShowDialog() != true) return;
 
             var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.CardType);
             _cards.Add(card);
@@ -379,5 +380,6 @@ namespace LinkaWPF
         public string CurrentFileName { get; set; }
 
         public Func<bool> ChangeMode;
+        private Settings _settings;
     }
 }

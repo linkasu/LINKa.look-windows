@@ -56,8 +56,6 @@ namespace LinkaWPF
             _tempDirPath = Path.GetTempPath()+ "\\linka.looks\\temp\\";
             Directory.CreateDirectory(_tempDirPath);
 
-            // TODO: Заменить на загрузку из конфига
-            _yandexSpeech = new YandexSpeech("4e68a4e5-b590-448d-9a66-f3d8f2854348", _tempDirPath);
 
             // Everything starts with initializing Host, which manages connection to the 
             // Tobii Engine and provides all Tobii Core SDK functionality.
@@ -100,10 +98,12 @@ namespace LinkaWPF
 
                 settingsLoader.SaveToFile(configFile, _settings);
             }
+            _yandexSpeech = new YandexSpeech(_tempDirPath, _settings);
 
             _settings.SettingsLoader = settingsLoader;
             _settings.TempDirPath = _tempDirPath;
             _settings.YandexSpeech = _yandexSpeech;
+            
             _settings.Host = _host;
 
             if (_isEditor == true)
@@ -114,12 +114,14 @@ namespace LinkaWPF
             {
                 ShowMainWindow(_path);
             }
+
+            // TODO: Заменить на загрузку из конфига
         }
 
         private void ShowEditorWindow(string path)
         {
             // Создаем окно редактора
-            var editorWindow = new EditorWindow(_tempDirPath, _yandexSpeech);
+            var editorWindow = new EditorWindow(_settings, _tempDirPath, _yandexSpeech);
             editorWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             // Функция смены режима работы программы
             editorWindow.ChangeMode = () =>
