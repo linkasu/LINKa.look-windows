@@ -20,6 +20,8 @@ namespace LinkaWPF
         private bool _isJoystickEnabled;
         private bool _isMouseEnabled;
         private string _voiceId;
+        private bool _isOutputType;
+
         public Dictionary<string, string> Keys { get; set; }
 
         public string TempDirPath { get; set; }
@@ -122,7 +124,8 @@ namespace LinkaWPF
                 OnPropertyChanged();
             }
         }
-            
+
+        public bool IsOutputType { get { return _isOutputType; } internal set { _isOutputType = value; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

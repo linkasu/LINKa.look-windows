@@ -49,7 +49,7 @@ namespace LinkaWPF
             isJoystickEnabledCheckBox.IsChecked = _settings.IsJoystickEnabled;
             isKeyboardEnabledCheckBox.IsChecked = _settings.IsKeyboardEnabled;
             isMouseEnabledCheckBox.IsChecked = _settings.IsMouseEnabled;
-
+            isOutputTypeCheckBox.IsChecked = _settings.IsOutputType;
 
             voiceSelect.ItemsSource = YandexVoice.VOICES;
             voiceSelect.SelectedIndex = YandexVoice.FindIndexById(_settings.VoiceId);
@@ -143,7 +143,7 @@ namespace LinkaWPF
             _settings.IsKeyboardEnabled = isKeyboardEnabledCheckBox.IsChecked ?? true;
             _settings.IsMouseEnabled = isMouseEnabledCheckBox.IsChecked ?? true;
             _settings.VoiceId = ((YandexVoice) voiceSelect.SelectionBoxItem).Id??"alena";
-
+            _settings.IsOutputType = isOutputTypeCheckBox.IsChecked ?? false;
             Settings = _settings;
             DialogResult = true;
         }
