@@ -39,6 +39,7 @@
                 <Button Click="SaveCardSet_Click">Сохранить</Button>
                 <Button Click="SaveCardSetAs_Click">Сохранить как</Button>
                 <Button Click="LoadCardSet_Click">Загрузить</Button>
+                <Button Click="EditDescription_Click">Заметки по работе с набором</Button>
                 <Button Click="GoToUserMode_Click">Пользовательский режим</Button>
             </WrapPanel>
         </GroupBox>

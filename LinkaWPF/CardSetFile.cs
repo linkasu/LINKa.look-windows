@@ -14,17 +14,21 @@ namespace LinkaWPF
 {
     public class CardSetFile
     {
-        public CardSetFile(int columns, int rows, bool withoutSpace, IList<Card> cards)
+        public CardSetFile(int columns, int rows, bool withoutSpace, IList<Card> cards, String description)
         {
             Version = "1.0";
             Columns = columns;
             Rows = rows;
             WithoutSpace = withoutSpace;
             Cards = cards;
+            Description = description;
         }
 
         [JsonProperty("version")]
         public string Version { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
 
         [JsonProperty("columns")]
         public int Columns { get; set; }

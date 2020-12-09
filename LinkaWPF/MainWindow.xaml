@@ -73,6 +73,7 @@
                 <MenuItem Header="Настройки" Click="OpenSettings_Click"/>
                 <MenuItem Header="Выйти" Click="Exit_Click"/>
             </MenuItem>
+            <MenuItem Header="Заметки по работе с набором" Click="OpenDescription_Click"></MenuItem>
         </Menu>
 
         <!-- Text -->

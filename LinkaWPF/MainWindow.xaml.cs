@@ -337,7 +337,7 @@ namespace LinkaWPF
 
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
-
+                CurrentFileDescription = cardSetFile.Description;
                 WithoutSpace = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
@@ -363,6 +363,7 @@ namespace LinkaWPF
         public Func<string, bool> ChangeMode;
 
         public string CurrentFileName { get; set; }
+        public string CurrentFileDescription { get; private set; }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
@@ -410,6 +411,11 @@ namespace LinkaWPF
         private void changeGazeStatusButton_Click(object sender, RoutedEventArgs e)
         {
             Settings.IsHasGazeEnabled = !Settings.IsHasGazeEnabled;
+        }
+
+        private void OpenDescription_Click(object sender, RoutedEventArgs e)
+        {
+            new DescriptionWindow(false, CurrentFileDescription).Show();
         }
     }
 }

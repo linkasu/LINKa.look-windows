@@ -26,6 +26,7 @@ namespace LinkaWPF
         private IList<Card> _cards;
         private readonly string _tempDirPath;
         private YandexSpeech _yandexSpeech;
+        private String Description;
 
         private bool WithoutSpace
         {
@@ -227,7 +228,7 @@ namespace LinkaWPF
         {
             try
             {
-                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards);
+                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards, Description);
                 var cardSetLoader = new CardSetLoader();
                 cardSetLoader.SaveToFile(fileName, cardSetFile);
 
@@ -280,7 +281,7 @@ namespace LinkaWPF
 
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
-
+                Description = cardSetFile.Description??"";
                 WithoutSpace = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
@@ -381,5 +382,13 @@ namespace LinkaWPF
 
         public Func<bool> ChangeMode;
         private Settings _settings;
+
+        private void EditDescription_Click(object sender, RoutedEventArgs e)
+        {
+            var editor = new DescriptionWindow(true, Description);
+            editor.Owner = this;
+            if (editor.ShowDialog() != true) return;
+            Description = editor.Description;
+        }
     }
 }
