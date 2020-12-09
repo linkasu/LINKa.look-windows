@@ -90,9 +90,14 @@ namespace LinkaWPF
             return tempList;
         }
 
+        Audio lastAudio = null;
         // Воспроизведение
         private void PlayAudio(IList<string> pathList, int index)
         {
+            if (lastAudio != null)
+            {
+                lastAudio.Stop();
+            }
             if (index >= pathList.Count) return;
 
             var path = pathList[index];
@@ -106,10 +111,13 @@ namespace LinkaWPF
 
             var audio = new Audio(path);
             audio.Ending += new EventHandler((obj, evnt) => {
+                lastAudio = null;
+
                 PlayAudio(pathList, index);
                 Task.Run(() => { (obj as Audio).Dispose(); });
             });
             audio.Play();
+            lastAudio = audio;
             index++;
         }
     }
