@@ -26,6 +26,7 @@ namespace LinkaWPF
         private IList<Card> _cards;
         private readonly string _tempDirPath;
         private YandexSpeech _yandexSpeech;
+        private String Description;
 
         private bool WithoutSpace
         {
@@ -50,8 +51,9 @@ namespace LinkaWPF
             window.IsEdited = true;
         }
 
-        public EditorWindow(string tempDirPath, YandexSpeech yandexSpeech)
+        public EditorWindow(Settings settings, string tempDirPath, YandexSpeech yandexSpeech)
         {
+            _settings = settings;
             InitializeComponent();
 
             // Создать директорию для временных файлов
@@ -77,10 +79,13 @@ namespace LinkaWPF
         private void CardBoard_SelectedCardChanged(object sender, EventArgs e)
         {
             ChangeStatusPlayButton();
-            editButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
-            deleteButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
-            moveToLeftButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
-            moveToRightButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
+            var isNull = cardBoard.SelectedCard  == null ? false : true;
+            editButton.IsEnabled = isNull;
+            deleteButton.IsEnabled = isNull;
+            moveToLeftButton.IsEnabled = isNull;
+            moveToRightButton.IsEnabled = isNull;
+            moveToUpButton.IsEnabled = isNull;
+            moveToDownButton.IsEnabled = isNull;
         }
 
         private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
@@ -147,7 +152,7 @@ namespace LinkaWPF
                 CardType = SelectedCardButton.Card.CardType
             };
 
-            var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, card, WithoutSpace);
+            var cardEditorWindow = new CardEditorWindow(_settings, _tempDirPath, _yandexSpeech, card, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             if (cardEditorWindow.ShowDialog() != true) return;
@@ -194,6 +199,16 @@ namespace LinkaWPF
             cardBoard.MoveCardRight();
         }
 
+        private void MoveToDown(object sender, RoutedEventArgs e)
+        {
+            cardBoard.MoveCardDown();
+        }
+
+        private void MoveToUp(object sender, RoutedEventArgs e)
+        {
+            cardBoard.MoveCardUp();
+        }
+
         private void SaveCardSet_Click(object sender, RoutedEventArgs e)
         {
             SaveCardSet();
@@ -226,7 +241,7 @@ namespace LinkaWPF
         {
             try
             {
-                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards);
+                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards, Description);
                 var cardSetLoader = new CardSetLoader();
                 cardSetLoader.SaveToFile(fileName, cardSetFile);
 
@@ -279,7 +294,7 @@ namespace LinkaWPF
 
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
-
+                Description = cardSetFile.Description??"";
                 WithoutSpace = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
@@ -303,10 +318,10 @@ namespace LinkaWPF
 
         private void CreateCard()
         {
-            var cardEditorWindow = new CardEditorWindow(_tempDirPath, _yandexSpeech, WithoutSpace);
+            var cardEditorWindow = new CardEditorWindow(_settings, _tempDirPath, _yandexSpeech, WithoutSpace);
             cardEditorWindow.Owner = this;
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            if (cardEditorWindow.ShowDialog() != true) return;
+         if (cardEditorWindow.ShowDialog() != true) return;
 
             var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.CardType);
             _cards.Add(card);
@@ -379,5 +394,14 @@ namespace LinkaWPF
         public string CurrentFileName { get; set; }
 
         public Func<bool> ChangeMode;
+        private Settings _settings;
+
+        private void EditDescription_Click(object sender, RoutedEventArgs e)
+        {
+            var editor = new DescriptionWindow(true, Description);
+            editor.Owner = this;
+            if (editor.ShowDialog() != true) return;
+            Description = editor.Description;
+        }
     }
 }

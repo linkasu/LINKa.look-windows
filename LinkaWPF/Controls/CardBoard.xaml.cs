@@ -578,6 +578,54 @@ namespace LinkaWPF
             Edit();
         }
 
+
+        public void MoveCardUp()
+        {
+            // Переместить карточку влево
+            if (SelectedCardButton == null || SelectedCardButton.Card == null || Cards.Count == 0) return;
+
+            var index = Cards.IndexOf(SelectedCardButton.Card);
+
+            if (index-Columns < 0 || index >= Cards.Count) return;
+
+            var prevCard = Cards[index - Columns];
+            Cards[index - Columns] = Cards[index];
+            Cards[index] = prevCard;
+
+            Update(Cards);
+
+            Edit();
+        }
+
+        public void MoveCardDown()
+        {
+            // Переместить карточку вправо
+            if (SelectedCardButton == null || SelectedCardButton.Card == null) return;
+
+            var index = Cards.IndexOf(SelectedCardButton.Card);
+            var sindex = index;
+            if ((index + Columns) / Columns > Rows-1) return;
+            var newIndex = index + Columns;
+            if (Cards.Count < newIndex)
+            {
+                while (index < newIndex)
+                {
+                    MoveCardRight();
+                    index++;
+                    SelectedCardButton = _buttons[index];
+                }
+            }
+            else
+            {
+                var tmp = Cards[newIndex];
+                Cards[newIndex] = Cards[index];
+                Cards[index] = tmp;
+            }
+                Update(Cards);
+
+            Edit();
+        }
+
         protected virtual CardButton CreateCardButton()
         {
             return new CardButton();

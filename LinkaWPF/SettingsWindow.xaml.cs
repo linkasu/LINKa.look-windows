@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,11 @@ namespace LinkaWPF
             isJoystickEnabledCheckBox.IsChecked = _settings.IsJoystickEnabled;
             isKeyboardEnabledCheckBox.IsChecked = _settings.IsKeyboardEnabled;
             isMouseEnabledCheckBox.IsChecked = _settings.IsMouseEnabled;
+            isOutputTypeCheckBox.IsChecked = _settings.IsOutputType;
 
+            voiceSelect.ItemsSource = YandexVoice.VOICES;
+            voiceSelect.SelectedIndex = YandexVoice.FindIndexById(_settings.VoiceId);
+          
             DataContext = _settings;
         }
 
@@ -137,11 +142,11 @@ namespace LinkaWPF
             _settings.IsJoystickEnabled = isJoystickEnabledCheckBox.IsChecked ?? true;
             _settings.IsKeyboardEnabled = isKeyboardEnabledCheckBox.IsChecked ?? true;
             _settings.IsMouseEnabled = isMouseEnabledCheckBox.IsChecked ?? true;
-
+            _settings.VoiceId = ((YandexVoice) voiceSelect.SelectionBoxItem).Id??"alena";
+            _settings.IsOutputType = isOutputTypeCheckBox.IsChecked ?? false;
             Settings = _settings;
             DialogResult = true;
         }
-
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
             Settings = null;
