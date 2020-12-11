@@ -352,7 +352,8 @@ namespace LinkaWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                MessageBoxResult messageBoxResult = MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
