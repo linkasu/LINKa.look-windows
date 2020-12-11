@@ -79,10 +79,13 @@ namespace LinkaWPF
         private void CardBoard_SelectedCardChanged(object sender, EventArgs e)
         {
             ChangeStatusPlayButton();
-            editButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
-            deleteButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
-            moveToLeftButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
-            moveToRightButton.IsEnabled = cardBoard.SelectedCard == null ? false : true;
+            var isNull = cardBoard.SelectedCard  == null ? false : true;
+            editButton.IsEnabled = isNull;
+            deleteButton.IsEnabled = isNull;
+            moveToLeftButton.IsEnabled = isNull;
+            moveToRightButton.IsEnabled = isNull;
+            moveToUpButton.IsEnabled = isNull;
+            moveToDownButton.IsEnabled = isNull;
         }
 
         private void CardBoard_CurrentPageChanged(object sender, EventArgs e)
@@ -194,6 +197,16 @@ namespace LinkaWPF
         private void MoveToRight(object sender, RoutedEventArgs e)
         {
             cardBoard.MoveCardRight();
+        }
+
+        private void MoveToDown(object sender, RoutedEventArgs e)
+        {
+            cardBoard.MoveCardDown();
+        }
+
+        private void MoveToUp(object sender, RoutedEventArgs e)
+        {
+            cardBoard.MoveCardUp();
         }
 
         private void SaveCardSet_Click(object sender, RoutedEventArgs e)
