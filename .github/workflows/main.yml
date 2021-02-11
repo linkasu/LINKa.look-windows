@@ -64,6 +64,7 @@ jobs:
             7z x _DX_.exe 
             7z x  dxsdk.exe
             rm _DX_.exe dxsdk.exe
+            mkdir $HOME/cache
             cp -rf ./* $HOME/cache
       shell: bash
     # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
