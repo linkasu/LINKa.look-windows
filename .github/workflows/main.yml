@@ -58,10 +58,10 @@ jobs:
     - name:  Cache create
       if:    steps.cache.outputs.cache-hit != 'true'
       run:   |
-            curl -L https://download.microsoft.com/download/a/e/7/ae743f1f-632b-4809-87a9-aa1bb3458e31/DXSDK_Jun10.exe -o _DX2010_.exe
-            7z x _DX2010_.exe DXSDK/Include -o_DX2010_
-            7z x _DX2010_.exe DXSDK/Lib/x86 -o_DX2010_
-            mv _DX2010_/DXSDK $HOME/cache
+            curl -L https://download.microsoft.com/download/d/b/9/db9153aa-4419-4a06-a1f1-aafd7944f453/dxsdk_march2008.exe -o _DX_.exe
+            7z x _DX_.exe DXSDK/Include -o_DX_
+            7z x _DX_.exe DXSDK/Lib/x86 -o_DX_
+            mv _DX_/DXSDK $HOME/cache
             rm -fR _DX*_ _DX*_.exe
       shell: bash
     # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
