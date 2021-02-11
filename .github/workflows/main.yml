@@ -52,6 +52,10 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.1
 
     # Restore the application
+    - name: Restore packages
+      run: nuget restore $env:Solution_Path 
+      
+    # Restore the application
     - name: Build solution
       run: msbuild $env:Solution_Path 
       
