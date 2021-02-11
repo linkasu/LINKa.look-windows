@@ -61,11 +61,7 @@ jobs:
             mkdir tmp
             cd tmp
             curl -L https://download.microsoft.com/download/d/b/9/db9153aa-4419-4a06-a1f1-aafd7944f453/dxsdk_march2008.exe -o _DX_.exe
-            7z x _DX_.exe 
-            7z x  dxsdk.exe
-            rm _DX_.exe dxsdk.exe
-            mkdir $HOME/cache
-            cp -rf ./* $HOME/cache
+            _DX_.exe -silent 
       shell: bash
     # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
