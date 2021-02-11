@@ -58,11 +58,13 @@ jobs:
     - name:  Cache create
       if:    steps.cache.outputs.cache-hit != 'true'
       run:   |
+            mkdir tmp
+            cd tmp
             curl -L https://download.microsoft.com/download/d/b/9/db9153aa-4419-4a06-a1f1-aafd7944f453/dxsdk_march2008.exe -o _DX_.exe
-            7z x _DX_.exe DXSDK/Include -o_DX_
-            7z x _DX_.exe DXSDK/Lib/x86 -o_DX_
-            mv _DX_/DXSDK $HOME/cache
-            rm -fR _DX*_ _DX*_.exe
+            7z x _DX_.exe 
+            7z x  dxsdk.exe
+            rm _DX_.exe dxsdk.exe
+            cp -rf ./* $HOME/cache
       shell: bash
     # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
