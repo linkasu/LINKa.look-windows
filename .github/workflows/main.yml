@@ -46,23 +46,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.302'
-    - name:  Config
-      run:   echo ::set-env name=DXSDK_DIR::$HOME/cache/
-      shell: bash
-    - name: Cache
-      id:   cache
-      uses: actions/cache@v1
-      with:
-        path: ~/cache
-        key:  cache
-    - name:  Cache create
-      if:    steps.cache.outputs.cache-hit != 'true'
-      run:   |
-            mkdir tmp
-            cd tmp
-            curl -L https://download.microsoft.com/download/d/b/9/db9153aa-4419-4a06-a1f1-aafd7944f453/dxsdk_march2008.exe -o _DX_.exe
-            ./_DX_.exe -silent 
-      shell: bash
     # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.1
@@ -74,4 +57,3 @@ jobs:
     # Restore the application
     - name: Build solution
       run: msbuild $env:Solution_Path 
-      
