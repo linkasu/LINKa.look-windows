@@ -50,7 +50,7 @@ jobs:
       
     # Restore the application
     - name: Build solution
-      run: msbuild $env:Solution_Path 
+      run: msbuild $env:Solution_Path /t:Build /p:Configuration=Release  
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
