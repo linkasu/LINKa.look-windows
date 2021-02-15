@@ -1,0 +1,67 @@
+name:  Wpf Continuous Integration
+
+# Trigger on every master branch push and pull request
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        targetplatform: [x86]
+
+    runs-on: windows-latest
+
+    env:
+      App_Packages_Directory: LINKaWPF
+      # SigningCertificate: GitHubActionsDemo.pfx
+      Solution_Path: LINKaLooks.sln
+      # Test_Project_Path: MyWpfApp.Tests\MyWpfApp.Tests.csproj
+      Wpf_Project_Path: LINKaWPF\Linkaa.Looks.csproj
+      # Wap_Project_Directory: MyWpfApp.Package
+      # Wap_Project_Name: MyWpfApp.Package.wapproj
+      Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+
+    # Use Nerdbank.GitVersioning to set version variables: https://github.com/AArnott/nbgv
+    - name: Use Nerdbank.GitVersioning to set version variables
+      uses: aarnott/nbgv@v0.3
+      with:
+        setAllVars: true
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.302'
+    # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.1
+
+    # Restore the application
+    - name: Restore packages
+      run: nuget restore $env:Solution_Path 
+      
+    # Restore the application
+    - name: Build solution
+      run: msbuild $env:Solution_Path 
+      
+
+    # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: MSIX Package
+        path: ${{ env.Wap_Project_Directory }}\AppPackages
