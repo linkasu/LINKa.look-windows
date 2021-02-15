@@ -76,15 +76,15 @@ jobs:
           path: LinkaWPF/bin/Release
       
       - name: Download inno setup
-          run: |
-            curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.1.2.exe  -o is.exe
-            ./is.exe /silent
-          shell: bash
+        run: |
+          curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.1.2.exe -o is.exe
+          ./is.exe /silent
+        shell: bash
 
       - name: Building the installer
-          run: |
-            "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Linka.looks.iss"
-          shell: cmd
+        run: |
+          "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Linka.looks.iss"
+        shell: cmd
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
