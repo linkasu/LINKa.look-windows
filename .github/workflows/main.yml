@@ -8,7 +8,6 @@ on:
       - master
 
 jobs:
-
   build:
 
     strategy:
@@ -16,7 +15,7 @@ jobs:
         targetplatform: [x86]
 
     runs-on: windows-latest
-
+    name: Build
     env:
       App_Packages_Directory: LINKaWPF
       Solution_Path: LINKaLooks.sln
@@ -55,5 +54,39 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: Release-bin
         path: LinkaWPF/bin/Release
+  installer:
+    name: Create installer
+    strategy:
+      matrix:
+        targetplatform: [x86]
+
+
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Release-bin
+          path: LinkaWPF/bin/Release
+      
+      - name: Download inno setup
+          run: |
+            curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.1.2.exe  -o is.exe
+            ./is.exe /silent
+          shell: bash
+
+      - name: Building the installer
+          run: |
+            "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Linka.looks.iss"
+          shell: cmd
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Installer-bin
+          path: Releases/linka.looks.setup.exe
