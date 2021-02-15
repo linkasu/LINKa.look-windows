@@ -1,6 +1,4 @@
 name:  Wpf Continuous Integration
-
-# Trigger on every master branch push and pull request
 on:
   push:
     branches:
@@ -21,12 +19,8 @@ jobs:
 
     env:
       App_Packages_Directory: LINKaWPF
-      # SigningCertificate: GitHubActionsDemo.pfx
       Solution_Path: LINKaLooks.sln
-      # Test_Project_Path: MyWpfApp.Tests\MyWpfApp.Tests.csproj
       Wpf_Project_Path: LINKaWPF\Linkaa.Looks.csproj
-      # Wap_Project_Directory: MyWpfApp.Package
-      # Wap_Project_Name: MyWpfApp.Package.wapproj
       Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
 
     steps:
@@ -57,3 +51,9 @@ jobs:
     # Restore the application
     - name: Build solution
       run: msbuild $env:Solution_Path 
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: LinkaWPF/bin/Release
