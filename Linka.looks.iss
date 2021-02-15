@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LINKa. смотри"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.4.0.0"
 #define MyAppPublisher "LINKa"
 #define MyAppURL "http://www.linka.su"
 #define MyAppExeName "linka.looks.exe"
@@ -22,7 +22,7 @@ DefaultDirName={autopf}\LINka\LINKa.Looks
 DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=C:\Users\Ivan Bakaidov\LINKa\Releases
+OutputDir=C:\Users\aacidov\LINKa\Releases
 OutputBaseFilename=linka.looks.setup
 Compression=lzma
 SolidCompression=yes
@@ -35,9 +35,9 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\Ivan Bakaidov\source\repos\LINKa.look-windows\LinkaWPF\bin\Release\Linka.looks.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Ivan Bakaidov\source\repos\LINKa.look-windows\LinkaWPF\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Ivan Bakaidov\source\repos\LINKa.look-windows\DefaultSets\*"; DestDir: "{userdocs}\LINKa"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist
+Source: "C:\Users\aacidov\source\repos\LINKa.look-windows\LinkaWPF\bin\Release\Linka.looks.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\aacidov\source\repos\LINKa.look-windows\LinkaWPF\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\aacidov\source\repos\LINKa.look-windows\DefaultSets\*"; DestDir: "{userdocs}\LINKa"; Flags: ignoreversion recursesubdirs createallsubdirs onlyifdoesntexist
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
  
  [Registry]

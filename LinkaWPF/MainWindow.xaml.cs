@@ -22,6 +22,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Tobii.Interaction;
+using WindowsInput;
 
 namespace LinkaWPF
 {
@@ -37,11 +38,12 @@ namespace LinkaWPF
         private readonly Host _host;
         private Settings _settings;
         private Player _player;
+        private InputSimulator inputSimulator;
 
         public MainWindow(Settings settings)
         {
             StaticServer.instance.ReportEvent("startupApp") ;
-            
+            inputSimulator = new InputSimulator();
             InitializeComponent();
 
             _tempDirPath = settings.TempDirPath;
@@ -60,10 +62,14 @@ namespace LinkaWPF
             cardBoard.Cards = _cards;
 
             _words = new List<Card>();
+            try
+            {
+                var joystick = new Joysticks();
+                joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
+            } catch(Exception e)
+            {
 
-            var joystick = new Joysticks();
-            joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
-
+            }
             _player = new Player(_yandexSpeech);
         }
 
@@ -90,7 +96,8 @@ namespace LinkaWPF
             _settings.IsJoystickEnabled = settings.IsJoystickEnabled;
             _settings.IsKeyboardEnabled = settings.IsKeyboardEnabled;
             _settings.IsMouseEnabled = settings.IsMouseEnabled;
-
+            _settings.VoiceId = settings.VoiceId;
+            _settings.IsOutputType = settings.IsOutputType;
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }
 
@@ -198,6 +205,7 @@ namespace LinkaWPF
             if (cardButton.Card == null) return;
             
             StaticServer.instance.ReportEvent("CardSelected") ;
+          
             if (_settings.IsPlayAudioFromCard == true)
             {
                 var cards = new List<Card>();
@@ -206,24 +214,42 @@ namespace LinkaWPF
             }
             else
             {
-                if (WithoutSpace == false)
-                    text.Text += (text.Text != string.Empty ? " " : string.Empty);
-
-                if (cardButton.Card.CardType == CardType.Space)
+                Stream str = Properties.Resources.type;
+                System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+                snd.Play();
+                if (_settings.IsOutputType)
                 {
-                    text.Text += " ";
+                    if (cardButton.Card.CardType == CardType.Space)
+                    {
+                        inputSimulator.Keyboard.TextEntry(" ");
+                    }
+                    else
+                    {
+                        inputSimulator.Keyboard.TextEntry(cardButton.Card.Title);
+                    }
+
                 }
                 else
                 {
-                    text.Text += cardButton.Card.Title;
+                    if (WithoutSpace == false)
+                        text.Text += (text.Text != string.Empty ? " " : string.Empty);
+
+                    if (cardButton.Card.CardType == CardType.Space)
+                    {
+                        text.Text += " ";
+                    }
+                    else
+                    {
+                        text.Text += cardButton.Card.Title;
+                    }
+
+                    // Переставить курсор в конец строки
+                    text.Select(text.Text.Length, 0);
+
+                    // Добавить карточку в цепочку
+                    _words.Add(cardButton.Card);
                 }
-
-                // Переставить курсор в конец строки
-                text.Select(text.Text.Length, 0);
-
-                // Добавить карточку в цепочку
-                _words.Add(cardButton.Card);
-            }
+                }
         }
 
         private void cardButton_Click(object sender, EventArgs e)
@@ -255,21 +281,28 @@ namespace LinkaWPF
 
         private void removeLastWordButton_Click(object sender, RoutedEventArgs e)
         {
-            if (WithoutSpace == true)
+            if (_settings.IsOutputType)
             {
-                if (text.Text.Length > 0) text.Text = text.Text.Remove(text.Text.Length - 1, 1);
+                inputSimulator.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.BACK);
             }
             else
             {
-                // Удалить последнее слово из текстового поля
-                var end = text.Text.LastIndexOf(' ');
-                text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
+                if (WithoutSpace == true)
+                {
+                    if (text.Text.Length > 0) text.Text = text.Text.Remove(text.Text.Length - 1, 1);
+                }
+                else
+                {
+                    // Удалить последнее слово из текстового поля
+                    var end = text.Text.LastIndexOf(' ');
+                    text.Text = end <= 0 ? "" : text.Text.Substring(0, end);
 
-                // Переставить курсор в конец строки
-                text.Select(text.Text.Length, 0);
+                    // Переставить курсор в конец строки
+                    text.Select(text.Text.Length, 0);
 
-                // Удалить последнее слово из цепочки слов
-                if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
+                    // Удалить последнее слово из цепочки слов
+                    if (_words.Count > 0) _words.RemoveAt(_words.Count - 1);
+                }
             }
         }
 
@@ -304,7 +337,7 @@ namespace LinkaWPF
 
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
-
+                CurrentFileDescription = cardSetFile.Description;
                 WithoutSpace = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
@@ -319,7 +352,8 @@ namespace LinkaWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                MessageBoxResult messageBoxResult = MessageBox.Show(this, string.Format("При загрузке набора произошла ошибка! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -330,6 +364,7 @@ namespace LinkaWPF
         public Func<string, bool> ChangeMode;
 
         public string CurrentFileName { get; set; }
+        public string CurrentFileDescription { get; private set; }
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
@@ -377,6 +412,11 @@ namespace LinkaWPF
         private void changeGazeStatusButton_Click(object sender, RoutedEventArgs e)
         {
             Settings.IsHasGazeEnabled = !Settings.IsHasGazeEnabled;
+        }
+
+        private void OpenDescription_Click(object sender, RoutedEventArgs e)
+        {
+            new DescriptionWindow(false, CurrentFileDescription).Show();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LinkaWPF
     class StaticServer
     {
         private static string SERVER = "http://linka.su:5443/";
-        private static string DISTFOLDER = "https://linka.su/dist/linka.looks/";
+        public static string DISTFOLDER = "https://linka.su/dist/linka.looks/";
         private static StaticServer _instance;
 
         public static StaticServer instance
@@ -39,6 +39,7 @@ namespace LinkaWPF
             JObject obj = new JObject();
             obj.Add("event", eventType);
             obj.Add("uuid", uuid);
+            obj.Add("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             if (parameters!=null) obj.Add("params", JObject.FromObject(parameters));
 
             var httpContent = new StringContent(obj.ToString());
@@ -67,6 +68,7 @@ namespace LinkaWPF
             var jobject = JObject.Parse(responseBody);
             var newVersion = new Version(jobject.Value<string>("version"));
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
             if (newVersion.CompareTo(currentVersion) == 1)
             {
 
@@ -78,10 +80,14 @@ namespace LinkaWPF
                                              MessageBoxButtons.YesNo,
                                              MessageBoxIcon.Question);
 
-                // If the no button was pressed ...
+
                 if (result == DialogResult.Yes)
                 {
-                    System.Diagnostics.Process.Start(DISTFOLDER + "linka.looks.setup.exe");
+
+                    var window = (new UpdateWindow());
+                    window.Show();
+
+                    //    System.Diagnostics.Process.Start();
                 }
 
             }
