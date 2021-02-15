@@ -58,10 +58,7 @@ jobs:
         path: LinkaWPF/bin/Release
   installer:
     name: Create installer
-    strategy:
-      matrix:
-        targetplatform: [x86]
-
+    needs: build
 
     runs-on: windows-latest
     steps:
