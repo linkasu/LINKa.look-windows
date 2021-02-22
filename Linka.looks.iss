@@ -2,10 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LINKa. Смотри"
-#define MyAppVersion "1.4.0.0"
 #define MyAppPublisher "LINKa"
 #define MyAppURL "http://www.linka.su"
 #define MyAppExeName "linka.looks.exe"
+#define MyAppVersion GetStringFileInfo(".\LinkaWPF\bin\Release\Linka.looks.exe", "FileVersion")
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
