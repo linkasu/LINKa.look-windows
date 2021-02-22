@@ -39,7 +39,6 @@ namespace LinkaWPF
         private Settings _settings;
         private Player _player;
         private InputSimulator inputSimulator;
-
         public MainWindow(Settings settings)
         {
             StaticServer.instance.ReportEvent("startupApp") ;
@@ -339,7 +338,8 @@ namespace LinkaWPF
                 cardBoard.Rows = cardSetFile.Rows;
                 CurrentFileDescription = cardSetFile.Description;
                 WithoutSpace = cardSetFile.WithoutSpace;
-
+                IsDirectSet = cardSetFile.DirectSet;
+                _settings.IsPlayAudioFromCard = IsDirectSet;
                 _cards = cardSetFile.Cards;
                 foreach (var card in _cards)
                 {
@@ -360,6 +360,7 @@ namespace LinkaWPF
         }
 
         public bool WithoutSpace { get; set; }
+        private bool IsDirectSet { get; set; }
 
         public Func<string, bool> ChangeMode;
 

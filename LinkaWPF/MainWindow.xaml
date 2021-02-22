@@ -22,6 +22,7 @@
                     <Style TargetType="{x:Type RowDefinition}">
                         <Setter Property="Height" Value="1*" />
                         <Style.Triggers>
+
                             <DataTrigger Binding="{Binding IsPlayAudioFromCard}" Value="True">
                                 <Setter Property="Height" Value="0" />
                             </DataTrigger>

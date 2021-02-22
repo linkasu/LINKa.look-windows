@@ -241,7 +241,7 @@ namespace LinkaWPF
         {
             try
             {
-                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards, Description);
+                var cardSetFile = new CardSetFile(cardBoard.Columns, cardBoard.Rows, WithoutSpace, _cards, Description, DirectSet);
                 var cardSetLoader = new CardSetLoader();
                 cardSetLoader.SaveToFile(fileName, cardSetFile);
 
@@ -295,6 +295,7 @@ namespace LinkaWPF
                 cardBoard.Columns = cardSetFile.Columns;
                 cardBoard.Rows = cardSetFile.Rows;
                 Description = cardSetFile.Description??"";
+                DirectSet = cardSetFile.DirectSet == null ? false : cardSetFile.DirectSet;
                 WithoutSpace = cardSetFile.WithoutSpace;
 
                 _cards = cardSetFile.Cards;
@@ -392,6 +393,7 @@ namespace LinkaWPF
         }
 
         public string CurrentFileName { get; set; }
+        public bool DirectSet { get; private set; }
 
         public Func<bool> ChangeMode;
         private Settings _settings;
