@@ -100,6 +100,7 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
-          echo $SSH_KEY >> ~/.ssh/known_hosts
-          cat Releases/linka.looks.setup.exe | ssh linka.su sh /var/www/wordpress/dist/linka.looks/updatefile.sh
+          mkdir ~/.ssh/
+          echo $SSH_KEY >> ~/.ssh/key
+          cat Releases/linka.looks.setup.exe | ssh -i ~/.ssh/key -o StictHostKetChecking=no aacidov@linka.su sh /var/www/wordpress/dist/linka.looks/updatefile.sh
           
