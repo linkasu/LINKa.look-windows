@@ -102,5 +102,5 @@ jobs:
         run: |
           mkdir ~/.ssh/
           echo $SSH_KEY >> ~/.ssh/key
-          cat Releases/linka.looks.setup.exe | ssh -i ~/.ssh/key -o StictHostKetChecking=no aacidov@linka.su sh /var/www/wordpress/dist/linka.looks/updatefile.sh
+          cat Releases/linka.looks.setup.exe | ssh -i ~/.ssh/key -o StrictHostKeyChecking=no aacidov@linka.su sh /var/www/wordpress/dist/linka.looks/updatefile.sh
           
