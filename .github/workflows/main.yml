@@ -28,26 +28,22 @@ jobs:
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
 
-    # Use Nerdbank.GitVersioning to set version variables: https://github.com/AArnott/nbgv
     - name: Use Nerdbank.GitVersioning to set version variables
       uses: aarnott/nbgv@v0.3
       with:
         setAllVars: true
 
-    # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '3.1.302'
-    # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
+
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.1
 
-    # Restore the application
     - name: Restore packages
       run: nuget restore $env:Solution_Path 
       
-    # Restore the application
     - name: Build solution
       run: msbuild $env:Solution_Path /t:Build /p:Configuration=Release  
     
@@ -56,35 +52,29 @@ jobs:
       with:
         name: Release-bin
         path: LinkaWPF/bin/Release
+  
   installer:
     name: Create installer
     needs: build
-
     runs-on: windows-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+  
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: Release-bin
           path: LinkaWPF/bin/Release
-      
-      # - name: Download inno setup
-      #   run: |
-      #     cd
-      #     curl https://mlaan2.home.xs4all.nl/ispack/innosetup-6.1.2.exe -o is.exe
-      #     chmod +x ./is.exe
-      #     ./is.exe /silent /currentuser
-      #   shell: bash
-
+  
       - name: Building the installer
         run: |
           "%programfiles(x86)%\Inno Setup 6\iscc.exe" "Linka.looks.iss"
-  
         shell: cmd
+  
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
