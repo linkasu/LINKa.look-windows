@@ -96,12 +96,13 @@ jobs:
         with:
           name: Installer-bin
           path: Releases/
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.SSH_KEY }}" > "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/key"
       - name: Deploy to server
         env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}      
         run: |
-          mkdir ~/.ssh/
-          echo $SSH_KEY >> ~/.ssh/key
-          chmod 600 ~/.ssh/key
           cat Releases/linka.looks.setup.exe | ssh -i ~/.ssh/key -o StrictHostKeyChecking=no aacidov@linka.su sh /var/www/wordpress/dist/linka.looks/updatefile.sh
           
