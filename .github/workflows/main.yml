@@ -80,3 +80,26 @@ jobs:
         with:
           name: Installer-bin
           path: Releases/linka.looks.setup.exe
+  deploy:
+    name: Deploy to server
+    needs: installer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+  
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Installer-bin
+          path: Releases/
+      - name: Deploy to server
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          echo $SSH_KEY >> ~/.ssh/known_hosts
+          cat Releases/linka.looks.setup.exe | ssh linka.su sh /var/www/wordpress/dist/linka.looks/updatefile.sh
+          
