@@ -46,12 +46,22 @@ jobs:
       
     - name: Build solution
       run: msbuild $env:Solution_Path /t:Build /p:Configuration=Release  
-    
+    - name: Start app
+      run: LinkaWPF/bin/Linka.looks.exe -p ./DefaultSets/Клавиатура.linka
+    - name: Take Screen
+      uses: OrbitalOwen/desktop-screenshot-action@0.1
+      with:
+        file-name: 'desktop.jpg'
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Release-bin
         path: LinkaWPF/bin/Release
+    - name: Upload screen artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Screen
+        path: desktop.jpg
   
   installer:
     name: Create installer
