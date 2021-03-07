@@ -87,11 +87,11 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <local:AnimatedButton Grid.Column="0" Margin="2" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="{Binding Path=IsHasGazeEnabled,Mode=TwoWay}" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="changeGazeStatusButton_Click">
+            <local:AnimatedButton Grid.Column="0" Margin="2" IsMouseEnabled="{Binding Path=IsMouseEnabled,Mode=TwoWay}" IsHasGazeEnabled="True" IsAnimatedClickEnabled="{Binding Path=IsAnimatedClickEnabled,Mode=TwoWay}" ClickDelay="{Binding Path=ClickDelay,Mode=TwoWay}" Click="changeGazeStatusButton_Click">
                 <local:AnimatedButton.Style>
                     <Style TargetType="local:AnimatedButton">
                         <Style.Triggers>
-                            <Trigger Property="IsHasGazeEnabled" Value="False">
+                            <DataTrigger Binding="{Binding Path=IsHasGazeEnabled}" Value="False">
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <Viewbox Width="48" Height="48">
@@ -101,8 +101,8 @@
                                         </Viewbox>
                                     </Setter.Value>
                                 </Setter>
-                            </Trigger>
-                            <Trigger Property="IsHasGazeEnabled" Value="True">
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsHasGazeEnabled}" Value="True">
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <Viewbox Width="48" Height="48">
@@ -112,7 +112,7 @@
                                         </Viewbox>
                                     </Setter.Value>
                                 </Setter>
-                            </Trigger>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </local:AnimatedButton.Style>
