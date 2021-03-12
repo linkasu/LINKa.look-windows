@@ -75,6 +75,7 @@
                 <MenuItem Header="Выйти" Click="Exit_Click"/>
             </MenuItem>
             <MenuItem Header="Заметки по работе с набором" Click="OpenDescription_Click"></MenuItem>
+            <CheckBox Content="Включить контроль при помощи айтрекера" IsChecked="{Binding Path=IsHasGazeEnabled, Mode=TwoWay}" />
         </Menu>
 
         <!-- Text -->
