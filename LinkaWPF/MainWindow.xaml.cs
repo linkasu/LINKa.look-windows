@@ -339,7 +339,7 @@ namespace LinkaWPF
                 CurrentFileDescription = cardSetFile.Description;
                 WithoutSpace = cardSetFile.WithoutSpace;
                 IsDirectSet = cardSetFile.DirectSet;
-                _settings.IsPlayAudioFromCard = IsDirectSet;
+                _settings.IsPlayAudioFromCard = IsDirectSet?true:_settings.IsPlayAudioFromCard;
                 _cards = cardSetFile.Cards;
                 foreach (var card in _cards)
                 {
