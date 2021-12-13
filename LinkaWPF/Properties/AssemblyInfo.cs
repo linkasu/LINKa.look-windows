@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("LINKa")]
-[assembly: AssemblyProduct("LINKa. смотри")]
+[assembly: AssemblyProduct("LINKa.smotri")]
 [assembly: AssemblyCopyright("Бакаидов Иван Александрович ©  2020")]
 [assembly: AssemblyTrademark("LINKa")]
 [assembly: AssemblyCulture("")]
@@ -50,6 +50,6 @@ using System.Windows;
 // Можно задать все значения или принять номер сборки и номер редакции по умолчанию.
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.6.1.2")]
-[assembly: AssemblyFileVersion("1.6.1.2")]
+[assembly: AssemblyVersion("1.6.1.3")]
+[assembly: AssemblyFileVersion("1.6.1.3")]
 [assembly: NeutralResourcesLanguage("ru-RU")]
