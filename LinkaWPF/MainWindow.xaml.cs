@@ -39,6 +39,8 @@ namespace LinkaWPF
         private Settings _settings;
         private Player _player;
         private InputSimulator inputSimulator;
+        private MousePointWindow mousePointWindow;
+
         public MainWindow(Settings settings)
         {
             StaticServer.instance.ReportEvent("startupApp") ;
@@ -97,6 +99,7 @@ namespace LinkaWPF
             _settings.IsMouseEnabled = settings.IsMouseEnabled;
             _settings.VoiceId = settings.VoiceId;
             _settings.IsOutputType = settings.IsOutputType;
+            _settings.MousePointReactionFilter = settings.MousePointReactionFilter;
             _settings.SettingsLoader.SaveToFile(_settings.ConfigFilePath, _settings);
         }
 
@@ -418,6 +421,27 @@ namespace LinkaWPF
         private void OpenDescription_Click(object sender, RoutedEventArgs e)
         {
             new DescriptionWindow(false, CurrentFileDescription).Show();
+        }
+
+        private void StartMousePoint_Click(object sender, RoutedEventArgs e)
+        {
+            if (mousePointWindow == null || !mousePointWindow.IsEnabled)
+            {
+                MousePointButton.Content = "Выключить КликМышь";
+                mousePointWindow = new MousePointWindow(_host, _settings);
+                mousePointWindow.Show();
+                
+            } else {
+                MousePointButton.Content = "Включить КликМышь";
+
+                mousePointWindow.Close();
+                mousePointWindow = null;
+            }
+        }
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+if(mousePointWindow!=null)            mousePointWindow.Close();
         }
     }
 }

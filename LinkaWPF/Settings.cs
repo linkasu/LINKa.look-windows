@@ -21,6 +21,7 @@ namespace LinkaWPF
         private bool _isMouseEnabled;
         private string _voiceId;
         private bool _isOutputType;
+        private double _mousePointReactionFilter;
 
         public Dictionary<string, string> Keys { get; set; }
 
@@ -57,8 +58,20 @@ namespace LinkaWPF
         public double ClickDelay
         {
             get { return _clickDelay; }
-            set {
+            set
+            {
                 _clickDelay = value;
+                OnPropertyChanged();
+            }
+
+
+        }
+        public double MousePointReactionFilter
+        {
+            get { return _mousePointReactionFilter; }
+            set
+            {
+                _mousePointReactionFilter = value;
                 OnPropertyChanged();
             }
         }

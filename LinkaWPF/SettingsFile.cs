@@ -20,6 +20,8 @@ namespace LinkaWPF
 
         [JsonProperty("clickDelay")]
         public double? ClickDelay { get; set; }
+        [JsonProperty("mousePointReactionFilter")]
+        public double? MousePointReactionFilter {  get; set; }
 
         [JsonProperty("isPlayAudioFromCard")]
         public bool? IsPlayAudioFromCard { get; set; }

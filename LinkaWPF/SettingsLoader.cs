@@ -25,6 +25,8 @@ namespace LinkaWPF
                 IsMouseEnabled = settings.IsMouseEnabled,
                 VoiceId = settings.VoiceId,
                 IsOutputType = settings.IsOutputType,
+
+                MousePointReactionFilter = settings.MousePointReactionFilter
             };
 
             string json = JsonConvert.SerializeObject(settingsFile, Formatting.Indented);
@@ -52,8 +54,9 @@ namespace LinkaWPF
                     IsJoystickEnabled = settingsFile.IsJoystickEnabled ?? false,
                     IsKeyboardEnabled = settingsFile.IsKeyboardEnabled ?? false,
                     IsMouseEnabled = settingsFile.IsMouseEnabled ?? true,
-                    VoiceId = settingsFile.VoiceId??"jane",
-                    IsOutputType = settingsFile.IsOutputType??false
+                    VoiceId = settingsFile.VoiceId ?? "jane",
+                    IsOutputType = settingsFile.IsOutputType ?? false,
+                    MousePointReactionFilter = settingsFile.MousePointReactionFilter ?? 30
                 };
             }
         }

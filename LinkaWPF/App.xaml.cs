@@ -147,6 +147,7 @@ namespace LinkaWPF
         private void ShowMainWindow(string path)
         {
             var mainWindow = new MainWindow(_settings);
+            
             mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             mainWindow.ChangeMode = (str) =>
             {

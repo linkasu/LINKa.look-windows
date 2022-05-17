@@ -194,5 +194,11 @@ namespace LinkaWPF
         {
             _settings.ClickDelay += 0.1;
         }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(_settings!=null)
+            _settings.MousePointReactionFilter = e.NewValue;
+        }
     }
 }
