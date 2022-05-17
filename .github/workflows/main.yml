@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-
+  
 jobs:
   build:
 
@@ -88,8 +88,6 @@ jobs:
     name: Deploy to server
     needs: installer
     runs-on: ubuntu-latest
-    on:
-      [master]
 
     steps:
       - name: Checkout
