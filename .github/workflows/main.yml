@@ -11,7 +11,7 @@ jobs:
       matrix:
         targetplatform: [x86]
 
-    runs-on: windows-latest
+    runs-on: windows-2019
     name: Build
     env:
       App_Packages_Directory: LINKaWPF
@@ -35,12 +35,6 @@ jobs:
       with:
         dotnet-version: '3.1.302'
 
-
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '4.5.x'
-
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.1
 
@@ -50,7 +44,7 @@ jobs:
     - name: Build solution
       run: msbuild $env:Solution_Path /t:Build /p:Configuration=Release  
     - name: Start app
-      run: .\LinkaWPF\bin\Release\Linka.looks.exe -p .\DefaultSets\Клавиатура.linka
+      run: .\LinkaWPF\bin\Release\Linka.looks.exe 
     - name: Wait starting (10s)
       run: sleep 10
     - name: Take Screen
@@ -66,7 +60,7 @@ jobs:
   installer:
     name: Create installer
     needs: build
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
       - name: Checkout
