@@ -1,9 +1,7 @@
 name:  Wpf Continuous Integration
 on:
-  push:
-    branches:
-      - master
-
+  push
+  
 jobs:
   build:
 
@@ -43,14 +41,7 @@ jobs:
       
     - name: Build solution
       run: msbuild $env:Solution_Path /t:Build /p:Configuration=Release  
-    - name: Start app
-      run: .\LinkaWPF\bin\Release\Linka.looks.exe -p .\DefaultSets\Клавиатура.linka
-    - name: Wait starting (10s)
-      run: sleep 10
-    - name: Take Screen
-      uses: OrbitalOwen/desktop-screenshot-action@0.1
-      with:
-        file-name: 'desktop.jpg'
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -88,9 +79,9 @@ jobs:
     name: Deploy to server
     needs: installer
     runs-on: ubuntu-latest
-    on:
-      [master]
-
+    only:
+      - master
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
