@@ -375,6 +375,11 @@ namespace LinkaWPF
             var openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "Linka files(*.linka)|*.linka";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\LINKa";
+
+            if (CurrentFileName != null)
+            {
+               openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(CurrentFileName);
+            }
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
             LoadCardSet(openFileDialog.FileName);
