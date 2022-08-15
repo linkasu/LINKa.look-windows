@@ -79,8 +79,8 @@ jobs:
     name: Deploy to server
     needs: installer
     runs-on: ubuntu-latest
-    only:
-      - master
+    
+    if: github.ref == 'refs/heads/master'
     
     steps:
       - name: Checkout
