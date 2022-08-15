@@ -54,6 +54,7 @@ namespace LinkaWPF
 
             Caption = card.Title;
             Image = SetImageFromPath(card.ImagePath);
+            
             AudioPath = card.AudioPath;
 
             _yandexSpeech = yandexSpeech;
@@ -80,7 +81,7 @@ namespace LinkaWPF
             openFileDialog.Filter = "Images files(*.jpg,*.png,*.gif)|*.jpg;*.png;*.gif";
 
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
-
+            ImagePath = openFileDialog.FileName;
             Image = SetImageFromPath(openFileDialog.FileName);
         }
 
@@ -96,7 +97,7 @@ namespace LinkaWPF
                 var imageGenerator = new ImageGenerator();
                 var imagePath = string.Format("{0}\\{1}.png", _tempDirPath, Guid.NewGuid());
                 imageGenerator.GenerateImage(captionTextBox.Text, imagePath);
-
+                ImagePath = ImagePath;
                 Image = SetImageFromPath(imagePath);
             }
             catch (Exception ex)
@@ -104,7 +105,20 @@ namespace LinkaWPF
                 MessageBox.Show(this, string.Format("При создании картинки из текста произошла ошибка (возможно отсутствует интернет соединение)! Подробнее: {0}", ex.Message), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void SaveImageClick(object sender, RoutedEventArgs e) {
+            if(ImagePath == null)
+            {
+                MessageBox.Show(this, "Невозможносохранить картинку, которой нет");
+                return;
+            }
+            var saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            saveFileDialog.FileName = "Картинка." + System.IO.Path.GetExtension( ImagePath);
 
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return ;
+
+            File.Copy(ImagePath, saveFileDialog.FileName);
+
+        }
         private async Task<bool> UploadAudioFromYandex()
         {
             var result = false;
@@ -153,6 +167,7 @@ namespace LinkaWPF
             {
                 MessageBox.Show("Перед воспроизведением загрузите аудио файл!", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
+
             }
             var audio = new Audio(AudioPath);
             audio.Ending += new EventHandler((s, args) => {
