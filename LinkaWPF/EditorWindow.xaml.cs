@@ -393,7 +393,7 @@ namespace LinkaWPF
         }
 
         public string CurrentFileName { get; set; }
-        public bool DirectSet { get; private set; }
+        public bool DirectSet { get;  set; }
 
         public Func<bool> ChangeMode;
         private Settings _settings;
