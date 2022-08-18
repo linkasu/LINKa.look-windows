@@ -44,6 +44,7 @@ namespace LinkaWPF
 
         [JsonProperty("cards")]
         public IList<Card> Cards { get; set; }
+
     }
 }
         

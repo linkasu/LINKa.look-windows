@@ -1,5 +1,6 @@
 ﻿using LinkaWPF.Models;
 using LinkaWPF.Properties;
+using LinkaWPF.Utils;
 using Microsoft.DirectX.AudioVideoPlayback;
 using System;
 using System.Collections.Generic;
@@ -350,7 +351,7 @@ namespace LinkaWPF
                     if (card.AudioPath != null && card.AudioPath != string.Empty) card.AudioPath = destPath + card.AudioPath;
                 }
                 cardBoard.Update(_cards);
-
+                CurrentSeFile = cardSetFile;
                 CurrentFileName = path;
             }
             catch (Exception ex)
@@ -367,6 +368,7 @@ namespace LinkaWPF
 
         public Func<string, bool> ChangeMode;
 
+        public CardSetFile CurrentSeFile { get; private set; }
         public string CurrentFileName { get; set; }
         public string CurrentFileDescription { get; private set; }
 
@@ -442,6 +444,21 @@ namespace LinkaWPF
                 mousePointWindow.Close();
                 mousePointWindow = null;
             }
+        }
+
+        private void SaveSetToDirectory(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSeFile == null)
+            {
+
+                return;
+            }
+            var openDirectoryDialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (openDirectoryDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            var loader =  new CardSetLoader();
+            loader.SaveToDirectory(CurrentSeFile, openDirectoryDialog.SelectedPath);
+            ExplorerUtils.ExploreDirectory(openDirectoryDialog.SelectedPath);
         }
         protected override void OnClosed(EventArgs e)
         {
