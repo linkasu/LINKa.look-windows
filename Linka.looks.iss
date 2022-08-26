@@ -43,7 +43,7 @@ Source: ".\DefaultSets\*"; DestDir: "{userdocs}\LINKa"; Flags: ignoreversion rec
  [Registry]
 
 Root: HKCR; Subkey: ".linka";                             ValueData: "{#MyAppName}";          Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
-Root: HKCR; Subkey: "{#MyAppName}";                     ValueData: "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ {#MyAppName}";  Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
+Root: HKCR; Subkey: "{#MyAppName}";                     ValueData: "Открыть {#MyAppName}";  Flags: uninsdeletekey;   ValueType: string;  ValueName: ""
 Root: HKCR; Subkey: "{#MyAppName}\shell\open\command";  ValueData: """{app}\{#MyAppExeName}"" -p ""%1""";  ValueType: string;  ValueName: ""
 
 
@@ -51,6 +51,7 @@ Root: HKCR;  Subkey: "{#MyAppName}\DefaultIcon";        ValueData: "{app}\linka_
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autoprograms}\LINKa. КликМышь. Управление компьютером"; Filename: "{app}\{#MyAppExeName}"; Parameters: "/m"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]

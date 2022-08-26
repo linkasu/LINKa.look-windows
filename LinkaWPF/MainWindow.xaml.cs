@@ -430,22 +430,6 @@ namespace LinkaWPF
             new DescriptionWindow(false, CurrentFileDescription).Show();
         }
 
-        private void StartMousePoint_Click(object sender, RoutedEventArgs e)
-        {
-            if (mousePointWindow == null || !mousePointWindow.IsEnabled)
-            {
-                MousePointButton.Content = "Выключить КликМышь";
-                mousePointWindow = new MousePointWindow(_host, _settings);
-                mousePointWindow.Show();
-                
-            } else {
-                MousePointButton.Content = "Включить КликМышь";
-
-                mousePointWindow.Close();
-                mousePointWindow = null;
-            }
-        }
-
         private void SaveSetToDirectory(object sender, RoutedEventArgs e)
         {
             if (CurrentSeFile == null)

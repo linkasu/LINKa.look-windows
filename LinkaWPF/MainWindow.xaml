@@ -63,9 +63,8 @@
             </Grid.ColumnDefinitions>
             <Image   Grid.Column="1" HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100" Source="LINKa.looks-logo.png"/>
 
-            <Button Content="Открыть набор" Grid.Row="1" Grid.Column="1" Click="Open_Click"></Button>
-            <Button Content="Создать набор" Grid.Row="2" Grid.Column="1" Click="OpenEditor_Click"></Button>
-            <Button x:Name="MousePointButton" Content="Включить КликМышь" Grid.Row="3" Grid.Column="1" Click="StartMousePoint_Click"></Button>
+            <Button Content="Открыть набор" Grid.Row="2" Grid.Column="1" Click="Open_Click"></Button>
+            <Button Content="Создать набор" Grid.Row="3" Grid.Column="1" Click="OpenEditor_Click"></Button>
             <Button Content="Открыть настройки" Grid.Row="4" Grid.Column="1" Click="OpenSettings_Click"></Button>
         </Grid>
 
