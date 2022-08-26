@@ -54,8 +54,11 @@ namespace LinkaWPF
 
             Caption = card.Title;
             Image = SetImageFromPath(card.ImagePath);
-            
+
+            CardWidth = card.Width==0?1:card.Width;
+            CardHeight = card.Height == 0 ? 1:card.Height ;
             AudioPath = card.AudioPath;
+
 
             _yandexSpeech = yandexSpeech;
             _tempDirPath = tempDirPath;
@@ -300,7 +303,16 @@ namespace LinkaWPF
             get;
             private set;
         }
-
+        public int CardWidth
+        {
+            get { return int.Parse(widthTextBox.Text); }
+            private set { widthTextBox.Text = value.ToString(); }
+        }
+        public int CardHeight
+        {
+            get { return int.Parse(heightTextBox.Text); }
+            private set { heightTextBox.Text = value.ToString(); }
+        }
         public CardType CardType { get; set; }
     }
 }

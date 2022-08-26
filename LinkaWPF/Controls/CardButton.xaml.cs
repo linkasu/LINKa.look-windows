@@ -42,7 +42,6 @@ namespace LinkaWPF
         {
             var button = sender as CardButton;
             button.Card = (Card)args.NewValue;
-
             button.IsHasGaze = button.Card == null ? false : true;
         }
 
