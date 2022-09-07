@@ -81,7 +81,8 @@
             <MenuItem Header="Открыть другой набор" Click="Open_Click"/>
             <MenuItem Header="Заметки по работе с набором" Click="OpenDescription_Click"></MenuItem>
             <CheckBox Content="Включить контроль при помощи айтрекера" IsChecked="{Binding Path=IsHasGazeEnabled, Mode=TwoWay}" />
-        </Menu>
+            <MenuItem Header="Остановить GIF" Click="MenuItem_Click"></MenuItem>
+    </Menu>
 
         <!-- Text -->
         <Grid Grid.Row="1" Grid.ColumnSpan="3">

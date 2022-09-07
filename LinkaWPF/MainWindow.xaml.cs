@@ -449,5 +449,10 @@ namespace LinkaWPF
             base.OnClosed(e);
 if(mousePointWindow!=null)            mousePointWindow.Close();
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            CardButton.StopAll();
+        }
     }
 }
