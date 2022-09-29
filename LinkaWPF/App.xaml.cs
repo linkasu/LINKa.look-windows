@@ -54,7 +54,7 @@ namespace LinkaWPF
                 {
                     if (o.IsEditor) _isEditor = o.IsEditor;
                     if (o.Path != null) _path = o.Path;
-                    if (o.IsClickMouse) _isClickMouse = true;
+                    if (o.IsClickMouse) _isClickMouse = o.IsClickMouse;
                 });
 
 

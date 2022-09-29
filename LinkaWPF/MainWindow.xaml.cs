@@ -44,7 +44,7 @@ namespace LinkaWPF
 
         public MainWindow(Settings settings)
         {
-            StaticServer.instance.ReportEvent("startupApp") ;
+            StaticServer.instance.ReportEvent("startupApp");
             inputSimulator = new InputSimulator();
             InitializeComponent();
 
@@ -68,7 +68,8 @@ namespace LinkaWPF
             {
                 var joystick = new Joysticks();
                 joystick.JoystickButtonDown += Joystick_JoystickButtonDown;
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
 
             }
@@ -91,7 +92,7 @@ namespace LinkaWPF
 
             _settings.IsHasGazeEnabled = settings.IsHasGazeEnabled;
             _settings.IsAnimatedClickEnabled = settings.IsAnimatedClickEnabled;
-            _settings.ClickDelay =  settings.ClickDelay;
+            _settings.ClickDelay = settings.ClickDelay;
             _settings.IsPlayAudioFromCard = settings.IsPlayAudioFromCard;
             _settings.IsPageButtonVisible = settings.IsPageButtonVisible;
 
@@ -206,9 +207,9 @@ namespace LinkaWPF
         private void pressCardButton(CardButton cardButton)
         {
             if (cardButton.Card == null) return;
-            
-            StaticServer.instance.ReportEvent("CardSelected") ;
-          
+
+            StaticServer.instance.ReportEvent("CardSelected");
+
             if (_settings.IsPlayAudioFromCard == true)
             {
                 var cards = new List<Card>();
@@ -252,7 +253,7 @@ namespace LinkaWPF
                     // Добавить карточку в цепочку
                     _words.Add(cardButton.Card);
                 }
-                }
+            }
         }
 
         private void cardButton_Click(object sender, EventArgs e)
@@ -343,7 +344,7 @@ namespace LinkaWPF
                 CurrentFileDescription = cardSetFile.Description;
                 WithoutSpace = cardSetFile.WithoutSpace;
                 IsDirectSet = cardSetFile.DirectSet;
-                _settings.IsPlayAudioFromCard = IsDirectSet?true:_settings.IsPlayAudioFromCard;
+                _settings.IsPlayAudioFromCard = IsDirectSet ? true : _settings.IsPlayAudioFromCard;
                 _cards = cardSetFile.Cards;
                 foreach (var card in _cards)
                 {
@@ -371,6 +372,7 @@ namespace LinkaWPF
         public CardSetFile CurrentSeFile { get; private set; }
         public string CurrentFileName { get; set; }
         public string CurrentFileDescription { get; private set; }
+        public bool IsGifStoped = false;
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
@@ -380,7 +382,7 @@ namespace LinkaWPF
 
             if (CurrentFileName != null)
             {
-               openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(CurrentFileName);
+                openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(CurrentFileName);
             }
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
@@ -440,19 +442,27 @@ namespace LinkaWPF
             var openDirectoryDialog = new System.Windows.Forms.FolderBrowserDialog();
             if (openDirectoryDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
-            var loader =  new CardSetLoader();
+            var loader = new CardSetLoader();
             loader.SaveToDirectory(CurrentSeFile, openDirectoryDialog.SelectedPath);
             ExplorerUtils.ExploreDirectory(openDirectoryDialog.SelectedPath);
         }
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-if(mousePointWindow!=null)            mousePointWindow.Close();
+            if (mousePointWindow != null) mousePointWindow.Close();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void ToogleGif_Click(object sender, RoutedEventArgs e)
         {
-            CardButton.StopAll();
+            IsGifStoped = !IsGifStoped;
+            if (IsGifStoped)
+            {
+                CardButton.StopAll();
+            }
+            else
+            {
+                CardButton.PlayAll();
+            }
         }
     }
 }

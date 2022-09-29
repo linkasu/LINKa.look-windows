@@ -36,6 +36,13 @@ namespace LinkaWPF
                 if (item != null) item.Stop();
             }
         }
+        public static void PlayAll()
+        {
+            foreach (var item in buttons)
+            {
+                if (item != null) item.Play();
+            }
+        }
 
         public Card Card
         {
