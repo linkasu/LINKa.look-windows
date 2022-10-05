@@ -52,6 +52,7 @@ Root: HKCR;  Subkey: "{#MyAppName}\DefaultIcon";        ValueData: "{app}\linka_
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autoprograms}\LINKa. ClickMouse"; Filename: "{app}\{#MyAppExeName}"; Parameters: "-m"
+Name: "{autodesktop}\LINKa. ClickMouse"; Filename: "{app}\{#MyAppExeName}"; Parameters: "-m"; Tasks: desktopicon
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
