@@ -149,7 +149,9 @@ namespace LinkaWPF
                 Title = SelectedCardButton.Card.Title,
                 ImagePath = SelectedCardButton.Card.ImagePath,
                 AudioPath = SelectedCardButton.Card.AudioPath,
-                CardType = SelectedCardButton.Card.CardType
+                CardType = SelectedCardButton.Card.CardType,
+                Width = SelectedCardButton.Card.Width,
+                Height = SelectedCardButton.Card.Height
             };
 
             var cardEditorWindow = new CardEditorWindow(_settings, _tempDirPath, _yandexSpeech, card, WithoutSpace);
@@ -160,7 +162,8 @@ namespace LinkaWPF
             _cards[index].Title = cardEditorWindow.Caption;
             _cards[index].ImagePath = cardEditorWindow.ImagePath;
             _cards[index].AudioPath = cardEditorWindow.AudioPath;
-
+            _cards[index].Width = cardEditorWindow.CardWidth;
+            _cards[index].Height = cardEditorWindow.CardHeight;
             cardBoard.UpdateCard(index, _cards[index]);
         }
 
@@ -324,7 +327,7 @@ namespace LinkaWPF
             cardEditorWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
          if (cardEditorWindow.ShowDialog() != true) return;
 
-            var card = new Card(_cards.Count, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.CardType);
+            var card = new Card(_cards.Count, 1, 1, cardEditorWindow.Caption, cardEditorWindow.ImagePath, cardEditorWindow.AudioPath, cardEditorWindow.CardType);
             _cards.Add(card);
 
             cardBoard.Update(_cards);
@@ -393,7 +396,7 @@ namespace LinkaWPF
         }
 
         public string CurrentFileName { get; set; }
-        public bool DirectSet { get; private set; }
+        public bool DirectSet { get;  set; }
 
         public Func<bool> ChangeMode;
         private Settings _settings;

@@ -56,5 +56,15 @@ namespace LinkaWPF
                 return (CardSetFile)serializer.Deserialize(file, typeof(CardSetFile));
             }
         }
+
+        internal void SaveToDirectory(CardSetFile currentSeFile, string selectedPath)
+        {
+            for (int i = 0; i < currentSeFile.Cards.Count; i++)
+            {
+                string imagePath = currentSeFile.Cards[i].ImagePath;
+                if (imagePath == null||imagePath.Length==0||!File.Exists(imagePath)) continue;
+                File.Copy(imagePath, Path.Combine(selectedPath, "Картинка N" + i + Path.GetExtension(imagePath)), true);
+            }
+        }
     }
 }

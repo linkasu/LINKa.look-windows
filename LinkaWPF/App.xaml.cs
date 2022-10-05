@@ -20,6 +20,10 @@ namespace LinkaWPF
             HelpText = "If you need to open the editor, set this parameter.")]
         public bool IsEditor { get; set; }
 
+        [Option('m', "clickingMouse", Required = false,
+                    HelpText = "If you need to open the click mouse, set this parameter.")]
+        public bool IsClickMouse { get; set; }
+
         [Option('p', "path", Default = null,
             HelpText = "If you need to open cardset from file, set this parametr.")]
         public string Path { get; set; }
@@ -37,6 +41,7 @@ namespace LinkaWPF
         private Settings _settings;
         private string _tempDirPath;
         private YandexSpeech _yandexSpeech;
+        private bool _isClickMouse;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -49,6 +54,7 @@ namespace LinkaWPF
                 {
                     if (o.IsEditor) _isEditor = o.IsEditor;
                     if (o.Path != null) _path = o.Path;
+                    if (o.IsClickMouse) _isClickMouse = o.IsClickMouse;
                 });
 
 
@@ -107,17 +113,28 @@ namespace LinkaWPF
             _settings.YandexSpeech = _yandexSpeech;
             
             _settings.Host = _host;
-
-            if (_isEditor == true)
+            if (_isClickMouse == true)
             {
-                ShowEditorWindow(_path);
+                ShowClicckMouse(_host, _settings);
             }
             else
             {
-                ShowMainWindow(_path);
+                if (_isEditor == true)
+                {
+                    ShowEditorWindow(_path);
+                }
+                else
+                {
+                    ShowMainWindow(_path);
+                }
             }
-
             // TODO: Заменить на загрузку из конфига
+        }
+
+        private void ShowClicckMouse(Host host, Settings settings)
+        {
+            var win = new MousePointWindow(host, settings);
+            win.Show();
         }
 
         private void ShowEditorWindow(string path)

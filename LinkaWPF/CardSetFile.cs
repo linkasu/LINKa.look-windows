@@ -16,7 +16,7 @@ namespace LinkaWPF
     {
         public CardSetFile(int columns, int rows, bool withoutSpace, IList<Card> cards, String description, bool directSet)
         {
-            Version = "1.2";
+            Version = "1.3";
             Columns = columns;
             Rows = rows;
             WithoutSpace = withoutSpace;
@@ -44,6 +44,7 @@ namespace LinkaWPF
 
         [JsonProperty("cards")]
         public IList<Card> Cards { get; set; }
+
     }
 }
         

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,21 +24,31 @@ namespace LinkaWPF.Models
 
         }
 
-        public Card(int id, string title, string imagePath, string audioPath = null) :this(id, title, imagePath, audioPath, CardType.Common)
+        public Card(int id, int width, int height, string title, string imagePath, string audioPath = null) :this(id, width, height, title, imagePath, audioPath, CardType.Common)
         {
         }
 
-        public Card(int id, string title, string imagePath, string audioPath, CardType cardType)
+        public Card(int id, int width, int height, string title, string imagePath, string audioPath, CardType cardType)
         {
             Id = id;
             Title = title;
             ImagePath = imagePath;
             AudioPath = audioPath;
             CardType = cardType;
+            Width = width;
+            Height = height;
         }
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
+        [DefaultValue(1)]
+        [JsonProperty("width", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int Width { get; set; }
+
+        [DefaultValue(1)]
+        [JsonProperty("height", DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int Height { get; set; }
 
         [JsonProperty("imagePath")]
         public string ImagePath { get; set; }

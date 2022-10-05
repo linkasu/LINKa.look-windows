@@ -6,7 +6,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:LinkaWPF"
         mc:Ignorable="d"
-        Title="Создание карточки" Height="340" Width="470" >
+        Title="Создание карточки" Height="400" Width="470" >
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="2"/>
@@ -25,6 +25,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -61,6 +63,7 @@
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                 <Button x:Name="uploadImageButton" Click="UploadImage">Загрузить из файла</Button>
                 <Button x:Name="createImageFromTextButton" Click="CreateImageFromTextClick">Создать из текста</Button>
+                <Button x:Name="saveImageButton" Click="SaveImageClick">Сохранить изображение</Button>
             </StackPanel>
         </Grid>
 
@@ -90,7 +93,22 @@
             <TextBlock Grid.Column="0" Grid.ColumnSpan="3" x:Name="infoAboutAudioTextBlock" TextWrapping="Wrap" Visibility="Hidden">При установленном параметре "Добавлять текст без пробела", добавить аудио нельзя</TextBlock>
         </Grid>
 
-        <WrapPanel Grid.Column="1" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        
+        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">Ширина (в разработке)</TextBlock>
+
+        <StackPanel Grid.Column="1" Grid.Row="4" Margin="2">
+            <TextBox x:Name="widthTextBox"  FontSize="16" IsEnabled="False"/>
+        </StackPanel>
+        <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">Высота</TextBlock>
+
+        <StackPanel Grid.Column="1" Grid.Row="5" Margin="2">
+            <TextBox x:Name="heightTextBox"  FontSize="16" IsEnabled="True"/>
+        </StackPanel>
+
+
+
+
+        <WrapPanel Grid.Column="1" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button x:Name="acceptButton" Click="Accept">Добавить</Button>
             <Button Click="Cancel">Отменить</Button>
         </WrapPanel>

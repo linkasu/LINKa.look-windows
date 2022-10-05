@@ -1,8 +1,6 @@
-name:  Wpf Continuous Integration
+ name:  Wpf Continuous Integration
 on:
-  push:
-    branches:
-      - master
+  push
   
 jobs:
   build:
@@ -43,20 +41,68 @@ jobs:
       
     - name: Build solution
       run: msbuild $env:Solution_Path /t:Build /p:Configuration=Release  
-    - name: Start app
-      run: .\LinkaWPF\bin\Release\Linka.looks.exe 
-    - name: Wait starting (10s)
-      run: sleep 10
-    - name: Take Screen
-      uses: OrbitalOwen/desktop-screenshot-action@0.1
-      with:
-        file-name: 'desktop.jpg'
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Release-bin
         path: LinkaWPF/bin/Release
-    
+  tests:
+    name: Test
+    needs: build
+    runs-on: windows-2019
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+  
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Release-bin
+          path: LinkaWPF/bin/Release
+      - name: Start app
+        run: .\LinkaWPF\bin\Release\Linka.looks.exe 
+      - name: Wait starting (10s)
+        run: sleep 10
+      - name: Take Screen
+        uses: OrbitalOwen/desktop-screenshot-action@0.1
+        with:
+          file-name: 'main.jpg'
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Main
+          path: main.jpg
+      - name: Start editor
+        run: .\LinkaWPF\bin\Release\Linka.looks.exe -e
+      - name: Wait starting (10s)
+        run: sleep 10
+      - name: Take Screen
+        uses: OrbitalOwen/desktop-screenshot-action@0.1
+        with:
+          file-name: 'Editor.jpg'
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Editor
+          path: Editor.jpg
+
+      - name: Start set
+        run: .\LinkaWPF\bin\Release\Linka.looks.exe -p .\test\testset.linka
+      - name: Wait starting (10s)
+        run: sleep 10
+      - name: Take Screen
+        uses: OrbitalOwen/desktop-screenshot-action@0.1
+        with:
+          file-name: 'set.jpg'
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: set
+          path: set.jpg
   installer:
     name: Create installer
     needs: build
@@ -88,7 +134,9 @@ jobs:
     name: Deploy to server
     needs: installer
     runs-on: ubuntu-latest
-
+    
+    if: github.ref == 'refs/heads/master'
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
