@@ -1,4 +1,4 @@
- name:  Wpf Continuous Integration
+name:  Wpf Continuous Integration
 on:
   push
   
