@@ -32,9 +32,8 @@ namespace LinkaWPF
         public async Task ReportEvent(string eventType, Dictionary<string, string> parameters)
         {
             var uuid = new DeviceIdBuilder()
-                .AddSystemUUID()
-                .AddOSVersion()
-                .AddUserName()
+                .AddMacAddress()
+                .AddOsVersion()
                 .ToString();
             JObject obj = new JObject();
             obj.Add("event", eventType);
